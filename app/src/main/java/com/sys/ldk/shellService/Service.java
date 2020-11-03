@@ -9,8 +9,6 @@ import java.net.Socket;
 
 public class Service {
     private ServiceGetText mServiceGetText;
-
-
     public Service(ServiceGetText serviceGetText, int PORT) {
         mServiceGetText = serviceGetText;
         try {

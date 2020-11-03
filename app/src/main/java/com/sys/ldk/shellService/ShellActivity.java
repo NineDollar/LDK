@@ -1,4 +1,4 @@
-package com.sys.ldk;
+package com.sys.ldk.shellService;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,22 +10,19 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.sys.ldk.R;
+import com.sys.ldk.SocketClient;
+
 public class ShellActivity extends AppCompatActivity {
-
-
-
     public TextView mOutputTv;
     private Button mRunShellBtn;
     private EditText mCmdInputEt;
-
     public TextView getmOutputTv() {
         return mOutputTv;
     }
-
     public void setmOutputTv(TextView mOutputTv) {
         this.mOutputTv = mOutputTv;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

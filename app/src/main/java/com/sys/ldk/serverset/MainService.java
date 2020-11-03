@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.sys.ldk.FloatingWindow;
 import com.sys.ldk.MainAccessService;
 import com.sys.ldk.MainActivity;
 import com.sys.ldk.MyApplication;
@@ -42,7 +43,7 @@ import com.sys.ldk.easyfloat.interfaces.OnInvokeView;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
 
 
-public class MainServer extends Service {
+public class MainService extends Service {
     private Context mcontext;
     private static final String CHANNEL_ID = "10";
     public static CharSequence textTitle = "服务检查";
@@ -57,7 +58,10 @@ public class MainServer extends Service {
 
     @Override
     public void onCreate() {
-        mcontext = MyApplication.getContext();
+        mcontext = MainActivity.getMcontext();
+        FloatingWindow.chekPermission(mcontext);
+        fuzhuservice();
+        naozhongserver();
         super.onCreate();
     }
 
@@ -73,7 +77,13 @@ public class MainServer extends Service {
      * @author Nine_Dollar
      * @time 2020/11/3 1:47
      */
-
+    public void naozhongserver() {
+        if (ServiceUtil.isRunning(this, "com.sys.ldk.clock.ClockService")) {
+        } else {
+            startService(new Intent(mcontext, ClockService.class).putExtra("flag", "MainActivity"));
+            Toast.makeText(mcontext, "开启服务", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      * @param
@@ -82,6 +92,11 @@ public class MainServer extends Service {
      * @author Nine_Dollar
      * @time 2020/11/3 1:50
      */
+    public void fuzhuservice() {
+        if (!ApiUtil.isAccessibilityServiceOn(mcontext, MainAccessService.class)) {
+            User.authority_alerdialog(mcontext);
+        }
+    }
 
 
     public void notification() {

@@ -1,6 +1,7 @@
 package com.sys.ldk;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,23 +22,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sys.ldk.accessibility.api.User;
-import com.sys.ldk.accessibility.util.ApiUtil;
-import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.AddclockActivity;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.MyDatabaseHelper;
 import com.sys.ldk.clock.MySimpleAdaptey;
 import com.sys.ldk.clock.ServiceUtil;
-import com.sys.ldk.serverset.MainServer;
-import com.sys.ldk.serverset.MessengerService;
+import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.Permission;
+import com.sys.ldk.shellService.Checkshell;
+import com.sys.ldk.shellService.ShellActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static Context mcontext;
     private ListView clockItmesList;
     private MySimpleAdaptey mySimpleAdaptey;
     private MyDatabaseHelper myDatabaseHelper;
@@ -51,13 +51,14 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportActionBar().hide();//隐藏ActionBar
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明化通知栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        mcontext = this;
         setContentView(R.layout.activity_clock);
 //        启动服务
-        Intent intent = new Intent(MainActivity.this, MainServer.class);
+        Intent intent = new Intent(MainActivity.this, MainService.class);
         startService(intent);
 
-        FloatingWindow floatingWindow = new FloatingWindow();
-        floatingWindow.chekPermission();
+        /*FloatingWindow floatingWindow = new FloatingWindow();
+        floatingWindow.chekPermission(this);*/
 //        naozhongserver();
 //        fuzhuserer();
 
@@ -115,18 +116,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void fuzhuserer() {
-        if (!ApiUtil.isAccessibilityServiceOn(this, MainAccessService.class)) {
-            User.authority_alerdialog(this);
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initDatabase();
+        mySimpleAdaptey.notifyDataSetChanged();
     }
 
-    public void naozhongserver() {
-        if (ServiceUtil.isRunning(this, "com.sys.ldk.clock.ClockService")) {
-        } else {
-            startService(new Intent(this, ClockService.class).putExtra("flag", "MainActivity"));
-            Toast.makeText(this, "开启服务", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
+    }
+
+    public static Context getMcontext() {
+        return mcontext;
     }
 
     private int deleteItem(ClockBean clockBean) {
@@ -154,19 +158,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        initDatabase();
-        mySimpleAdaptey.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
@@ -177,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.root_test:
-                show_root();
+                Checkshell.show_root(this);
                 return true;
             case R.id.shell:
                 startActivity(new Intent(this, ShellActivity.class));
@@ -190,32 +181,5 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void show_root() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new SocketClient("###AreYouOK", new SocketClient.onServiceSend() {
-                    @Override
-                    public void getSend(String result) {
-                        showTextOnTextView(result);
-                    }
-                });
-            }
-        }).start();
-    }
-
-    private void showTextOnTextView(final String text) {
-        MainActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (text.equals("###IamOK#")) {
-                    Toast.makeText(MainActivity.this, "以提权", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "未提权", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 }
