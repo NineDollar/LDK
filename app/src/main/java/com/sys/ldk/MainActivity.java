@@ -211,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 LogUtil.D("--");
+                LogUtil.D("--");
                 if (text.equals("###IamOK#")) {
                     Toast.makeText(MainActivity.this, "以提权", Toast.LENGTH_SHORT).show();
                 } else {
