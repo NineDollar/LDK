@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.ApiUtil;
+import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.AddclockActivity;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
@@ -209,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                LogUtil.D("--");
                 if (text.equals("###IamOK#")) {
                     Toast.makeText(MainActivity.this, "以提权", Toast.LENGTH_SHORT).show();
                 } else {
@@ -217,5 +219,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
