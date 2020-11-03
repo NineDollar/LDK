@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/root_test"
+        android:title="root检测" />
+    <item
+        android:id="@+id/shell"
+        android:title="执行shell命令" />
+    <item
+        android:id="@+id/test"
+        android:title="手动运行"/>
+    <item
+        android:id="@+id/setverset"
+        android:title="设置"/>
+
+
+</menu>

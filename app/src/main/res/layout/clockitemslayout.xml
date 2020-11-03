@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/head"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/jinri"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="5dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/clockTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="06:10"
+        android:textColor="#8a8a8a"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/head"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/clocktv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="app"
+        android:textColor="#8a8a8a"
+        android:textSize="13dp"
+        app:layout_constraintLeft_toRightOf="@id/head"
+        app:layout_constraintTop_toBottomOf="@id/clockTime" />
+
+    <TextView
+        android:id="@+id/repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="仅一次"
+        android:textColor="#8a8a8a"
+        android:textSize="13dp"
+        app:layout_constraintLeft_toRightOf="@id/clocktv"
+        app:layout_constraintTop_toBottomOf="@id/clockTime" />
+
+    <TextView
+        android:id="@+id/timedistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="7dp"
+        android:text="22小时0分钟后启动"
+        android:textColor="#8a8a8a"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@id/clockTime"
+        app:layout_constraintLeft_toRightOf="@+id/clockTime" />
+
+    <com.sys.ldk.clock.DrawableSwitch xmlns:lh2="http://schemas.android.com/apk/res/com.sys.ldk"
+        android:id="@+id/drawableSwitch"
+        android:layout_width="50dp"
+        android:layout_height="23dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/clocktv"
+        app:layout_constraintRight_toRightOf="parent"
+        lh2:circleColor="#F9F9F9"
+        lh2:isSwitchOn="false"
+        lh2:radius="8dp"
+        lh2:switchOffColor="#D8D8D8"
+        lh2:switchOnColor="#6AB344"
+        lh2:textColor="#1C1C0F" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
