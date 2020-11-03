@@ -210,8 +210,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LogUtil.D("--");
-                LogUtil.D("--");
+                LogUtil.D("版本控制1");
                 if (text.equals("###IamOK#")) {
                     Toast.makeText(MainActivity.this, "以提权", Toast.LENGTH_SHORT).show();
                 } else {
