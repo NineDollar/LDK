@@ -2,17 +2,21 @@ package com.sys.ldk;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
+
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.enums.ShowPattern;
 import com.sys.ldk.easyfloat.enums.SidePattern;
 import com.sys.ldk.easyfloat.interfaces.OnInvokeView;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
-import com.sys.ldk.serverset.Binding;
+import com.sys.ldk.serverset.Binding1;
+import com.sys.ldk.serverset.MessengerService;
 
 public class FloatingWindow {
     private static Context mcontext;
@@ -54,35 +58,13 @@ public class FloatingWindow {
     }
 
     private static void test5() {
-//        UiApi.clickNodeByIdWithTimeOut(2000, "com.tencent.mm:id/b4r");
-//        UiApi.clickNodeByTextWithTimeOut(2000, "教学服务");
-//        UiApi.clickNodeByTextWithTimeOut(2000, "顶岗实习");
-        /*List<AccessibilityNodeInfo> accessibilityNodeInfoList = User.getEditableInfo();
-        LogUtil.I(accessibilityNodeInfoList.size()+"");
-        if (accessibilityNodeInfoList.size() == 1) {
-            AcessibilityApi.inputTextByNode(accessibilityNodeInfoList.get(0),"上班");
-        }*/
-        /*if(User.findtext("川信职院微教")){
-            LogUtil.I("true");
-        }*/
-//        DGSX dgsx = new DGSX();
-//        dgsx.startdgsx();
-
-//        Autoanswer.auto_answer();
-//        Autoanswer.doactivity();
-//        Notification.textContent = "成功";
-//        User.getallInfottext(true);
-//        UiApi.clickNodeByIdWithTimeOut(1000, "cn.xuexi.android:id/home_bottom_tab_button_work");
-//        UiApi.clickNodeByDesWithTimeOut(1000, "工作");
-        /*List<AccessibilityNodeInfo> List = User.getScrollNodeInfo();
-        AcessibilityApi.ScrollNode(List.get(4));*/
         LogUtil.I("点击");
         /*Message message = new Message();
         message.what = 123;
 */
-        /*Binding binding = new Binding();
+//        Binding1 binding1 = new Binding1(mcontext);
 //        建立连接
-        binding.doBindService();*/
+//        binding1.doBindService();
        /* Binding.IncomingHandler bindingincominghandler = binding.new IncomingHandler();
 //        bindingincominghandler.sendMessage(message);
 
@@ -97,5 +79,9 @@ public class FloatingWindow {
         } catch (RemoteException e) {
             e.printStackTrace();
         }*/
+
+        Binding1 binding1 = new Binding1();
+        binding1.doBindService();
     }
+
 }

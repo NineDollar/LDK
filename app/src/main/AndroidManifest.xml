@@ -43,7 +43,8 @@
         <service
             android:name=".serverset.MessengerService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":messenger"/>
 
         <service
             android:name=".serverset.MainService"
