@@ -59,9 +59,10 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         mcontext = MainActivity.getMcontext();
-        FloatingWindow.chekPermission(mcontext);
+        FloatingWindow.chekPermission();
         fuzhuservice();
         naozhongserver();
+        notification();
         super.onCreate();
     }
 
@@ -99,35 +100,15 @@ public class MainService extends Service {
     }
 
 
+    /**
+     * @description 启动通知栏客户端
+     * @param
+     * @return
+     * @author Nine_Dollar
+     * @time 2020/11/4 15:12
+     */
     public void notification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-
-//           跳转页面
-            Intent intent = new Intent(mcontext, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(mcontext, 0, intent, 0);
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(mcontext, CHANNEL_ID)
-                    .setSmallIcon(R.mipmap.user_ic_launcher_round)
-                    .setContentTitle(textTitle)
-                    .setContentText(textContent)
-//                    .setStyle(new NotificationCompat.BigTextStyle().bigText("Much longer text that cannot fit one line..."))
-                    .setContentIntent(pendingIntent)
-//                    只响一次声音
-//                    .setOnlyAlertOnce(true)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-//            显示通知
-            NotificationManagerCompat Manager = NotificationManagerCompat.from(this);
-            Manager.notify(notificationId, builder.build());
-        }
+        Binding binding = new Binding(MyNotificationType.case1,MyNotificationType.key1,MyNotificationType.value1);
+        binding.doBindService();
     }
 }

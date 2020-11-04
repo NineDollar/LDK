@@ -51,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportActionBar().hide();//隐藏ActionBar
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明化通知栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        mcontext = this;
         setContentView(R.layout.activity_clock);
+        mcontext = this;
+
 //        启动服务
         Intent intent = new Intent(MainActivity.this, MainService.class);
         startService(intent);

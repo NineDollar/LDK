@@ -8,7 +8,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.sys.ldk.SocketClient;
+import com.sys.ldk.shellService.SocketClient;
 
 /**
  * api 内部需要用到的类

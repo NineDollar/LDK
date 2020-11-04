@@ -25,20 +25,28 @@ import com.sys.ldk.accessibility.util.LogUtil;
 import java.util.ArrayList;
 
 /**
+ * @description 服务端
  * @author: Nine_Dollar
  * @date: 2020/11/3
  */
 public class MessengerService extends Service {
+    private String string;
     private static final String CHANNEL_ID = "10";
     public static CharSequence textTitle = "服务检查";
     public static CharSequence textContent = "检查失败";
     public int notificationId = 123;
 
-    /** For showing and hiding our notification. */
+    /**
+     * For showing and hiding our notification.
+     */
     NotificationManager mNM;
-    /** Keeps track of all current registered clients. */
+    /**
+     * Keeps track of all current registered clients.
+     */
     ArrayList<Messenger> mClients = new ArrayList<Messenger>();
-    /** Holds last value set by a client. */
+    /**
+     * Holds last value set by a client.
+     */
     int mValue = 0;
 
     /**
@@ -61,14 +69,15 @@ public class MessengerService extends Service {
      * any registered clients with the new value.
      */
     public static final int MSG_SET_VALUE = 3;
+    public static String mytext = "未接收到消息";
 
     /**
      * Handler of incoming messages from clients.
      */
-    class IncomingHandler extends Handler {
+    public class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Log.e("Messeng","服务端接收到客户端消息");
+            Log.e("Messeng", "服务端接收到客户端消息");
             switch (msg.what) {
                 case MSG_REGISTER_CLIENT:
                     mClients.add(msg.replyTo);
@@ -78,7 +87,7 @@ public class MessengerService extends Service {
                     break;
                 case MSG_SET_VALUE:
                     mValue = msg.arg1;
-                    for (int i=mClients.size()-1; i>=0; i--) {
+                    for (int i = mClients.size() - 1; i >= 0; i--) {
                         try {
                             mClients.get(i).send(Message.obtain(null,
                                     MSG_SET_VALUE, mValue, 0));
@@ -89,6 +98,18 @@ public class MessengerService extends Service {
                             mClients.remove(i);
                         }
                     }
+                    break;
+                case MyNotificationType.case1:
+                    Log.d("mess: ", "创建通知");
+                    mytext = msg.getData().getString(MyNotificationType.key1);
+                    Log.e("mess: ", mytext);
+                    showNotification(mytext);
+                    break;
+                case MyNotificationType.case2 :
+                    Log.d("mess: ", "test");
+                    mytext = msg.getData().getString(MyNotificationType.key2);
+                    Log.e("mess: ", mytext);
+                    showNotification(mytext);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -103,11 +124,11 @@ public class MessengerService extends Service {
 
     @Override
     public void onCreate() {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-        // Display a notification about us starting.
-        showNotification();
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
+
+
 
     @Override
     public void onDestroy() {
@@ -118,19 +139,25 @@ public class MessengerService extends Service {
         Toast.makeText(this, R.string.remote_service_stopped, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     /**
      * When binding to the service, we return an interface to our messenger
      * for sending messages to the service.
      */
     @Override
     public IBinder onBind(Intent intent) {
+
         return mMessenger.getBinder();
     }
 
     /**
      * Show a notification while this service is running.
      */
-    private void showNotification() {
+    private void showNotification(String text) {
 
         CharSequence name = getString(R.string.channel_name);
         String description = getString(R.string.channel_description);
@@ -140,26 +167,26 @@ public class MessengerService extends Service {
 
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
+        sendMessage(text);
+    }
 
-        // In this sample, we'll use the same text for the ticker and the expanded notification
-        CharSequence text = getText(R.string.remote_service_started);
-
-        // The PendingIntent to launch our activity if the user selects this notification
+    private void sendMessage(String text) {
         PendingIntent contentIntent = PendingIntent.getActivity(MyApplication.getContext(), 0,
                 new Intent(this, MainActivity.class), 0);
-
+        CharSequence titext = getText(R.string.remote_service_started);
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this,CHANNEL_ID)
+        Notification notification = new Notification.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.user_ic_launcher_round)  // the status icon
-                .setTicker(text)  // the status text
+                .setTicker(titext)  // the status text
                 .setContentTitle(getText(R.string.local_service_label))  // the label of the entry
-                .setContentText(mClients+"")  // the contents of the entry
+                .setContentText(text)  // the contents of the entry
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .build();
-
         // Send the notification.
         // We use a string id because it is a unique number.  We use it later to cancel.
 //        mNM.notify(R.string.remote_service_started, notification);
-        startForeground(notificationId,notification);
+        startForeground(notificationId, notification);
     }
+
+
 }

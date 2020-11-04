@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sys.ldk.R;
-import com.sys.ldk.SocketClient;
 
 public class ShellActivity extends AppCompatActivity {
     public TextView mOutputTv;

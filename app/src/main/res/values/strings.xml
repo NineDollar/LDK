@@ -3,9 +3,9 @@
     <string name="cancel">取消</string>
     <string name="submit">确定</string>
     <string name="perDialog">""</string>
-    <!--<string name="copyRight">
-        Copyright © p171813950 王阳.All Rights Reserved.
-    </string>-->
+    <string name="copyRight">
+        Copyright © NineDollar.All Rights Reserved.
+    </string>
     <string name="ysq">已授权</string>
     <string name="wsq">未授权</string>
     <string name="kuaisu">快速设置</string>
@@ -20,4 +20,5 @@
     <string name="remote_service_disconnected">连接失败</string>
     <string name="remote_service_started">服务开始</string>
     <string name="remote_service_stopped">服务停止</string>
+    <string name="create">创建通知</string>
 </resources>

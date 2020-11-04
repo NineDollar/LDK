@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.widget.Toast;
 
 import com.sys.ldk.MainActivity;
-import com.sys.ldk.SocketClient;
 
 /**
  * @author: Nine_Dollar

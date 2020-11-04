@@ -1,6 +1,7 @@
 package com.sys.ldk;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.serverset.MessengerService;
+import com.sys.ldk.serverset.MyNotificationType;
 import com.sys.ldk.xxqg.AutoRead;
 import com.sys.ldk.xxqg.AutoVideo;
 import com.sys.ldk.xxqg.Autoanswer;
@@ -24,6 +27,7 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
     private Button btn_read;
     private Button btn_answer;
     private Button btn_vido;
+    private Button btn_test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            XXQG.openxxqj(context);
+                            openxxqj(context);
                         }
                     }).start();
                 } else {
@@ -86,10 +90,12 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
         btn_read = (Button) findViewById(R.id.btn_read);
         btn_answer = (Button) findViewById(R.id.btn_answer);
         btn_vido = (Button) findViewById(R.id.btn_vido);
+        btn_test = (Button) findViewById(R.id.btn_test);
 
         btn_read.setOnClickListener(this);
         btn_answer.setOnClickListener(this);
         btn_vido.setOnClickListener(this);
+        btn_test.setOnClickListener(this);
     }
 
     @Override
@@ -148,6 +154,9 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
                     }
                 }).start();
                 break;
+            case R.id.btn_test:
+                test();
+                break;
         }
     }
 
@@ -166,4 +175,16 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private void test() {
+        LogUtil.I("点击");
+        Message message = new Message();
+        message.what = MyNotificationType.case2;
+        Bundle bundle = new Bundle();
+        bundle.putString(MyNotificationType.key2, MyNotificationType.value2);
+        message.setData(bundle);
+
+        MessengerService messengerService = new MessengerService();
+        MessengerService.IncomingHandler messageHandler = messengerService.new IncomingHandler();
+        messageHandler.sendMessage(message);
+    }
 }

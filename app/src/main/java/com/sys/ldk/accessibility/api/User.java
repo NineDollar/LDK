@@ -11,7 +11,7 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.sys.ldk.SocketClient;
+import com.sys.ldk.shellService.SocketClient;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 

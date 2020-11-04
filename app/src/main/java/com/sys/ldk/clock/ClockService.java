@@ -10,7 +10,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
@@ -133,10 +136,19 @@ public class ClockService extends Service {
     }
 
     private  void showDialog(ClockBean clockBean) {
-        Intent intent = new Intent(this, StartAppReceiver.class);
+      /*  Intent intent = new Intent(this, StartAppReceiver.class);
         intent.putExtra("apptype", clockBean.getApptype());
         intent.setAction("com.sys.ldk");
-        sendBroadcast(intent);
+        sendBroadcast(intent);*/
+
+        Message message = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putString("app",clockBean.getApptype());
+        message.setData(bundle);
+        message.what = 30;
+        Handler handler = new Handler();
+        handler.sendMessage(message);
+
     }
 
     private PendingIntent initRemind(int huorOfDay, int minute, int requestCode) {
