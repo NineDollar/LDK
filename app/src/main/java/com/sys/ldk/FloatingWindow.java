@@ -1,11 +1,7 @@
 package com.sys.ldk;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.Message;
-import android.os.Messenger;
 import android.view.Gravity;
 import android.view.View;
 
@@ -17,9 +13,7 @@ import com.sys.ldk.easyfloat.enums.ShowPattern;
 import com.sys.ldk.easyfloat.enums.SidePattern;
 import com.sys.ldk.easyfloat.interfaces.OnInvokeView;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
-import com.sys.ldk.serverset.Binding;
-import com.sys.ldk.serverset.MessengerService;
-import com.sys.ldk.serverset.MyNotificationType;
+import com.sys.ldk.sdcard.SaveLog;
 
 public class FloatingWindow {
     private static Context mcontext;
@@ -64,7 +58,7 @@ public class FloatingWindow {
 
     private static void test5() {
         LogUtil.I("点击");
-
+        SaveLog.saveUserInfo("test", "test.txt");
     }
 
 }

@@ -100,14 +100,17 @@ public class MessengerService extends Service {
                     }
                     break;
                 case MyNotificationType.case1:
-                    Log.d("mess: ", "创建通知");
                     mytext = msg.getData().getString(MyNotificationType.key1);
                     Log.e("mess: ", mytext);
                     showNotification(mytext);
                     break;
                 case MyNotificationType.case2 :
-                    Log.d("mess: ", "test");
                     mytext = msg.getData().getString(MyNotificationType.key2);
+                    Log.e("mess: ", mytext);
+                    showNotification(mytext);
+                    break;
+                    case MyNotificationType.case3 :
+                    mytext = msg.getData().getString(MyNotificationType.key3);
                     Log.e("mess: ", mytext);
                     showNotification(mytext);
                     break;
@@ -127,8 +130,6 @@ public class MessengerService extends Service {
 
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
-
-
 
     @Override
     public void onDestroy() {
@@ -150,7 +151,6 @@ public class MessengerService extends Service {
      */
     @Override
     public IBinder onBind(Intent intent) {
-
         return mMessenger.getBinder();
     }
 

@@ -14,11 +14,16 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/user_ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/user_ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity android:name=".serverset.Permission" />
@@ -38,16 +43,21 @@
             android:name=".clock.ClockService"
             android:enabled="true"
             android:exported="true"
-            android:process=":ClockService" />
+            android:process=":clockservice" />
 
         <service
             android:name=".serverset.MessengerService"
             android:enabled="true"
             android:exported="true"
-            android:process=":messenger"/>
+            android:process=":clockservice" />
 
         <service
             android:name=".serverset.MainService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".apptype.Startapp"
             android:enabled="true"
             android:exported="true" />
 

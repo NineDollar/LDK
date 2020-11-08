@@ -14,4 +14,8 @@ public class MyNotificationType {
     public static final String key2 = "2";
     public static final String value2 = "通知2";
 
+    public static final int case3 = 30;
+    public static final String key3 = "3";
+    public static final String value3 = "服务以启动";
+
 }

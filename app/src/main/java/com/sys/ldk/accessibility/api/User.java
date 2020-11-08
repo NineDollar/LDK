@@ -15,7 +15,9 @@ import com.sys.ldk.shellService.SocketClient;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -294,6 +296,16 @@ public class User {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static String gettime() {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
+        return df.format(new Date());// new Date()为获取当前系统时间
+    }
+
+    public static String gettimelog() {
+        SimpleDateFormat df = new SimpleDateFormat("YYYY_MM_dd_HH_mm");//设置日期格式
+        return df.format(new Date());// new Date()为获取当前系统时间
     }
 
     //    自动点击辅助功能

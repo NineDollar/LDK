@@ -4,11 +4,9 @@ package com.sys.ldk.clock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import com.sys.ldk.accessibility.util.LogUtil;
+import android.os.IBinder;
 
 public class ClockReceiver extends BroadcastReceiver {
-
     private int code;
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -19,5 +17,4 @@ public class ClockReceiver extends BroadcastReceiver {
         intent1.putExtra("code", code + "");
         context.startService(intent1);
     }
-
 }

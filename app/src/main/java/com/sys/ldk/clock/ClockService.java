@@ -4,8 +4,10 @@ import android.app.AlarmManager;
 import android.app.LocalActivityManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
@@ -14,18 +16,28 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.sys.ldk.MyApplication;
+import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.apptype.Appchoose;
 import com.sys.ldk.apptype.StartAppReceiver;
+import com.sys.ldk.apptype.Startapp;
+import com.sys.ldk.serverset.Binding;
+import com.sys.ldk.serverset.MessengerService;
+import com.sys.ldk.serverset.MyNotificationType;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -39,12 +51,27 @@ public class ClockService extends Service {
     private Vibrator vibrator;
     private ClockBean clockBean;
     private MediaPlayer mMediaPlayer;
-    private Context context = this;
+    private Messenger mService;
+    private boolean mIsBound;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for (PendingIntent p : pendingIntentList) {
+            am.cancel(p);
+        }
+        db.close();
     }
 
     @Override
@@ -135,23 +162,8 @@ public class ClockService extends Service {
         vibrator.vibrate(time, 0);
     }
 
-    private  void showDialog(ClockBean clockBean) {
-      /*  Intent intent = new Intent(this, StartAppReceiver.class);
-        intent.putExtra("apptype", clockBean.getApptype());
-        intent.setAction("com.sys.ldk");
-        sendBroadcast(intent);*/
-
-        Message message = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putString("app",clockBean.getApptype());
-        message.setData(bundle);
-        message.what = 30;
-        Handler handler = new Handler();
-        handler.sendMessage(message);
-
-    }
-
     private PendingIntent initRemind(int huorOfDay, int minute, int requestCode) {
+
         Intent intent2 = new Intent(this, ClockReceiver.class);
         intent2.putExtra("requestcode", requestCode);
         intent2.setAction("com.sys.ldk.clock.RING");
@@ -182,18 +194,59 @@ public class ClockService extends Service {
         return pi;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    private void showDialog(ClockBean clockBean) {
+      /*  Intent intent = new Intent(this, StartAppReceiver.class);
+        intent.putExtra("apptype", clockBean.getApptype());
+        intent.setAction("com.sys.ldk");
+        sendBroadcast(intent);*/
+        Log.d("ClockService", "定时时间到");
+        doBindService();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        for (PendingIntent p : pendingIntentList) {
-            am.cancel(p);
+    /**
+     * @description 通过IPC启动app
+     * @param
+     * @return
+     * @author Nine_Dollar
+     * @time 2020/11/5 1:38
+     */
+    public ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d("ClockService", "连接成功");
+            mService = new Messenger(service);
+            Message message = Message.obtain(null, MyNotificationType.case3);
+            Bundle bundle = new Bundle();
+            bundle.putString("app", clockBean.getApptype());
+            message.setData(bundle);
+            try {
+                mService.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
-        db.close();
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d("ClockService", "连接失败");
+        }
+    };
+
+    public void doBindService() {
+        Intent intent = new Intent(this, Startapp.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+
+    public void doUnbindService() {
+        if (mIsBound) {
+            if (mService != null) {
+                Log.d("ClockService: ", "关闭app启动的服务");
+                MyApplication.getContext().unbindService(mConnection);
+                mIsBound = false;
+            }
+        } else {
+            Log.d("ClockService: ", "未创建服务");
+        }
     }
 }
 

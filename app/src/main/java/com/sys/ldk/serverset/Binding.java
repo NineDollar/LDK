@@ -31,6 +31,16 @@ public class Binding extends Activity {
     private int mywhat;
     private String key;
     private String value;
+
+    /**
+     * @description 发送通知类
+     * @param mywhat: 消息选择
+     * @param key:传递消息的key
+     * @param value:通过键获取的值
+     * @return
+     * @author Nine_Dollar
+     * @time 2020/11/5 1:47
+     */
     public Binding(int mywhat,String key, String value) {
         this.mywhat = mywhat;
         this.key = key;
@@ -134,6 +144,7 @@ public class Binding extends Activity {
         // Establish a connection with the service.  We use an explicit
         // class name because there is no reason to be able to let other
         // applications replace our component.
+        Log.d("binding： ", "发送通知");
         Intent intent = new Intent(mcontext, MessengerService.class);
         mcontext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
