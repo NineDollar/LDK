@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.serverset.MessengerService;
@@ -28,6 +27,7 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
     private Button btn_answer;
     private Button btn_vido;
     private Button btn_test;
+    private Button btn_answer_dd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +96,8 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
         btn_answer.setOnClickListener(this);
         btn_vido.setOnClickListener(this);
         btn_test.setOnClickListener(this);
+        btn_answer_dd = (Button) findViewById(R.id.btn_answer_dd);
+        btn_answer_dd.setOnClickListener(this);
     }
 
     @Override
@@ -107,7 +109,7 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run() {
                         LogUtil.D("打开学习强国");
-                        UiApi.backToDesk();
+//                        UiApi.backToDesk();
                         if (!xxqg.startLearning_power(context, "cn.xuexi.android", "com.alibaba.android.rimet.biz.SplashActivity")) {
                             LogUtil.E("打开学习强国失败");
                             return;
@@ -125,7 +127,7 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run() {
                         LogUtil.D("打开学习强国");
-                        UiApi.backToDesk();
+//                        UiApi.backToDesk();
                         if (!xxqg.startLearning_power(context, "cn.xuexi.android", "com.alibaba.android.rimet.biz.SplashActivity")) {
                             LogUtil.E("打开学习强国失败");
                             return;
@@ -156,6 +158,9 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btn_test:
                 test();
+                break;
+            case R.id.btn_answer_dd:
+
                 break;
         }
     }

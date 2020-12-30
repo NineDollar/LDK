@@ -59,6 +59,7 @@ public class Autoanswer {
             return false;
         }
 
+
 //      每周答题
         Threadsleep(3);
         LogUtil.I("每周答题");
@@ -88,7 +89,6 @@ public class Autoanswer {
         do {
             if (n >= 1) {
                 if (n > 20) {
-                    LogUtil.E("weidatiORkaishidati: 未找到");
                     break;
                 }
                 LogUtil.D("ScrollableInfo: " + n);
@@ -153,6 +153,7 @@ public class Autoanswer {
 
         return true;
     }
+
     //    寻找未答题
     private static HashMap<String, AccessibilityNodeInfo> findweizuoda() {
         HashMap<String, AccessibilityNodeInfo> hashMap = new HashMap<>();

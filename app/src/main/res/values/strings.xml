@@ -21,4 +21,6 @@
     <string name="remote_service_started">服务开始</string>
     <string name="remote_service_stopped">服务停止</string>
     <string name="create">创建通知</string>
+    <string name="btn_answr_dd">手动答题</string>
+    <string name="dati">答题</string>
 </resources>

@@ -16,7 +16,7 @@ import static com.sys.ldk.accessibility.api.User.Threadsleep;
 
 public class AutoVideo {
     //    最大观看时间5分钟
-    private static int MAXshijina = 5 * 60;
+    private static int MAXshijina = 2 * 60;
     private static int times = 10;
     private static int count = 0;
 

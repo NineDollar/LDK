@@ -14,10 +14,10 @@ import java.util.List;
 import static com.sys.ldk.serverset.Keyguard.context;
 
 
-public class DGSX {
-
-    public boolean startdgsx() {
+public class WXDK {
+    public static boolean startdgsx() {
 //        打开微信
+        LogUtil.D("开始微信打卡");
         User.Threadsleep(1);
         if (!openweixin()) {
             return false;
@@ -28,8 +28,6 @@ public class DGSX {
         if (!isPage()) {
             LogUtil.E("不在微信界面");
             return false;
-        }else{
-
         }
 
 //        进入打卡页面
@@ -58,7 +56,7 @@ public class DGSX {
         return true;
     }
 
-    private boolean openweixin() {
+    private static boolean openweixin() {
         if (!User.startAPP(context, "com.tencent.mm", "com.tencent.mm.ui.LauncherUI")) {
             LogUtil.E("打开微信失败");
             return false;
@@ -67,7 +65,7 @@ public class DGSX {
         return true;
     }
 
-    public boolean isPage() {
+    private static boolean isPage() {
         String pageStr = "{maxMustMills:5000,"
                 + "'maxOptionMills':5000,"
                 + "'must':{'text':[],'id':[],'desc':[]},"
@@ -77,7 +75,7 @@ public class DGSX {
         return UiApi.isMyNeedPage(pageStr);
     }
 
-    public boolean clickdgsx() {
+    private static boolean clickdgsx() {
         String temp1 = "{"
                 + "'maxWClickMSec':5000,"
                 + "'click':{'id':'com.tencent.mm:id/b4r'},"
@@ -118,7 +116,7 @@ public class DGSX {
     }
 
     //    查找输入框并输入，maxMills超时时间
-    public boolean tianxiety(long maxMills, String inputtext) {
+    private static boolean tianxiety(long maxMills, String inputtext) {
 
         long beginUtcMsc = System.currentTimeMillis(); //记录当前开始时间
         long curUtcMsc; //当前时间

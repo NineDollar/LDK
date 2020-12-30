@@ -123,8 +123,6 @@ public class AcessibilityApi {
                 break;
             case SCROLL_FORWARD:
                 mAccessibilityService.performGlobalAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
-
-
                 LogUtil.I("上滑");
                 break;
         }

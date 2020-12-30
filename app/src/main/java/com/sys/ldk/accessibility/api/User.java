@@ -142,7 +142,10 @@ public class User {
             if (s == key_text || s.equals(key_text)) {
                 LogUtil.E("" + n);
                 flag = true;
-            }
+            }/*else if(s.equals("以完成")){
+//                该项已完成
+                return false;
+            }*/
             if (flag) {
                 if (s == vau_text || s.equals(vau_text)) {
                     AcessibilityApi.performViewClick(accessibilityNodeInfoList.get(n));

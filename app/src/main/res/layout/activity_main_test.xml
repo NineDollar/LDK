@@ -42,11 +42,19 @@
             android:layout_below="@id/btn_vido"/>
 
         <Button
+            android:id="@+id/btn_answer_dd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_answr_dd"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/btn_answer"/>
+
+        <Button
             android:id="@+id/jrxy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_below="@id/btn_answer"
+            android:layout_below="@id/btn_answer_dd"
             android:text="打开今日校园" />
 
         <Button

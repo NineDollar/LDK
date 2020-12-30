@@ -59,7 +59,7 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         mcontext = MainActivity.getMcontext();
-        FloatingWindow.chekPermission();
+        floatingwindow();
         fuzhuservice();
         naozhongserver();
         notification();
@@ -99,7 +99,6 @@ public class MainService extends Service {
         }
     }
 
-
     /**
      * @description 启动通知栏客户端
      * @param
@@ -110,5 +109,9 @@ public class MainService extends Service {
     public void notification() {
         Binding binding = new Binding(MyNotificationType.case1,MyNotificationType.key1,MyNotificationType.value1);
         binding.doBindService();
+    }
+
+    public void floatingwindow(){
+        FloatingWindow.chekPermission();
     }
 }
