@@ -1,4 +1,4 @@
-package com.sys.ldk.apptype;
+package com.sys.ldk.app;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

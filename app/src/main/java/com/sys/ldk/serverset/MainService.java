@@ -112,6 +112,7 @@ public class MainService extends Service {
     }
 
     public void floatingwindow(){
-        FloatingWindow.chekPermission();
+        FloatingWindow floatingWindow = new FloatingWindow();
+        floatingWindow.chekPermission();
     }
 }

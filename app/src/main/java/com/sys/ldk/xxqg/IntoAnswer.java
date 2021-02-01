@@ -17,8 +17,8 @@ import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
 
 public class IntoAnswer {
     public static int intoanswer() {
-        ThreadSleepTime.threadsleepshort();
-        int ReFlag = 0;
+        ThreadSleepTime.sleepshort();
+        int ReFlag;
         LogUtil.D("开始自动答题");
 //        关闭键盘
         AcessibilityApi.closeKeyBoard();
@@ -105,10 +105,10 @@ public class IntoAnswer {
     public static boolean abcdInfoandtext(HashMap<String, AccessibilityNodeInfo> hashMaptextInfo, HashMap<String, AccessibilityNodeInfo> hashMapabcdInfo, List<String> listabcdtext) {
         int n = 0;
         if (hashMaptextInfo == null) {
-            hashMaptextInfo = new HashMap<String, AccessibilityNodeInfo>();
+            hashMaptextInfo = new HashMap<>();
         }
         if (hashMapabcdInfo == null) {
-            hashMapabcdInfo = new HashMap<String, AccessibilityNodeInfo>();
+            hashMapabcdInfo = new HashMap<>();
         }
         if (listabcdtext == null) {
             listabcdtext = new ArrayList<>();
@@ -131,11 +131,9 @@ public class IntoAnswer {
         }
 
 //        输出
-        int m = 0;
         for (HashMap.Entry e : hashMaptextInfo.entrySet()
         ) {
             LogUtil.D("hashMaptextInfo: text: " + e.getKey() + " click: " + hashMaptextInfo.get(e.getKey()).isClickable());
-            m += 1;
         }
         int q = 0;
         for (HashMap.Entry e : hashMapabcdInfo.entrySet()
@@ -314,7 +312,7 @@ public class IntoAnswer {
                 LogUtil.E("点击下一题失败");
                 return FAILURE;
             }
-            ThreadSleepTime.threadsleepshort();
+            ThreadSleepTime.sleepshort();
             CReFlag = overanswer();
             switch (CReFlag) {
                 case OVER:

@@ -1,4 +1,4 @@
-package com.sys.ldk.apptype;
+package com.sys.ldk.app;
 
 import android.content.Context;
 
@@ -10,11 +10,11 @@ import com.sys.ldk.accessibility.util.LogUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class Apps {
-    private final static String xuexi = "大国";
-    private final static String Qq = "QQ";
-    private final static String jinri = "今日校园";
-    private final static String mayi = "蚂蚁森林";
-    private final static String weixin = "微信";
+    public final static String xuexi = "大国";
+    public final static String Qq = "QQ";
+    public final static String jinri = "今日校园";
+    public final static String mayi = "蚂蚁森林";
+    public final static String weixin = "微信";
 
     public void startapp(@NotNull String appstr, Context context) {
         switch (appstr) {

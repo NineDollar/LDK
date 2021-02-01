@@ -1,4 +1,4 @@
-package com.sys.ldk.apptype;
+package com.sys.ldk.app;
 
 import android.app.Service;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,10 +16,8 @@ import com.sys.ldk.MyApplication;
 import com.sys.ldk.R;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
-import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.power.PowerThread;
 import com.sys.ldk.serverset.Binding;
-import com.sys.ldk.serverset.MessengerService;
 import com.sys.ldk.serverset.MyNotificationType;
 
 /**

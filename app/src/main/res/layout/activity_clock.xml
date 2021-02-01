@@ -10,19 +10,33 @@
 
     <ListView
         android:id="@+id/clockItmesList"
-        app:layout_constraintTop_toTopOf="parent"
-        android:divider="@null"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="match_parent"
+        android:divider="@null"
+        app:layout_constraintTop_toTopOf="parent"></ListView>
 
     <ImageView
         android:id="@+id/addclock"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@drawable/add"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="30dp"
+        android:background="@drawable/add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <Switch
+        android:id="@+id/xufuchuang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/xufuchuang"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="@+id/addclock"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/addclock"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

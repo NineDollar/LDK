@@ -29,9 +29,7 @@ public class AcessibilityApi {
         NOTIFICATIONS, //通知
         SCROLL_BACKWARD,  //下滑
         SCROLL_FORWARD, //上划
-
     }
-
 
     private static AccessibilityEvent mAccessibilityEvent = null;
     public static AccessibilityService mAccessibilityService = null;
@@ -438,7 +436,6 @@ public class AcessibilityApi {
 
     }
 
-
     /**
      * 查找所有节点,比较耗时
      *
@@ -452,12 +449,10 @@ public class AcessibilityApi {
         }
         if (node == null) {
             node = getRootNodeInfo();
-
         }
 
         if (node != null) {
             int childNum = node.getChildCount();
-
 
             if (childNum > 0) {
                 for (int i = 0; i < childNum; i++) {

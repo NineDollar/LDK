@@ -146,12 +146,23 @@ public class ApiUtil {
     }
 
 
-    public static void sleepTime(long t) {
+    /**
+     * 线程睡眠，以秒为单位
+     * @param time
+     * @return 抛出异常为trun
+     */
+    public static boolean sleepTime(long time) {
+        LogUtil.V("线程睡眠" + time + "秒");
+        time *= 1000;
         try {
-            Thread.sleep(t);
+            Thread.sleep(time);
         } catch (InterruptedException e) {
+            LogUtil.I("抛出线程中断");
             e.printStackTrace();
+            return true;
         }
+        LogUtil.V("睡眠结束");
+        return false;
     }
 
 }

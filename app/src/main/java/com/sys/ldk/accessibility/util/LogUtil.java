@@ -13,13 +13,13 @@ import java.util.Date;
 
 public class LogUtil {
     private static final String TAG = User.gettime();
-    private static final String TS = "ldk";
+    private static final String TS = "Log";
     private static boolean isSHow = User.isApkInDebug(Keyguard.context);
     public static boolean issave = true;
     public static String filename = "1.txt";
     public static void E(String msg) {
         if (isSHow) {
-            Log.e(TS + " " + TAG, msg);
+            Log.e(TS + " ", msg);
         }
         if(issave){
             savelog(msg);
@@ -28,7 +28,7 @@ public class LogUtil {
 
     public static void D(String msg) {
         if (isSHow) {
-            Log.d(TS + " " + TAG, msg);
+            Log.d(TS + " ", msg);
         }
         if(issave){
             savelog(msg);
@@ -37,7 +37,7 @@ public class LogUtil {
 
     public static void I(String msg) {
         if (isSHow) {
-            Log.i(TS + " " + TAG, msg);
+            Log.i(TS + " ", msg);
         }
         if(issave){
             savelog(msg);
@@ -46,7 +46,7 @@ public class LogUtil {
 
     public static void V(String msg) {
         if (isSHow) {
-            Log.v(TS + " " + TAG, msg);
+            Log.v(TS + " ", msg);
         }
         if(issave){
             savelog(msg);
@@ -55,7 +55,7 @@ public class LogUtil {
 
     public static void W(String msg) {
         if (isSHow) {
-            Log.w(TS + " " + TAG, msg);
+            Log.w(TS + " ", msg);
         }
         if(issave){
             savelog(msg);

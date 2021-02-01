@@ -1,7 +1,6 @@
 package com.sys.ldk.clock;
 
 import android.app.AlarmManager;
-import android.app.LocalActivityManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -13,7 +12,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -25,19 +23,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.sys.ldk.MyApplication;
-import com.sys.ldk.accessibility.api.User;
-import com.sys.ldk.accessibility.util.LogUtil;
-import com.sys.ldk.apptype.Appchoose;
-import com.sys.ldk.apptype.StartAppReceiver;
-import com.sys.ldk.apptype.Startapp;
-import com.sys.ldk.serverset.Binding;
-import com.sys.ldk.serverset.MessengerService;
+import com.sys.ldk.app.Startapp;
 import com.sys.ldk.serverset.MyNotificationType;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 

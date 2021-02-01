@@ -35,14 +35,14 @@ public class Dxt {
 
 //      拿到提示
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
        /* HashMap<String, Integer> hashMap = new HashMap<>();
         hashMap.put("查看提示", 0);
         AccessibilityNodeInfo a = Answer.getallInfotextandafterInfo(hashMap).get("查看提示");
         AcessibilityApi.performViewClick(a);*/
         User.clik_text_Info("查看提示");
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         List<String> alltextlistafter = User.getallInfottext(false);
         String tishistr = alltextlistafter.get(alltextlistbefore.size() - 3);
         if (tishistr.isEmpty()) {
@@ -50,7 +50,7 @@ public class Dxt {
         }
         LogUtil.D("提示： " + tishistr);
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
 
         if (tishistr.indexOf("故本题选") != -1) {
@@ -65,12 +65,12 @@ public class Dxt {
 
 //       提示和答案匹配
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         String dn = funtion1(listabcdtext, tishistr);
         if (dn != null) {
             AcessibilityApi.performViewClick(hashMaptextInfo.get(dn));
 //            User.Threadsleep500();
-            ThreadSleepTime.threadsleepshortshort();
+            ThreadSleepTime.sleepshorts();
             return IntoAnswer.cliknext(null);
         }
 
@@ -81,7 +81,7 @@ public class Dxt {
     private static int funtion4(HashMap<String, AccessibilityNodeInfo> hashMapabcdInfo) {
         LogUtil.E("未找到答案，跳过");
         AcessibilityApi.performViewClick(hashMapabcdInfo.get("A."));
-        ThreadSleepTime.threadsleepshortshort();
+        ThreadSleepTime.sleepshorts();
         return IntoAnswer.cliknext(null);
     }
 
@@ -90,7 +90,7 @@ public class Dxt {
         LogUtil.D("故本题选" + dn);
         User.Threadsleep(1);
         AcessibilityApi.performViewClick(hashMap.get(dn + "."));
-        ThreadSleepTime.threadsleepshortshort();
+        ThreadSleepTime.sleepshorts();
         return IntoAnswer.cliknext(null);
     }
 
@@ -100,7 +100,7 @@ public class Dxt {
             if (tishistr.indexOf(s) != -1) {
                 User.clik_text_Info("正确");
 //                User.Threadsleep(1);
-                ThreadSleepTime.threadsleepshortshort();
+                ThreadSleepTime.sleepshorts();
                 return IntoAnswer.cliknext(null);
             }
         }
@@ -118,20 +118,20 @@ public class Dxt {
                 LogUtil.D("应该选正确");
                 AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
 //                User.Threadsleep(1);
-                ThreadSleepTime.threadsleepshort();
+                ThreadSleepTime.sleepshorts();
                 AcessibilityApi.performViewClick(hashMaptextInfo.get("正确"));
 //                User.Threadsleep(1);
-                ThreadSleepTime.threadsleepshortshort();
+                ThreadSleepTime.sleepshorts();
                 return IntoAnswer.cliknext(null);
             } else if (hashMap1.get(s1) < 0) {
                 LogUtil.D("找到不同关键字:" + s1);
                 LogUtil.D("应该选不正确");
                 AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
 //                User.Threadsleep(1);
-                ThreadSleepTime.threadsleepshort();
+                ThreadSleepTime.sleepshorts();
                 AcessibilityApi.performViewClick(hashMaptextInfo.get("错误"));
 //                User.Threadsleep(1);
-                ThreadSleepTime.threadsleepshortshort();
+                ThreadSleepTime.sleepshorts();
                 return IntoAnswer.cliknext(null);
             } else if (hashMap1.get(s1) == 1) {
                 LogUtil.D("都未找到:" + s1);

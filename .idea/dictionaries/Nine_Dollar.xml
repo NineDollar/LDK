@@ -5,10 +5,23 @@
       <w>answr</w>
       <w>apptype</w>
       <w>dati</w>
+      <w>isrun</w>
+      <w>mcontext</w>
+      <w>mystart</w>
+      <w>mystop</w>
+      <w>mythreadsleep</w>
+      <w>questiontype</w>
+      <w>questiontypeflag</w>
+      <w>readandvideo</w>
+      <w>readvideo</w>
+      <w>sdfasdfsf</w>
       <w>serverset</w>
       <w>startapp</w>
       <w>tencent</w>
+      <w>theat</w>
+      <w>threadsleep</w>
       <w>xiapp</w>
+      <w>xufuchuang</w>
     </words>
   </dictionary>
 </component>

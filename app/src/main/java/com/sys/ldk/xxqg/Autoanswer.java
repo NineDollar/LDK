@@ -5,10 +5,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
-import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 
-import java.security.acl.LastOwnerException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -108,7 +106,7 @@ public class Autoanswer {
         if (hashMap.containsKey(weidatiORkaishidati)) {
             AcessibilityApi.performViewClick(hashMap.get(weidatiORkaishidati));
 //            User.Threadsleep(2);
-            ThreadSleepTime.threadsleepshort();
+            ThreadSleepTime.sleepshort();
 //                    自动答题
             if (startanswer()) {
                 LogUtil.D("答题完成，开始下一项");
@@ -190,7 +188,7 @@ public class Autoanswer {
                     return true;
             }
 //            下一题等待时间
-            ThreadSleepTime.threadsleep();
+            ThreadSleepTime.sleep();
         } while (true);
     }
 

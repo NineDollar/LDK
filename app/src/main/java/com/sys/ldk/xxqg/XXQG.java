@@ -7,9 +7,6 @@ import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 
-
-import static com.sys.ldk.accessibility.api.User.Threadsleep;
-
 public class XXQG {
 
     public static boolean openxxqj(Context context) {
@@ -63,15 +60,15 @@ public class XXQG {
             LogUtil.D("首页点击成功");
             User.Threadsleep(1);
             UiApi.clickNodeByDesWithTimeOut(2000, "工作");
-            ThreadSleepTime.threadsleeplog();
+            ThreadSleepTime.sleeplog();
             if (AcessibilityApi.clickTextViewByText("四川")) {
                 LogUtil.D("四川点击成功");
-                ThreadSleepTime.threadsleeplog();
+                ThreadSleepTime.sleeplog();
                 AcessibilityApi.clickTextViewByText("四川");
-                ThreadSleepTime.threadsleeplog();
+                ThreadSleepTime.sleeplog();
                 if (AcessibilityApi.clickTextViewByText("四川学习平台")) {
                     LogUtil.D("点击四川学习平台成功");
-                    ThreadSleepTime.threadsleeplog();
+                    ThreadSleepTime.sleeplog();
                     AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
                 } else {
                     LogUtil.D("点击四川学习平台失败");

@@ -5,18 +5,24 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.xxqg.IntoAnswer;
+import com.sys.ldk.xxqg.ThreadSleepTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.sys.ldk.xxqg.ReturnType.FAILURE;
 import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
 
 public class Doxt {
+    /**
+     * 多选题
+     * @param questiontype
+     * @return
+     */
     public static int doxt(String questiontype) {
-//        User.Threadsleep500();
-//        ThreadSleepTime.threadsleepshort();
         List<String> alltextlistbefore = User.getallInfottext(false);
         List<String> timu = IntoAnswer.gettimu(questiontype);
         for (String s : timu
@@ -25,19 +31,16 @@ public class Doxt {
         }
 
 //       拿到答案选项
-//        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         HashMap<String, AccessibilityNodeInfo> hashMaptextInfo = new HashMap<>();
         HashMap<String, AccessibilityNodeInfo> hashMapabcdInfo = new HashMap<>();
         List<String> listabcdtext = new ArrayList<>();
         IntoAnswer.abcdInfoandtext(hashMaptextInfo, hashMapabcdInfo, listabcdtext);
 
 //      拿到提示
-//        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         User.clik_text_Info("查看提示");
-//        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         List<String> alltextlistafter = User.getallInfottext(false);
         String tishistr = alltextlistafter.get(alltextlistbefore.size() - 3);
         if (tishistr.isEmpty()) {
@@ -45,22 +48,22 @@ public class Doxt {
         }
         LogUtil.D("提示： " + tishistr);
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
 
 //       开始选择
 //        判断是否全选
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         if (quanxuan(timu.get(0), listabcdtext)) {
             LogUtil.D("全选");
             for (HashMap.Entry e : hashMapabcdInfo.entrySet()
             ) {
-                ThreadSleepTime.threadsleepshort();
+                ThreadSleepTime.sleepshort();
                 AcessibilityApi.performViewClick(hashMapabcdInfo.get(e.getKey()));
             }
 //            User.Threadsleep(1);
-            ThreadSleepTime.threadsleepshortshort();
+            ThreadSleepTime.sleepshorts();
             return IntoAnswer.cliknext(null);
         } else {
             LogUtil.D("不能全选");
@@ -72,13 +75,13 @@ public class Doxt {
                     ) {
                         LogUtil.D("e.getKey():" + e.getKey());
                         if (s.equals(e.getKey())) {
-                            ThreadSleepTime.threadsleepshort();
+                            ThreadSleepTime.sleepshort();
                             AcessibilityApi.performViewClick(hashMaptextInfo.get(e.getKey()));
                         }
                     }
                 }
 //                User.Threadsleep(1);
-                ThreadSleepTime.threadsleepshortshort();
+                ThreadSleepTime.sleepshorts();
                 return IntoAnswer.cliknext(null);
             }else {
                 LogUtil.D("答案为空");
@@ -112,4 +115,5 @@ public class Doxt {
         }
         return false;
     }
+
 }

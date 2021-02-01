@@ -1,7 +1,9 @@
 package com.sys.ldk;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -77,8 +79,9 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        QQ qq = new QQ();
-                        qq.openQQ(getApplicationContext());
+                        /*QQ qq = new QQ();
+                        qq.openQQ(getApplicationContext());*/
+                        read();
                     }
                 }).start();
 
@@ -87,7 +90,7 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
     }
 
     private void initView() {
-        btn_read = (Button) findViewById(R.id.btn_read);
+        btn_read = (Button) findViewById(R.id.btn_test1);
         btn_answer = (Button) findViewById(R.id.btn_answer);
         btn_vido = (Button) findViewById(R.id.btn_vido);
         btn_test = (Button) findViewById(R.id.btn_test);
@@ -100,11 +103,12 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
         btn_answer_dd.setOnClickListener(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         XXQG xxqg = new XXQG();
         switch (v.getId()) {
-            case R.id.btn_read:
+            case R.id.btn_test1:
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -157,11 +161,43 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
                 }).start();
                 break;
             case R.id.btn_test:
-                test();
+                video();
                 break;
             case R.id.btn_answer_dd:
 
                 break;
+        }
+    }
+
+    ThreadRead threadRead = new ThreadRead();
+
+
+    private void test1() {
+
+    }
+
+    private void video() {
+        threadRead.interrupt();
+    }
+
+    private void read() {
+
+        threadRead.start();
+    }
+
+    public class ThreadRead extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            while (!isInterrupted()) {
+                try {
+                    Log.e("--", "测试");
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
         }
     }
 

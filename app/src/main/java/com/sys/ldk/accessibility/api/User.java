@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.sys.ldk.TaskTheat;
 import com.sys.ldk.shellService.SocketClient;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
@@ -47,11 +48,24 @@ public class User {
         return false;
     }
 
-    public static void Threadsleep(long time) {
-        long time1 = time * 1000;
-        LogUtil.V("线程睡眠" + time + "秒");
-        ApiUtil.sleepTime(time1);
-        LogUtil.V("睡眠结束");
+    public static void Threadsleep( long time) {
+//        long time1 = time * 1000;
+//        LogUtil.V("线程睡眠" + time + "秒");
+//        if(ApiUtil.sleepTime(time1)){
+//            return true;
+//        }
+//        LogUtil.V("睡眠结束");
+//        return false;
+    }
+    public static boolean Threadsleep(TaskTheat.MyThread myThread, long time) {
+//        long time1 = time * 1000;
+//        LogUtil.V("线程睡眠" + time + "秒");
+//        if(ApiUtil.sleepTime(time1)){
+//            return true;
+//        }
+//        LogUtil.V("睡眠结束");
+//        return false;
+        return myThread.mythreadsleep();
     }
 
     public static void Threadsleep200() {
@@ -77,7 +91,6 @@ public class User {
         ApiUtil.sleepTime(1500);
         LogUtil.V("睡眠结束");
     }
-
 
 
     public static void authority_alerdialog(final Context context) {
@@ -210,7 +223,7 @@ public class User {
         List<String> stringListtext = new ArrayList<>();
         for (int i = 0; i < listInfo.size(); i++) {
             String text = listInfo.get(i).getText() + "";
-            if(open){
+            if (open) {
                 LogUtil.D("Info " + i + " text: " + text);
             }
             stringListtext.add(text);
@@ -319,7 +332,7 @@ public class User {
         User.Threadsleep1500();
         ApiUtil.perforGlobalSwipe(493, 1650, 477, 859);
 
-        User.Threadsleep(1);
+//        User.Threadsleep(1);
         ApiUtil.perforGlobalClick(573, 1516);
 
         User.Threadsleep500();

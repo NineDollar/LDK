@@ -13,11 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +31,7 @@ import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.MyDatabaseHelper;
 import com.sys.ldk.clock.MySimpleAdaptey;
-import com.sys.ldk.clock.ServiceUtil;
+import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.Permission;
 import com.sys.ldk.shellService.Checkshell;
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private List<ClockBean> clockBeanList = new ArrayList<>();
     private ImageView addclock;
+    private Switch xufuchuang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明化通知栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setContentView(R.layout.activity_clock);
+        initView();
         mcontext = this;
 
         requestMyPermissions();
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         initDatabase();
         mySimpleAdaptey.notifyDataSetChanged();
+        xufuchuang.setChecked(EasyFloat.appFloatIsShow());
     }
 
     @Override
@@ -139,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
     public static Context getMcontext() {
         return mcontext;
     }
-
     private int deleteItem(ClockBean clockBean) {
         db.delete("clocks", "id=?", new String[]{clockBean.getId() + ""});
         initDatabase();
@@ -210,5 +212,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    private void initView() {
+        xufuchuang = (Switch) findViewById(R.id.xufuchuang);
+        xufuchuang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    FloatingWindow floatingWindow = new FloatingWindow();
+                    floatingWindow.chekPermission();
+                } else {
+                    EasyFloat.dismissAppFloat();
+                }
+            }
+        });
+    }
 }

@@ -9,4 +9,5 @@ public class QQ {
     public static void openQQ(Context context) {
         startAPP(context, "com.tencent.mobileqq", "com.tencent.mobileqq.activity.SplashActivity");
     }
+
 }

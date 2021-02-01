@@ -40,10 +40,10 @@ public class Tikot {
 
 //      拿到提示
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         User.clik_text_Info("查看提示");
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         List<String> alltextlistafter = User.getallInfottext(false);
 
         String tishistr = alltextlistafter.get(alltextlistbefore.size() - 3);
@@ -63,7 +63,7 @@ public class Tikot {
 
         LogUtil.D("提示： " + tishistr);
 //        User.Threadsleep500();
-        ThreadSleepTime.threadsleepshort();
+        ThreadSleepTime.sleepshort();
         AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
 //        获得输入框Info
         List<AccessibilityNodeInfo> inputInfo = IntoAnswer.getinputInfo();
@@ -71,7 +71,7 @@ public class Tikot {
         if (tishistr.equals("请观看视频")) {
             inputdnfalse(inputInfo);
 //            User.Threadsleep(1);
-            ThreadSleepTime.threadsleepshortshort();
+            ThreadSleepTime.sleepshorts();
             return IntoAnswer.cliknext(null);
         }
 
@@ -100,7 +100,7 @@ public class Tikot {
                 LogUtil.E("出错");
                 return FAILURE;
         }
-        ThreadSleepTime.threadsleepshortshort();
+        ThreadSleepTime.sleepshorts();
         int q = IntoAnswer.cliknext(null);
         LogUtil.W("q: "+q);
         return q;

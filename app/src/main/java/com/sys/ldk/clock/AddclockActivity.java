@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.sys.ldk.apptype.Apps;
+import com.sys.ldk.app.Apps;
 import com.sys.ldk.MainActivity;
 import com.sys.ldk.R;
 

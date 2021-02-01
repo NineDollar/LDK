@@ -1,7 +1,6 @@
 package com.sys.ldk;
 
 import android.accessibilityservice.GestureDescription;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,32 +14,27 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.view.accessibility.AccessibilityNodeInfo;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import com.sys.ldk.accessibility.api.AcessibilityApi;
-import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
-import com.sys.ldk.apptype.Startapp;
+import com.sys.ldk.app.AppThreas;
+import com.sys.ldk.app.Startapp;
+import com.sys.ldk.app.function;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.enums.ShowPattern;
 import com.sys.ldk.easyfloat.enums.SidePattern;
-import com.sys.ldk.easyfloat.interfaces.OnInvokeView;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
-import com.sys.ldk.sdcard.SaveLog;
 import com.sys.ldk.serverset.MyNotificationType;
-import com.sys.ldk.weixin.WXDK;
 import com.sys.ldk.xxqg.Autoanswer;
 
-import java.util.List;
-
 public class FloatingWindow {
-    private static Context mcontext;
+    private Context mcontext;
+    private AppThreas appThreas = new AppThreas();
+    private Messenger mService;
+    private TaskTheat taskTheat = new TaskTheat();
 
-    public static void chekPermission() {
+    public void chekPermission() {
         mcontext = MainActivity.getMcontext();
         if (!PermissionUtils.checkPermission(mcontext)) {
             AlertDialog alertDialog = new AlertDialog.Builder(mcontext)
@@ -61,23 +55,39 @@ public class FloatingWindow {
     }
 
     //    悬浮窗
-    private static void Floating_window() {
+    private void Floating_window() {
         EasyFloat.with(mcontext)
                 .setSidePattern(SidePattern.RESULT_HORIZONTAL)
                 .setShowPattern(ShowPattern.ALL_TIME)
-                .setGravity(Gravity.END, 0, 700)
-                .setLayout(R.layout.activity_floatingwindow,
-                        new OnInvokeView() {
-                            @Override
-                            public void invoke(View View) {
-                                View.findViewById(R.id.btn_floatwindow).setOnClickListener(v1 -> test());
-                            }
-                        })
+                .setGravity(Gravity.END, 0, 500)
+                .setLayout(R.layout.activity_floatingwindow, View -> {
+                    View.findViewById(R.id.btn_readvideo).setOnClickListener(v1 -> readandvideo());
+                    View.findViewById(R.id.ivClose).setOnClickListener(v1 -> close());
+                    View.findViewById(R.id.btn_dati).setOnClickListener(v1 -> dati());
+
+                    View.findViewById(R.id.btn_start).setOnClickListener(v1 -> taskTheat.start());
+                    View.findViewById(R.id.zhanting).setOnClickListener(v1 -> taskTheat.zhanting());
+                    View.findViewById(R.id.huifu).setOnClickListener(v1 -> taskTheat.huifu());
+                    View.findViewById(R.id.tingzhi).setOnClickListener(v1 -> taskTheat.tingzhi());
+                    View.findViewById(R.id.btn_test).setOnClickListener(v1 -> taskTheat.test());
+                })
                 .show();
     }
-    private static Messenger mService;
 
-    private static void test() {
+    private void readandvideo() {
+        appThreas.run(function.readandvideo);
+    }
+
+    private void dati() {
+        appThreas.run(function.dati);
+    }
+
+
+    private void close() {
+        EasyFloat.dismissAppFloat();
+    }
+
+    private void test() {
         LogUtil.I("点击2");
 
         if (Autoanswer.startanswer()) {
@@ -86,17 +96,9 @@ public class FloatingWindow {
             LogUtil.D("答题失败");
         }
 
-//        WXDK.startdgsx();
-//        doRightThenDownDrag();
-       /* List<AccessibilityNodeInfo> list = AcessibilityApi.getAllNode(null, null);
-        for (AccessibilityNodeInfo a:list
-             ) {
-            LogUtil.I(""+a+"\n");
-        }*/
-//        doBindService();
     }
 
-    public static ServiceConnection mConnection = new ServiceConnection() {
+    public ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d("ClockService", "连接成功");
@@ -111,19 +113,20 @@ public class FloatingWindow {
                 e.printStackTrace();
             }
         }
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Log.d("ClockService", "连接失败");
         }
     };
 
-    public static void doBindService() {
+    public void doBindService() {
         Intent intent = new Intent(MyApplication.getContext(), Startapp.class);
         mcontext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     // Simulates an L-shaped drag path: 200 pixels right, then 200 pixels down.
-    private static void doRightThenDownDrag() {
+    private void doRightThenDownDrag() {
         Path dragRightPath = new Path();
         dragRightPath.moveTo(200, 200);
         dragRightPath.lineTo(400, 200);
@@ -141,5 +144,6 @@ public class FloatingWindow {
         rightThenDownDrag.continueStroke(dragDownPath, dragRightDuration,
                 dragDownDuration, false);
     }
+
 
 }

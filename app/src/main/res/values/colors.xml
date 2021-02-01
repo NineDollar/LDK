@@ -23,4 +23,8 @@
     <color name="green">#00FF00</color>
 
     <color name="putty">#DCCA82</color>
+
+    <color name="translucent">#80000000</color>
+    <color name="translucent1">#1A00B5BB</color>
+
 </resources>

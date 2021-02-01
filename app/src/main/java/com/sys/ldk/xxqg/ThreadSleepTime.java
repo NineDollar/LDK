@@ -3,19 +3,33 @@ package com.sys.ldk.xxqg;
 import com.sys.ldk.accessibility.api.User;
 
 public class ThreadSleepTime {
-    public static void threadsleeplog() {
+
+    /**
+     * 随眠2秒
+     */
+    public static void sleeplog() {
         User.Threadsleep(2);
     }
 
-    public static void threadsleep() {
+    /**
+     * 随眠一秒
+     */
+    public static void sleep() {
         User.Threadsleep(1);
     }
 
-    public static void threadsleepshort() {
+
+    /**
+     * 睡眠0.5秒
+     */
+    public static void sleepshort() {
         User.Threadsleep500();
     }
 
-    public static void threadsleepshortshort() {
+    /**
+     * 睡眠0.2秒
+     */
+    public static void sleepshorts() {
         User.Threadsleep200();
     }
 }

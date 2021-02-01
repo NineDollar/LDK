@@ -57,7 +57,7 @@
             android:exported="true" />
 
         <service
-            android:name=".apptype.Startapp"
+            android:name=".app.Startapp"
             android:enabled="true"
             android:exported="true" />
 
@@ -69,7 +69,7 @@
             android:process=":remote" />
 
         <receiver
-            android:name=".apptype.StartAppReceiver"
+            android:name=".app.StartAppReceiver"
             android:enabled="true"
             android:exported="true" />
 
