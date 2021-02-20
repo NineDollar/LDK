@@ -20,20 +20,27 @@ import androidx.appcompat.app.AlertDialog;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.app.AppThreas;
 import com.sys.ldk.app.Startapp;
+import com.sys.ldk.app.TaskThread;
 import com.sys.ldk.app.function;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.enums.ShowPattern;
 import com.sys.ldk.easyfloat.enums.SidePattern;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
 import com.sys.ldk.serverset.MyNotificationType;
+import com.sys.ldk.xxqg.AutoRead;
+import com.sys.ldk.xxqg.AutoVideo;
 import com.sys.ldk.xxqg.Autoanswer;
+import com.sys.ldk.xxqg.ThreadSleepTime;
+import com.sys.ldk.xxqg.XXQG;
+
+import static com.sys.ldk.serverset.Keyguard.context;
 
 public class FloatingWindow {
     private Context mcontext;
     private AppThreas appThreas = new AppThreas();
     private Messenger mService;
-    private TaskTheat taskTheat = new TaskTheat();
-
+    private TaskThread taskTheat = new TaskThread();
+    private XXQG xxqg = new XXQG();
     public void chekPermission() {
         mcontext = MainActivity.getMcontext();
         if (!PermissionUtils.checkPermission(mcontext)) {
@@ -62,26 +69,47 @@ public class FloatingWindow {
                 .setGravity(Gravity.END, 0, 500)
                 .setLayout(R.layout.activity_floatingwindow, View -> {
                     View.findViewById(R.id.btn_readvideo).setOnClickListener(v1 -> readandvideo());
-                    View.findViewById(R.id.ivClose).setOnClickListener(v1 -> close());
                     View.findViewById(R.id.btn_dati).setOnClickListener(v1 -> dati());
-
-                    View.findViewById(R.id.btn_start).setOnClickListener(v1 -> taskTheat.start());
+                     View.findViewById(R.id.ivClose).setOnClickListener(v1 -> close());
+                   /*View.findViewById(R.id.btn_start).setOnClickListener(v1 -> taskTheat.start());
                     View.findViewById(R.id.zhanting).setOnClickListener(v1 -> taskTheat.zhanting());
                     View.findViewById(R.id.huifu).setOnClickListener(v1 -> taskTheat.huifu());
                     View.findViewById(R.id.tingzhi).setOnClickListener(v1 -> taskTheat.tingzhi());
-                    View.findViewById(R.id.btn_test).setOnClickListener(v1 -> taskTheat.test());
+                    View.findViewById(R.id.btn_test).setOnClickListener(v1 -> taskTheat.test());*/
                 })
                 .show();
     }
 
     private void readandvideo() {
-        appThreas.run(function.readandvideo);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LogUtil.D("打开学习强国");
+                if (!xxqg.startLearning_power(context, "cn.xuexi.android", "com.alibaba.android.rimet.biz.SplashActivity")) {
+                    LogUtil.E("打开学习强国失败");
+                    return;
+                }
+                if (!xxqg.isLearning_power()) {
+                    LogUtil.E("不在学习强国页面");
+                    return;
+                }
+                AutoRead.auto_read();
+                ThreadSleepTime.sleeplog();
+                AutoVideo.auto_video();
+                ThreadSleepTime.sleeplog();
+                Autoanswer.doactivity();
+            }
+        }).start();
     }
 
     private void dati() {
-        appThreas.run(function.dati);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Autoanswer.startanswer();
+            }
+        }).start();
     }
-
 
     private void close() {
         EasyFloat.dismissAppFloat();
@@ -144,6 +172,4 @@ public class FloatingWindow {
         rightThenDownDrag.continueStroke(dragDownPath, dragRightDuration,
                 dragDownDuration, false);
     }
-
-
 }

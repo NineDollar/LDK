@@ -16,7 +16,7 @@ import static com.sys.ldk.accessibility.api.User.Threadsleep;
 
 public class AutoVideo {
     //    最大观看时间5分钟
-    private static int MAXshijina = 2 * 60;
+    private static int MAXshijina = 5 * 2;
     private static int times = 10;
     private static int count = 0;
 
@@ -28,10 +28,10 @@ public class AutoVideo {
         AcessibilityApi.clickTextViewByText("学习视频");
         User.Threadsleep(2);
         AcessibilityApi.clickTextViewByText("学习视频");
-        User.Threadsleep(2);
+        /*User.Threadsleep(2);
         AcessibilityApi.clickTextViewByText("看理论");
         User.Threadsleep(2);
-        AcessibilityApi.clickTextViewByText("看理论");
+        AcessibilityApi.clickTextViewByText("看理论");*/
         User.Threadsleep(2);
         AcessibilityApi.clickTextViewByText("第一频道");
         User.Threadsleep(2);

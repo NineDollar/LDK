@@ -10,8 +10,8 @@ import java.security.acl.LastOwnerException;
 import java.util.List;
 
 public class AutoRead {
-    private static final int read_time = 60;
-    private static int reading_times = 5;
+    private static final int read_time = 1*5;
+    private static int reading_times = 10;
 
     public static boolean auto_read() {
         LogUtil.D("要闻---开始阅读");

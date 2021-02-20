@@ -145,15 +145,12 @@ public class ApiUtil {
         }).start();
     }
 
-
     /**
-     * 线程睡眠，以秒为单位
+     * 线程睡眠，以毫秒为单位
      * @param time
      * @return 抛出异常为trun
      */
     public static boolean sleepTime(long time) {
-        LogUtil.V("线程睡眠" + time + "秒");
-        time *= 1000;
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {

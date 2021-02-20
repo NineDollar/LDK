@@ -11,7 +11,8 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.sys.ldk.TaskTheat;
+
+import com.sys.ldk.app.TaskThread;
 import com.sys.ldk.shellService.SocketClient;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
@@ -48,16 +49,14 @@ public class User {
         return false;
     }
 
-    public static void Threadsleep( long time) {
-//        long time1 = time * 1000;
-//        LogUtil.V("线程睡眠" + time + "秒");
-//        if(ApiUtil.sleepTime(time1)){
-//            return true;
-//        }
-//        LogUtil.V("睡眠结束");
-//        return false;
+    public static void Threadsleep(double time) {
+        LogUtil.V("线程睡眠" + time + "秒");
+        time *= 1000;
+        ApiUtil.sleepTime((long) time);
+        LogUtil.V("睡眠结束");
     }
-    public static boolean Threadsleep(TaskTheat.MyThread myThread, long time) {
+
+    public static boolean Threadsleep(TaskThread.MyThread myThread, long time) {
 //        long time1 = time * 1000;
 //        LogUtil.V("线程睡眠" + time + "秒");
 //        if(ApiUtil.sleepTime(time1)){
@@ -69,26 +68,26 @@ public class User {
     }
 
     public static void Threadsleep200() {
-        LogUtil.V("线程睡眠200毫秒");
+        LogUtil.V("线程睡眠0.2秒");
         ApiUtil.sleepTime(200);
         LogUtil.V("睡眠结束");
     }
 
     public static void Threadsleep500() {
-        LogUtil.V("线程睡眠500毫秒");
+        LogUtil.V("线程睡眠0.5秒");
         ApiUtil.sleepTime(500);
         LogUtil.V("睡眠结束");
     }
 
     public static void Threadsleep700() {
-        LogUtil.V("线程睡眠700毫秒");
+        LogUtil.V("线程睡眠0.7秒");
         ApiUtil.sleepTime(700);
         LogUtil.V("睡眠结束");
     }
 
     public static void Threadsleep1500() {
-        LogUtil.V("线程睡眠1500毫秒");
-        ApiUtil.sleepTime(1500);
+        LogUtil.V("线程睡眠1.5秒");
+        ApiUtil.sleepTime(15000);
         LogUtil.V("睡眠结束");
     }
 
