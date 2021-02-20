@@ -38,7 +38,7 @@ public class Doxt {
         IntoAnswer.abcdInfoandtext(hashMaptextInfo, hashMapabcdInfo, listabcdtext);
 
 //      拿到提示
-        ThreadSleepTime.sleepshort();
+//        ThreadSleepTime.sleepshort();
         User.clik_text_Info("查看提示");
         ThreadSleepTime.sleepshort();
         List<String> alltextlistafter = User.getallInfottext(false);
@@ -47,7 +47,6 @@ public class Doxt {
             tishistr = alltextlistafter.get(alltextlistbefore.size() - 2);
         }
         LogUtil.D("提示： " + tishistr);
-//        User.Threadsleep500();
         ThreadSleepTime.sleepshort();
         AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
 

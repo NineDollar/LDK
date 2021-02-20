@@ -12,7 +12,7 @@ import com.sys.ldk.accessibility.util.LogUtil;
  * @date: 2021/2/1
  */
 public  class TaskTheat {
-    private MyThread myThread;
+    public MyThread myThread;
 
     public TaskTheat() {
         myThread = new MyThread();
@@ -113,9 +113,9 @@ public  class TaskTheat {
                 while (true) {
                     LogUtil.D(index + "   " + getId());
 
-                    if (User.Threadsleep(myThread,1000)) {
+                    /*if (User.Threadsleep(myThread,1000)) {
                         break;
-                    }
+                    }*/
 
                     ++index;
                 }

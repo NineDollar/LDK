@@ -35,7 +35,7 @@ public class Dxt {
 
 //      拿到提示
 //        User.Threadsleep500();
-        ThreadSleepTime.sleepshort();
+//        ThreadSleepTime.sleepshort();
        /* HashMap<String, Integer> hashMap = new HashMap<>();
         hashMap.put("查看提示", 0);
         AccessibilityNodeInfo a = Answer.getallInfotextandafterInfo(hashMap).get("查看提示");

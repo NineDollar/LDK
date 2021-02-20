@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -14,9 +16,15 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.sys.ldk.accessibility.api.AcessibilityApi;
+import com.sys.ldk.accessibility.api.UiApi;
+import com.sys.ldk.accessibility.api.User;
+import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.app.AppThreas;
 import com.sys.ldk.app.Startapp;
@@ -30,17 +38,25 @@ import com.sys.ldk.serverset.MyNotificationType;
 import com.sys.ldk.xxqg.AutoRead;
 import com.sys.ldk.xxqg.AutoVideo;
 import com.sys.ldk.xxqg.Autoanswer;
+import com.sys.ldk.xxqg.IntoAnswer;
 import com.sys.ldk.xxqg.ThreadSleepTime;
 import com.sys.ldk.xxqg.XXQG;
+import com.sys.ldk.xxqg.XxqgFuntion;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.sys.ldk.serverset.Keyguard.context;
 
 public class FloatingWindow {
+
     private Context mcontext;
     private AppThreas appThreas = new AppThreas();
     private Messenger mService;
     private TaskThread taskTheat = new TaskThread();
     private XXQG xxqg = new XXQG();
+
     public void chekPermission() {
         mcontext = MainActivity.getMcontext();
         if (!PermissionUtils.checkPermission(mcontext)) {
@@ -66,11 +82,15 @@ public class FloatingWindow {
         EasyFloat.with(mcontext)
                 .setSidePattern(SidePattern.RESULT_HORIZONTAL)
                 .setShowPattern(ShowPattern.ALL_TIME)
-                .setGravity(Gravity.END, 0, 500)
+                .setGravity(Gravity.END, 0, 900)
                 .setLayout(R.layout.activity_floatingwindow, View -> {
                     View.findViewById(R.id.btn_readvideo).setOnClickListener(v1 -> readandvideo());
                     View.findViewById(R.id.btn_dati).setOnClickListener(v1 -> dati());
-                     View.findViewById(R.id.ivClose).setOnClickListener(v1 -> close());
+                    View.findViewById(R.id.ivClose).setOnClickListener(v1 -> close());
+                 /*   View.findViewById(R.id.alltext).setOnClickListener(v1 -> getfallinfo());
+                    View.findViewById(R.id.btn_test1).setOnClickListener(v1 -> test1());
+                    View.findViewById(R.id.btn_test2).setOnClickListener(v1 -> test2());*/
+
                    /*View.findViewById(R.id.btn_start).setOnClickListener(v1 -> taskTheat.start());
                     View.findViewById(R.id.zhanting).setOnClickListener(v1 -> taskTheat.zhanting());
                     View.findViewById(R.id.huifu).setOnClickListener(v1 -> taskTheat.huifu());
@@ -80,24 +100,28 @@ public class FloatingWindow {
                 .show();
     }
 
+    private void test2() {
+        Autoanswer.doactivity();
+
+    }
+
+    private void test1() {
+        Autoanswer.back();
+    }
+
+
+    private void getfallinfo() {
+        User.getallInfo();
+    }
+
+
     private void readandvideo() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                LogUtil.D("打开学习强国");
-                if (!xxqg.startLearning_power(context, "cn.xuexi.android", "com.alibaba.android.rimet.biz.SplashActivity")) {
-                    LogUtil.E("打开学习强国失败");
-                    return;
+                if (XXQG.openxxqj(mcontext)) {
+                    AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
                 }
-                if (!xxqg.isLearning_power()) {
-                    LogUtil.E("不在学习强国页面");
-                    return;
-                }
-                AutoRead.auto_read();
-                ThreadSleepTime.sleeplog();
-                AutoVideo.auto_video();
-                ThreadSleepTime.sleeplog();
-                Autoanswer.doactivity();
             }
         }).start();
     }
@@ -106,7 +130,9 @@ public class FloatingWindow {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Autoanswer.startanswer();
+                if (!Autoanswer.doactivity()) {
+                    AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
+                }
             }
         }).start();
     }
@@ -123,7 +149,6 @@ public class FloatingWindow {
         } else {
             LogUtil.D("答题失败");
         }
-
     }
 
     public ServiceConnection mConnection = new ServiceConnection() {

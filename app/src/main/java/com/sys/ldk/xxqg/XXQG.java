@@ -13,7 +13,7 @@ public class XXQG {
         LogUtil.D("打开学习强国");
 
 //        返回桌面
-        UiApi.backToDesk();
+//        UiApi.backToDesk();
 
 //        打开学习强国
         if (!startLearning_power(context, "cn.xuexi.android", "com.alibaba.android.rimet.biz.SplashActivity")) {
@@ -44,10 +44,10 @@ public class XXQG {
         }
 
 //      进入积分页面，自动答题
-        /*Threadsleep(2);
+        User.Threadsleep(2);
         if (!Autoanswer.doactivity()) {
             return false;
-        }*/
+        }
 
 //        返回桌面
         UiApi.backToDesk();
@@ -129,7 +129,12 @@ public class XXQG {
         return UiApi.isMyNeedPage(pageStr);
     }
 
-    //   在观看页面返回
+
+    /**
+     * 找text
+     * @param findtext
+     * @return
+     */
     public static boolean XXQGBACK(String findtext) {
         if (User.findtext(findtext)) {
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);

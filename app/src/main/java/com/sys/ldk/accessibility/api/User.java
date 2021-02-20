@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.audiofx.LoudnessEnhancer;
 import android.provider.Settings;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -16,6 +17,8 @@ import com.sys.ldk.app.TaskThread;
 import com.sys.ldk.shellService.SocketClient;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -202,6 +205,7 @@ public class User {
     }
 
 
+    @NotNull
     public static List<AccessibilityNodeInfo> getScrollNodeInfo() {
         List<AccessibilityNodeInfo> getScrollNodeInfo = new ArrayList<>();
         List<AccessibilityNodeInfo> accessibilityNodeInfoList = AcessibilityApi.getAllNode(null, null);
@@ -217,6 +221,13 @@ public class User {
         return getScrollNodeInfo;
     }
 
+
+    /**
+     * 获取所有节点text
+     *
+     * @param open 是否显示text
+     * @return List<String>
+     */
     public static List<String> getallInfottext(boolean open) {
         List<AccessibilityNodeInfo> listInfo = AcessibilityApi.getAllNode(null, null);
         List<String> stringListtext = new ArrayList<>();
@@ -228,6 +239,31 @@ public class User {
             stringListtext.add(text);
         }
         return stringListtext;
+    }
+
+    /**
+     * 获取页面所有info{packageName，className，text，viewIdResName，clickable，enabled，scrollable}
+     */
+    public static void getallInfo() {
+        int count = 0;
+        String textstr = null;
+        List<AccessibilityNodeInfo> listInfo = AcessibilityApi.getAllNode(null, null);
+        if (listInfo.isEmpty()) {
+            LogUtil.W("没有info");
+            return;
+        }
+        for (AccessibilityNodeInfo a : listInfo
+        ) {
+            count++;
+            if (a.getText() == null) {
+                textstr = "null";
+            } else {
+                textstr = a.getText().toString();
+            }
+
+            LogUtil.V("Info " + count + " : text: " + textstr + ", getPackageName: " + a.getPackageName() + ", getClassName: " + a.getClassName() +
+                    ", viewIdResName: " + a.getViewIdResourceName() + ", clickable: " + a.isClickable() + ", enabled: " + ", scrollable: " + a.isScrollable());
+        }
     }
 
     //    函数功能是查找text后或者前的第几个Info，String【】第一个是查找的text，第二个是查找N个后的text，确认查找正确
@@ -318,6 +354,7 @@ public class User {
         return df.format(new Date());// new Date()为获取当前系统时间
     }
 
+    @NotNull
     public static String gettimelog() {
         SimpleDateFormat df = new SimpleDateFormat("YYYY_MM_dd_HH_mm");//设置日期格式
         return df.format(new Date());// new Date()为获取当前系统时间

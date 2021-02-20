@@ -212,7 +212,7 @@ public class AcessibilityApi {
         if (nodeInfo == null) {
             LogUtil.E("NodeInfo为空");
             return flg;
-     }
+        }
         while (nodeInfo != null) {
             if (nodeInfo.isScrollable()) {
                 LogUtil.D("可滚动");
@@ -293,7 +293,6 @@ public class AcessibilityApi {
             for (AccessibilityNodeInfo nodeInfo : nodeInfoList) {
                 if (nodeInfo != null && nodeInfo.getText() != null && nodeInfo.getText().toString().equals(text)) {
                     return nodeInfo;
-
                 }
             }
         }
@@ -377,19 +376,13 @@ public class AcessibilityApi {
         AccessibilityEvent curEvent = mAccessibilityEvent;
         AccessibilityNodeInfo nodeInfo = null;
 
-        if (Build.VERSION.SDK_INT >= 19) {
-
-            // 建议使用getRootInActiveWindow，这样不依赖当前的事件类型
-            if (mAccessibilityService != null) {
-                nodeInfo = mAccessibilityService.getRootInActiveWindow();
-            }
-
-        } else {
-            nodeInfo = curEvent.getSource();
+        // 建议使用getRootInActiveWindow，这样不依赖当前的事件类型
+        if (mAccessibilityService != null) {
+            nodeInfo = mAccessibilityService.getRootInActiveWindow();
         }
+
         return nodeInfo;
     }
-
 
     /**
      * 根据Text搜索所有符合条件的节点, 模糊搜索方式
@@ -441,7 +434,7 @@ public class AcessibilityApi {
      *
      * @param node
      * @param lists
-     * @return
+     * @return List<AccessibilityNodeInfo>
      */
     public static List<AccessibilityNodeInfo> getAllNode(AccessibilityNodeInfo node, List<AccessibilityNodeInfo> lists) {
         if (lists == null) {
@@ -453,27 +446,19 @@ public class AcessibilityApi {
 
         if (node != null) {
             int childNum = node.getChildCount();
-
             if (childNum > 0) {
                 for (int i = 0; i < childNum; i++) {
                     AccessibilityNodeInfo nodeInfo = node.getChild(i);
                     if (nodeInfo != null) {
                         getAllNode(nodeInfo, lists);
                         lists.add(nodeInfo);
-
                     }
                 }
-
-
             } else {
-
                 return lists;
             }
         }
-
         return lists;
-
-
     }
 
     /**

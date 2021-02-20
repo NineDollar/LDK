@@ -10,7 +10,7 @@ import java.security.acl.LastOwnerException;
 import java.util.List;
 
 public class AutoRead {
-    private static final int read_time = 1*5;
+    private static final int read_time = 2*60;
     private static int reading_times = 10;
 
     public static boolean auto_read() {

@@ -317,7 +317,7 @@ public class IntoAnswer {
             switch (CReFlag) {
                 case OVER:
                     LogUtil.D("答题完成");
-                    AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
+                    Autoanswer.back();
                     break;
                 case SUCCESS:
                     LogUtil.D("继续答题");
@@ -351,7 +351,7 @@ public class IntoAnswer {
         ) {
             if (s.equals("答案解析")) {
                 return CLIK;
-            } else if (s.equals("再来一组") || s.equals("本次作答分数") || s.equals("本次答对题目数") || s.equals("再练一组")) {
+            } else if (s.equals("再来一组") || s.equals("本次作答分数") || s.equals("本次答对题目数") || s.equals("再练一组") || s.equals("再练一次")) {
                 return OVER;
             }
         }

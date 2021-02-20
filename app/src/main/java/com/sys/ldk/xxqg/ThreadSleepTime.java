@@ -5,6 +5,13 @@ import com.sys.ldk.accessibility.api.User;
 public class ThreadSleepTime {
 
     /**
+     * 3秒
+     */
+    public static void sleeploglog() {
+        User.Threadsleep(3);
+    }
+
+    /**
      * 随眠2秒
      */
     public static void sleeplog() {

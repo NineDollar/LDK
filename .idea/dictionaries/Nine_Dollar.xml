@@ -2,10 +2,17 @@
   <dictionary name="Nine_Dollar">
     <words>
       <w>addclock</w>
+      <w>alltext</w>
       <w>answr</w>
       <w>apptype</w>
+      <w>autoanswer</w>
       <w>dati</w>
+      <w>funtion</w>
+      <w>getall</w>
+      <w>getfallinfo</w>
       <w>isrun</w>
+      <w>listinfo</w>
+      <w>listview</w>
       <w>mcontext</w>
       <w>mystart</w>
       <w>mystop</w>
@@ -18,8 +25,11 @@
       <w>serverset</w>
       <w>startapp</w>
       <w>tencent</w>
+      <w>textstr</w>
       <w>theat</w>
       <w>threadsleep</w>
+      <w>timeinfo</w>
+      <w>xiang</w>
       <w>xiapp</w>
       <w>xufuchuang</w>
     </words>

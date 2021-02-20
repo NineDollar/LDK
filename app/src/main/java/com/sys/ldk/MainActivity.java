@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,8 @@ import com.sys.ldk.shellService.ShellActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
+
 public class MainActivity extends AppCompatActivity {
     private static Context mcontext;
     private ListView clockItmesList;
@@ -56,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportActionBar().hide();//隐藏ActionBar
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明化通知栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+        getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setContentView(R.layout.activity_clock);
         initView();
         mcontext = this;

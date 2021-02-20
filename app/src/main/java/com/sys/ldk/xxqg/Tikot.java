@@ -40,7 +40,7 @@ public class Tikot {
 
 //      拿到提示
 //        User.Threadsleep500();
-        ThreadSleepTime.sleepshort();
+//        ThreadSleepTime.sleepshort();
         User.clik_text_Info("查看提示");
 //        User.Threadsleep500();
         ThreadSleepTime.sleepshort();
