@@ -1,7 +1,9 @@
 package com.sys.ldk.xxqg;
 
+import android.accessibilityservice.AccessibilityService;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
@@ -14,14 +16,19 @@ import static com.sys.ldk.xxqg.ReturnType.CLIK;
 import static com.sys.ldk.xxqg.ReturnType.FAILURE;
 import static com.sys.ldk.xxqg.ReturnType.OVER;
 import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
+import static com.sys.ldk.xxqg.ReturnType.my_stop;
 
 public class IntoAnswer {
     public static int intoanswer() {
-        ThreadSleepTime.sleepshort();
+        /*if (ThreadSleepTime.sleep0D5()) {
+            return my_stop;
+        }*/
         int ReFlag;
         LogUtil.D("开始自动答题");
+
 //        关闭键盘
-        AcessibilityApi.closeKeyBoard();
+        AcessibilityApi.closeKeyBoard(AccessibilityService.SHOW_MODE_HIDDEN);
+
         String questiontype = getquestiontype();
         String questiontypeflag = questiontype.length() > 3 ? questiontype.substring(0, 3) : questiontype;
 
@@ -97,7 +104,8 @@ public class IntoAnswer {
         hashMap.put("确定", 0);
         AccessibilityNodeInfo a = getallInfotextandafterInfo(hashMap).get("确定");
         AcessibilityApi.performViewClick(a);*/
-
+//        打开键盘
+        AcessibilityApi.closeKeyBoard(AccessibilityService.SHOW_MODE_AUTO);
         return ReFlag;
     }
 
@@ -312,12 +320,14 @@ public class IntoAnswer {
                 LogUtil.E("点击下一题失败");
                 return FAILURE;
             }
-            ThreadSleepTime.sleepshort();
+            if (ThreadSleepTime.sleep0D5()) {
+            return my_stop;
+        }
             CReFlag = overanswer();
             switch (CReFlag) {
                 case OVER:
                     LogUtil.D("答题完成");
-                    Autoanswer.back();
+                    XxqgFuntion.back();
                     break;
                 case SUCCESS:
                     LogUtil.D("继续答题");

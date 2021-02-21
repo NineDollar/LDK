@@ -8,12 +8,11 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.media.audiofx.LoudnessEnhancer;
 import android.provider.Settings;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 
-import com.sys.ldk.app.TaskThread;
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.shellService.SocketClient;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
@@ -52,48 +51,20 @@ public class User {
         return false;
     }
 
-    public static void Threadsleep(double time) {
-        LogUtil.V("线程睡眠" + time + "秒");
-        time *= 1000;
-        ApiUtil.sleepTime((long) time);
+    /**
+     * 单位毫秒
+     * @param time
+     * @return
+     */
+    public static boolean sleep(long time) {
+        float time1 = (float) time / 1000;
+        LogUtil.V("线程睡眠" + time1 + "秒");
+        if (ApiUtil.sleepTime(time)) {
+            return true;
+        }
         LogUtil.V("睡眠结束");
+        return false;
     }
-
-    public static boolean Threadsleep(TaskThread.MyThread myThread, long time) {
-//        long time1 = time * 1000;
-//        LogUtil.V("线程睡眠" + time + "秒");
-//        if(ApiUtil.sleepTime(time1)){
-//            return true;
-//        }
-//        LogUtil.V("睡眠结束");
-//        return false;
-        return myThread.mythreadsleep();
-    }
-
-    public static void Threadsleep200() {
-        LogUtil.V("线程睡眠0.2秒");
-        ApiUtil.sleepTime(200);
-        LogUtil.V("睡眠结束");
-    }
-
-    public static void Threadsleep500() {
-        LogUtil.V("线程睡眠0.5秒");
-        ApiUtil.sleepTime(500);
-        LogUtil.V("睡眠结束");
-    }
-
-    public static void Threadsleep700() {
-        LogUtil.V("线程睡眠0.7秒");
-        ApiUtil.sleepTime(700);
-        LogUtil.V("睡眠结束");
-    }
-
-    public static void Threadsleep1500() {
-        LogUtil.V("线程睡眠1.5秒");
-        ApiUtil.sleepTime(15000);
-        LogUtil.V("睡眠结束");
-    }
-
 
     public static void authority_alerdialog(final Context context) {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
@@ -221,7 +192,6 @@ public class User {
         return getScrollNodeInfo;
     }
 
-
     /**
      * 获取所有节点text
      *
@@ -266,7 +236,11 @@ public class User {
         }
     }
 
-    //    函数功能是查找text后或者前的第几个Info，String【】第一个是查找的text，第二个是查找N个后的text，确认查找正确
+    /**
+     * 函数功能是查找text后或者前的第几个Info，String【】第一个是查找的text，第二个是查找N个后的text，确认查找正确
+     * @param getInfoBytextaftermap
+     * @return
+     */
     public static HashMap<String[], AccessibilityNodeInfo> getallafterInfo(HashMap<String[], Integer> getInfoBytextaftermap) {
         HashMap<String[], AccessibilityNodeInfo> InfoList = new HashMap<>();
         List<AccessibilityNodeInfo> listInfo = AcessibilityApi.getAllNode(null, null);
@@ -294,6 +268,23 @@ public class User {
             m += 1;
         }
         return InfoList;
+    }
+
+    /**
+     * 查找text后n个info
+     * @param text
+     * @param n
+     * @return
+     */
+    public static AccessibilityNodeInfo get_text_after_info(String text,int n){
+        List<AccessibilityNodeInfo> accessibilityNodeInfos = AcessibilityApi.getAllNode(null, null);
+        for(int i = 0; i < accessibilityNodeInfos.size(); i++){
+            if(text.equals(accessibilityNodeInfos.get(i).getText()+"")){
+                LogUtil.D("找到" + text + "后" + "第" + n + "个info");
+                return accessibilityNodeInfos.get(i + n);
+            }
+        }
+        return null;
     }
 
     //    查找页面是否有存在text
@@ -362,28 +353,33 @@ public class User {
 
     //    自动点击辅助功能
     private static void auto_acess() {
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
+
         ApiUtil.perforGlobalClick(482, 1306);
 
-        User.Threadsleep1500();
+        ThreadSleepTime.sleep1D5();
         ApiUtil.perforGlobalSwipe(493, 1650, 477, 859);
 
-//        User.Threadsleep(1);
         ApiUtil.perforGlobalClick(573, 1516);
 
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
+
         ApiUtil.perforGlobalClick(960, 337);
 
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
+
         ApiUtil.perforGlobalClick(802, 2095);
 
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
+
         ApiUtil.execRootCmdSilent(" input keyevent 4 ");
 
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
+
         ApiUtil.execRootCmdSilent(" input keyevent 4 ");
 
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
+
         ApiUtil.execRootCmdSilent(" input keyevent 4 ");
     }
 }

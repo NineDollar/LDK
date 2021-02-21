@@ -14,6 +14,7 @@
       <w>listinfo</w>
       <w>listview</w>
       <w>mcontext</w>
+      <w>modethread</w>
       <w>mystart</w>
       <w>mystop</w>
       <w>mythreadsleep</w>
@@ -23,6 +24,7 @@
       <w>readvideo</w>
       <w>sdfasdfsf</w>
       <w>serverset</w>
+      <w>sleepmy</w>
       <w>startapp</w>
       <w>tencent</w>
       <w>textstr</w>
@@ -32,6 +34,7 @@
       <w>xiang</w>
       <w>xiapp</w>
       <w>xufuchuang</w>
+      <w>xxqg</w>
     </words>
   </dictionary>
 </component>

@@ -6,6 +6,7 @@ import android.content.Context;
 
 import android.os.PowerManager;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.serverset.Keyguard;
@@ -72,7 +73,9 @@ public class PowerThread {
            LogUtil.V("判断是否由图案或者PIN锁定："+keyguardManager.isKeyguardSecure());
 //           判断当前设备是否需要图案或者PIN输入
            LogUtil.V("判断当前设备是否需要图案或者PIN输入："+keyguardManager.isDeviceLocked());*/
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
         if (Keyguard.isDeviceLocked) {
             LogUtil.E("解锁失败");
             return false;

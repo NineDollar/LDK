@@ -464,16 +464,10 @@ public class AcessibilityApi {
     /**
      * 关闭软件盘,需要7.0版本
      */
-    public static void closeKeyBoard() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if (mAccessibilityService != null) {
-                AccessibilityService.SoftKeyboardController softKeyboardController = mAccessibilityService.getSoftKeyboardController();
-                int mode = softKeyboardController.getShowMode();
-                if (mode == AccessibilityService.SHOW_MODE_AUTO) {
-                    //如果软键盘开启,就关闭软件拍
-                    softKeyboardController.setShowMode(AccessibilityService.SHOW_MODE_HIDDEN);
-                }
-            }
+    public static void closeKeyBoard(int mode) {
+        if (mAccessibilityService != null) {
+            AccessibilityService.SoftKeyboardController softKeyboardController = mAccessibilityService.getSoftKeyboardController();
+            softKeyboardController.setShowMode(mode);
         }
     }
 

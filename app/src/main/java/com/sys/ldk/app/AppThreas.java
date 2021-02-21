@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.sys.ldk.FloatingWindow;
 import com.sys.ldk.MainActivity;
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.serverset.MessengerService;
 import com.sys.ldk.serverset.MyNotificationType;
@@ -150,7 +151,7 @@ public class AppThreas {
                 return;
             }
             AutoRead.auto_read();
-            User.Threadsleep(3);
+            ThreadSleepTime.sleep3();
             AutoVideo.auto_video();
         }
 

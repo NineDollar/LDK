@@ -2,6 +2,7 @@ package com.sys.ldk.xxqg;
 
 import android.content.Context;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
@@ -26,31 +27,44 @@ public class XXQG {
         }
 
 //        自动阅读
-        User.Threadsleep(2);
+        if (ThreadSleepTime.sleep2()) {
+            return false;
+        }
         if (!AutoRead.auto_read()) {
             return false;
         }
 
         //      打开四川频道
-        User.Threadsleep(2);
+        if (ThreadSleepTime.sleep2()) {
+            return false;
+        }
         if (!opensichuan()) {
             return false;
         }
 
 //        视频
-        User.Threadsleep(2);
+        if (ThreadSleepTime.sleep2()) {
+            return false;
+        }
         if (!AutoVideo.auto_video()) {
             return false;
         }
 
 //      进入积分页面，自动答题
-        User.Threadsleep(2);
+        if (ThreadSleepTime.sleep2()) {
+            return false;
+        }
         if (!Autoanswer.doactivity()) {
             return false;
         }
 
 //        返回桌面
         UiApi.backToDesk();
+        if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
+
+        AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
         return true;
     }
 
@@ -58,17 +72,27 @@ public class XXQG {
         LogUtil.D("点击四川频道");
         if (UiApi.clickNodeByDesWithTimeOut(2000, "工作")) {
             LogUtil.D("首页点击成功");
-            User.Threadsleep(1);
+            if (ThreadSleepTime.sleep1()) {
+                return false;
+            }
             UiApi.clickNodeByDesWithTimeOut(2000, "工作");
-            ThreadSleepTime.sleeplog();
+            if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
             if (AcessibilityApi.clickTextViewByText("四川")) {
                 LogUtil.D("四川点击成功");
-                ThreadSleepTime.sleeplog();
+                if (ThreadSleepTime.sleep2()) {
+                    return false;
+                }
                 AcessibilityApi.clickTextViewByText("四川");
-                ThreadSleepTime.sleeplog();
+                if (ThreadSleepTime.sleep2()) {
+                    return false;
+                }
                 if (AcessibilityApi.clickTextViewByText("四川学习平台")) {
                     LogUtil.D("点击四川学习平台成功");
-                    ThreadSleepTime.sleeplog();
+                    if (ThreadSleepTime.sleep2()) {
+                        return false;
+                    }
                     AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
                 } else {
                     LogUtil.D("点击四川学习平台失败");
@@ -100,7 +124,9 @@ public class XXQG {
 
     public static boolean isLearning_power() {
 //        判断页面次数
-        User.Threadsleep(1);
+        if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
         int frequency = 3;
 //        判断是否进入软件
         while (frequency > 0) {
@@ -112,7 +138,9 @@ public class XXQG {
             }
             frequency--;
             LogUtil.E("判断次数： " + frequency);
-            User.Threadsleep(1);
+            if (ThreadSleepTime.sleep1()) {
+                return false;
+            }
         }
         LogUtil.D("进入学习强国失败");
         return false;
@@ -132,6 +160,7 @@ public class XXQG {
 
     /**
      * 找text
+     *
      * @param findtext
      * @return
      */

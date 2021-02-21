@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.sys.ldk.MyApplication;
 import com.sys.ldk.R;
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.power.PowerThread;
@@ -84,7 +85,8 @@ public class Startapp extends Service {
         if (!powerThread.openphone()) {
             return;
         }
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
+
         Appchoose appchoose = new Appchoose(mcontext, apptype);
         appchoose.start();
     }

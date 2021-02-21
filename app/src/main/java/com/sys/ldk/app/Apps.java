@@ -2,6 +2,7 @@ package com.sys.ldk.app;
 
 import android.content.Context;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.jrxy.JRXY;
 import com.sys.ldk.QQ;
 import com.sys.ldk.accessibility.api.User;
@@ -22,12 +23,13 @@ public class Apps {
                 LogUtil.D("打开学习强国");
                 break;
             case Qq:
-                User.Threadsleep(2);
+                ThreadSleepTime.sleep2();
+
                 LogUtil.D("打开QQ");
                 QQ.openQQ(context);
                 break;
             case jinri:
-                User.Threadsleep(3);
+                ThreadSleepTime.sleep3();
                 LogUtil.D("打开今日校园");
                 JRXY.openjrxy(context);
                 break;

@@ -2,6 +2,7 @@ package com.sys.ldk.jrxy;
 
 import android.content.Context;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
@@ -12,7 +13,9 @@ public class JRXY {
         LogUtil.I("打开今日校园");
 //        返回桌面
         UiApi.backToDesk();
-        User.Threadsleep(1);
+        if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
 //      打开今日校园
         startLearning_power(context, "com.wisedu.cpdaily", "com.wisorg.wisedu.home.ui.HomeActivity");
 //        判断是否在当前页面
@@ -29,16 +32,20 @@ public class JRXY {
 
     public static boolean into_page() {
         int n;
-        User.Threadsleep(2);
+        if(ThreadSleepTime.sleep2()){
+        return true;
+    }
         AcessibilityApi.clickTextViewByText("我的大学");
 
 //        查找信息收集并点击
-        User.Threadsleep(2);
+        if(ThreadSleepTime.sleep2()){
+        return true;
+    }
         if(AcessibilityApi.clickTextViewByText("信息收集")){
 
         }
 
-        User.Threadsleep(3);
+        ThreadSleepTime.sleep3();
 //        判断是否发布
         if (User.findtext("暂无信息收集")) {
             LogUtil.E("暂无信息收集");
@@ -46,7 +53,7 @@ public class JRXY {
         }
 
 //      点击报送表单
-        User.Threadsleep(3);
+        ThreadSleepTime.sleep3();
         n = 0;
         while (!User.clik_text_Info("未填写 >")) {
             n += 1;
@@ -57,7 +64,9 @@ public class JRXY {
         }
 
 //      开始填写
-        User.Threadsleep(2);
+        if(ThreadSleepTime.sleep2()){
+        return true;
+    }
         TianXie.tianxie();
         return true;
     }
@@ -68,7 +77,9 @@ public class JRXY {
 //        判断是否进入软件
         while (frequency > 0) {
             LogUtil.I("" + frequency);
-            User.Threadsleep(1);
+            if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
             if (isPage()) {
                 LogUtil.I("已进入今日校园");
                 return true;

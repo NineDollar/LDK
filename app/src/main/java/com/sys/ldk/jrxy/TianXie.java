@@ -2,6 +2,7 @@ package com.sys.ldk.jrxy;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
@@ -15,14 +16,18 @@ import java.util.List;
 public class TianXie {
 
     public static boolean tianxie() {
-        User.Threadsleep(1);
+        if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
         List<AccessibilityNodeInfo> accessibilityNodeInfoList = new ArrayList<>();
         HashMap<String[], Integer> hashMap = new HashMap<>();
         HashMap<String[], AccessibilityNodeInfo> afterInfomap = new HashMap<String[], AccessibilityNodeInfo>();
         if (!User.clik_text_Info("<37.3℃")) {
             return false;
         }
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
 
         String wd = wendu() + "";
         if (User.getEditableInfo().size() == 1) {
@@ -32,7 +37,9 @@ public class TianXie {
             return false;
         }
 
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
         List<AccessibilityNodeInfo> ScrollNodeInfoList = User.getScrollNodeInfo();
         AcessibilityApi.ScrollNode(ScrollNodeInfoList.get(0));
 
@@ -63,7 +70,9 @@ public class TianXie {
                 if(times == 3){
                     AcessibilityApi.ScrollNode(ScrollNodeInfoList.get(0));
                 }
-                User.Threadsleep500();
+                if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
             }
         }
         if (times!=0) {
@@ -71,13 +80,17 @@ public class TianXie {
             return false;
         }
 
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
         if(!User.clik_text_Info("提交给辅导员")){
             LogUtil.E("提交辅导员失败");
             return false;
         }
 
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
         if(!User.clik_text_Info("提交")){
             LogUtil.E("提交失败");
             return false;

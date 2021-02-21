@@ -7,10 +7,10 @@
     android:background="@color/translucent">
 
     <Button
-        android:id="@+id/btn_readvideo"
+        android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/readvideo"
+        android:text="开始学习"
         android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +22,7 @@
         android:text="@string/dati"
         android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_readvideo" />
+        app:layout_constraintTop_toBottomOf="@+id/start" />
 
     <ImageView
         android:id="@+id/ivClose"
@@ -31,19 +31,27 @@
         android:layout_alignParentEnd="true"
         android:padding="7dp"
         android:src="@drawable/icon_x"
-        app:layout_constraintLeft_toRightOf="@+id/btn_readvideo"
+        app:layout_constraintLeft_toRightOf="@+id/start"
         app:layout_constraintTop_toTopOf="parent" />
 
-   <!-- <Button
-        android:id="@+id/alltext"
+   <Button
+        android:id="@+id/btn_test_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="所有info"
+        android:text="1"
         android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_dati" />
 
-    <Button
+    <ImageView
+        android:id="@+id/im"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+      android:src="@drawable/show"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_test_3" />
+
+    <!-- <Button
         android:id="@+id/btn_test1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,10 +66,10 @@
         android:text="2"
         android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_test1" />-->
+        app:layout_constraintTop_toBottomOf="@+id/btn_test1" />
 
 
-    <!--<Button
+    <Button
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

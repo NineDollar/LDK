@@ -3,6 +3,7 @@ package com.sys.ldk.weixin;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
@@ -18,40 +19,56 @@ public class WXDK {
     public static boolean startdgsx() {
 //        打开微信
         LogUtil.D("开始微信打卡");
-        User.Threadsleep(1);
+        if(ThreadSleepTime.sleep1()) {
+            return true;
+        }
+
         if (!openweixin()) {
             return false;
         }
 
 //        判断是否在微信页面
-        User.Threadsleep(2);
+        if(ThreadSleepTime.sleep2()){
+        return true;
+    }
         if (!isPage()) {
             LogUtil.E("不在微信界面");
             return false;
         }
 
 //        进入打卡页面
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
         if (!clickdgsx()) {
             return false;
         }
 
 //      填写
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
         if (!tianxiety(5000,"上班")) {
             return false;
         }
 
 //        提交
-//        User.Threadsleep500();
+//        if(ThreadSleepTime.sleep0D5()){
+
 //        UiApi.clickNodeByTextWithTimeOut(5000, "提交");
 
 //        返回桌面
-        User.Threadsleep500();
+
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+        }
+
         UiApi.backToDesk();
 
 //        熄屏
-        User.Threadsleep500();
+        if(ThreadSleepTime.sleep0D5()){
+        return true;
+    }
         AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
         return true;
     }

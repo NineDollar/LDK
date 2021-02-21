@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.power.PowerThread;
@@ -24,7 +25,7 @@ public class StartAppReceiver extends BroadcastReceiver {
         if(!powerThread.openphone()){
             return;
         }
-        User.Threadsleep500();
+        ThreadSleepTime.sleep0D5();
         Appchoose appchoose = new Appchoose(context,apptype);
         appchoose.start();
     }

@@ -158,7 +158,6 @@ public class ApiUtil {
             e.printStackTrace();
             return true;
         }
-        LogUtil.V("睡眠结束");
         return false;
     }
 

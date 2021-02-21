@@ -2,16 +2,19 @@ package com.sys.ldk.xxqg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.serverset.MyNotificationType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
-import static com.sys.ldk.accessibility.api.User.Threadsleep;
+import static com.sys.ldk.serverset.MainService.notification;
 import static com.sys.ldk.xxqg.ReturnType.CLIK;
 import static com.sys.ldk.xxqg.ReturnType.FAILURE;
 import static com.sys.ldk.xxqg.ReturnType.OVER;
@@ -26,6 +29,18 @@ public class Autoanswer {
 
     public static boolean doactivity() {
 //进入积分页面
+        if(!into_ji_fen_page()){
+            return false;
+        }
+
+//        自动答题
+        if (ThreadSleepTime.sleep2()) {
+            return false;
+        }
+        return !auto_answer();
+    }
+
+    public static boolean into_ji_fen_page(){
         String temp1 = "{"
                 + "'maxWClickMSec':1000,"
                 + "'click':{'id':'cn.xuexi.android:id/comm_head_xuexi_score'},"
@@ -37,24 +52,16 @@ public class Autoanswer {
                 + "'option':{'text':[],'id':[],'desc':[]}"
                 + "}"
                 + "}";
-        if (!UiApi.jumpToNeedPage(new String[]{temp1})) {
-            return false;
-        }
-
-//        自动答题
-        Threadsleep(2);
-        if (auto_answer()) {
-            return false;
-        }
-
-        return true;
+        return UiApi.jumpToNeedPage(new String[]{temp1});
     }
 
     public static boolean auto_answer() {
 //      向上滚动
-        AcessibilityApi.ScrollNode(AcessibilityApi.findViewByCls("android.webkit.WebView").get(0));
+        AcessibilityApi.ScrollNode(Objects.requireNonNull(AcessibilityApi.findViewByCls("android.webkit.WebView")).get(0));
 
-        Threadsleep(3);
+        if (ThreadSleepTime.sleep3()) {
+            return false;
+        }
 
         if (!into_da_ti()) {
             return false;
@@ -80,22 +87,29 @@ public class Autoanswer {
             String[] key = (String[]) e.getKey();
             switch (key[0]) {
                 case mei_ri:
-                    ThreadSleepTime.sleeploglog();
+
+                    ThreadSleepTime.sleep3();
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
-                    ThreadSleepTime.sleeplog();
+                    if (ThreadSleepTime.sleep2()) {
+                        return false;
+                    }
                     LogUtil.D(mei_ri);
                     if (!startanswer()) {
                         return false;
                     }
                     break;
                 case mei_zhou:
-                    ThreadSleepTime.sleeploglog();
+                    ThreadSleepTime.sleep3();
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
-                    ThreadSleepTime.sleeplog();
+                    if (ThreadSleepTime.sleep2()) {
+                        return false;
+                    }
                     LogUtil.D(mei_zhou);
                     switch (find_wei_zuo_da("未作答")) {
                         case chen_gong:
-                            ThreadSleepTime.sleeplog();
+                            if (ThreadSleepTime.sleep2()) {
+                                return false;
+                            }
                             if (!startanswer()) {
                                 return false;
                             }
@@ -105,13 +119,17 @@ public class Autoanswer {
                     }
                     break;
                 case zhuan_xiang:
-                    ThreadSleepTime.sleeploglog();
+                    ThreadSleepTime.sleep3();
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
-                    ThreadSleepTime.sleeplog();
+                    if (ThreadSleepTime.sleep2()) {
+                        return false;
+                    }
                     LogUtil.D(zhuan_xiang);
                     switch (find_wei_zuo_da("开始答题")) {
                         case chen_gong:
-                            ThreadSleepTime.sleeplog();
+                            if (ThreadSleepTime.sleep2()) {
+                                return false;
+                            }
                             if (!startanswer()) {
                                 return false;
                             }
@@ -123,7 +141,20 @@ public class Autoanswer {
             }
         }
 //        AcessibilityApi.performViewClick(hashMap1.get(strings));
+        if(ThreadSleepTime.sleep1()){
+            return false;
+        }
+        fen_shu();
         return true;
+    }
+
+    public static void fen_shu() {
+        AccessibilityNodeInfo accessibilityNodeInfo = User.get_text_after_info("积分规则", 1);
+        if(accessibilityNodeInfo != null){
+            LogUtil.D("" + accessibilityNodeInfo.getText());
+        }
+        MyNotificationType.message1 = accessibilityNodeInfo.getText()+"";
+        notification();
     }
 
     private static int find_wei_zuo_da(String string) {
@@ -153,30 +184,17 @@ public class Autoanswer {
                     break;
                 case FAILURE:
                     LogUtil.E("答题失败结束程序");
-                    back();
+                    XxqgFuntion.back();
                     return false;
                 case OVER:
                     LogUtil.D("答题结束");
                     return true;
             }
 //            下一题等待时间
-            ThreadSleepTime.sleep();
-        } while (true);
-    }
-
-    public static boolean back() {
-//        返回两次
-        int count = 2;
-        do {
-            if (UiApi.findNodeByTextWithTimeOut(2000,"学习积分") != null) {
-                LogUtil.D("回到学习积分页面");
-                return true;
-            } else if (count-- <= 0) {
+            if (ThreadSleepTime.sleep0D5()) {
                 return false;
             }
-            AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
-        } while (UiApi.findNodeByTextWithTimeOut(2000,"学习积分") == null);
-        return true;
+        } while (true);
     }
 
 }

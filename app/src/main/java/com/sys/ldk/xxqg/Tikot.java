@@ -2,6 +2,7 @@ package com.sys.ldk.xxqg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
@@ -10,19 +11,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.sys.ldk.xxqg.ReturnType.FAILURE;
 import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
+import static com.sys.ldk.xxqg.ReturnType.my_stop;
 
 public class Tikot {
     public static int tikot(String questiontype) {
 //        填空类型
         int LX;
 //        获取题目
-//        User.Threadsleep500();
-//        ThreadSleepTime.threadsleepshort();
         List<String> alltextlistbefore = User.getallInfottext(false);
         List<String> timu = IntoAnswer.gettimu(questiontype);
         for (String s : timu
@@ -31,19 +32,17 @@ public class Tikot {
         }
 
 //       拿到答案选项
-//        User.Threadsleep500();
-//        ThreadSleepTime.threadsleepshort();
         HashMap<String, AccessibilityNodeInfo> hashMaptextInfo = new HashMap<>();
         HashMap<String, AccessibilityNodeInfo> hashMapabcdInfo = new HashMap<>();
         List<String> listabcdtext = new ArrayList<>();
         IntoAnswer.abcdInfoandtext(hashMaptextInfo, hashMapabcdInfo, listabcdtext);
 
 //      拿到提示
-//        User.Threadsleep500();
-//        ThreadSleepTime.sleepshort();
         User.clik_text_Info("查看提示");
-//        User.Threadsleep500();
-        ThreadSleepTime.sleepshort();
+
+        if (ThreadSleepTime.sleep0D5()) {
+            return my_stop;
+        }
         List<String> alltextlistafter = User.getallInfottext(false);
 
         String tishistr = alltextlistafter.get(alltextlistbefore.size() - 3);
@@ -62,24 +61,29 @@ public class Tikot {
         }
 
         LogUtil.D("提示： " + tishistr);
-//        User.Threadsleep500();
-        ThreadSleepTime.sleepshort();
+
+        if (ThreadSleepTime.sleep0D5()) {
+            return my_stop;
+        }
+
         AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
-//        获得输入框Info
+        //        获得输入框Info
         List<AccessibilityNodeInfo> inputInfo = IntoAnswer.getinputInfo();
 
         if (tishistr.equals("请观看视频")) {
             inputdnfalse(inputInfo);
-//            User.Threadsleep(1);
-            ThreadSleepTime.sleepshorts();
+
+            if (ThreadSleepTime.sleep0D2()) {
+                return my_stop;
+            }
             return IntoAnswer.cliknext(null);
         }
 
-//      开始填空
+        //      开始填空
 //        获取横线开头和末尾字符
         HashMap<Integer, String[]> wtbeginAndendmap = getwtbeginAndendmap(timu);
 
-//        获得答案
+        //        获得答案
         List<String> dnlist = getdnstr(wtbeginAndendmap, tishistr);
         if (dnlist.isEmpty()) {
             LX = 0;
@@ -100,9 +104,11 @@ public class Tikot {
                 LogUtil.E("出错");
                 return FAILURE;
         }
-        ThreadSleepTime.sleepshorts();
+        if (ThreadSleepTime.sleep0D2()) {
+            return my_stop;
+        }
         int q = IntoAnswer.cliknext(null);
-        LogUtil.W("q: "+q);
+        LogUtil.W("q: " + q);
         return q;
     }
 
@@ -124,7 +130,6 @@ public class Tikot {
         }
     }
 
-
     private static HashMap<Integer, String[]> getwtbeginAndendmap(List<String> timu) {
         HashMap<Integer, String[]> wentibeginAndendhashMap = IntoAnswer.getwentideginAndend(timu);
         return wentibeginAndendhashMap;
@@ -137,8 +142,8 @@ public class Tikot {
 
         for (Map.Entry e : getwtbeginAndendmap.entrySet()
         ) {
-            wtbegin = getwtbeginAndendmap.get(e.getKey())[0];
-            wtend = getwtbeginAndendmap.get(e.getKey())[1];
+            wtbegin = Objects.requireNonNull(getwtbeginAndendmap.get(e.getKey()))[0];
+            wtend = Objects.requireNonNull(getwtbeginAndendmap.get(e.getKey()))[1];
 
 //            匹配规则
             String regex = wtbegin + "(.*?)" + wtend;

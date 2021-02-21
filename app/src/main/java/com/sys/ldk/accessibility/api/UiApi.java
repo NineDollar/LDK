@@ -3,6 +3,7 @@ package com.sys.ldk.accessibility.api;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.google.gson.Gson;
+import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.selector.ActionSelector;
 import com.sys.ldk.accessibility.selector.NodeSelector;
 import com.sys.ldk.accessibility.util.ApiUtil;
@@ -90,7 +91,9 @@ public class UiApi {
                     return true;
                 }
             }
-            User.Threadsleep(1);
+            if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
             i--;
         }
 
@@ -737,7 +740,9 @@ public class UiApi {
                     return false;
                 }
             }
-            User.Threadsleep(1);
+            if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
         }
 
         return isJump;
