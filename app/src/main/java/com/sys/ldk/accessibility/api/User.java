@@ -66,7 +66,7 @@ public class User {
         return false;
     }
 
-    public static void authority_alerdialog(final Context context) {
+    public static void authority_alerdialog(Context context) {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle("提示")
                 .setMessage("使用应用服务需要打开辅助功能")

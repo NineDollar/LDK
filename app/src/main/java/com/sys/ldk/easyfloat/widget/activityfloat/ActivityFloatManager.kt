@@ -13,8 +13,7 @@ import com.sys.ldk.easyfloat.data.FloatConfig
 internal class ActivityFloatManager(val activity: Activity) {
 
     // 通过DecorView 获取屏幕底层FrameLayout，即activity的根布局，作为浮窗的父布局
-    private var parentFrame: FrameLayout =
-        activity.window.decorView.findViewById(android.R.id.content)
+    private var parentFrame: FrameLayout = activity.window.decorView.findViewById(android.R.id.content)
 
     /**
      * 创建Activity浮窗

@@ -27,4 +27,6 @@
     <string name="show">显示信息</string>
     <string name="xufuchuang">悬浮窗</string>
     <string name="test">测试</string>
+    <string name="start_xue_xi">开始学习</string>
+    <string name="stop">结束</string>
 </resources>

@@ -37,6 +37,8 @@ public class MainActivityTest extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_main_test);
         initView();
 
+
+
         //        打开学习强国
         findViewById(R.id.xxqg).setOnClickListener(new View.OnClickListener() {
             @Override

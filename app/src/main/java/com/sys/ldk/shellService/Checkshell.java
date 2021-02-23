@@ -32,9 +32,9 @@ public class Checkshell {
             @Override
             public void run() {
                 if (text.equals("###IamOK#")) {
-                    Toast.makeText(MainActivity.getMcontext(), "以提权", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.getMycontext(), "以提权", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.getMcontext(), "未提权", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.getMycontext(), "未提权", Toast.LENGTH_SHORT).show();
                 }
             }
         });

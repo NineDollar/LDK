@@ -6,6 +6,5 @@ package com.sys.ldk.easyfloat.interfaces
  * @date: 2019-07-15  16:18
  */
 interface OnPermissionResult {
-
     fun permissionResult(isOpen: Boolean)
 }

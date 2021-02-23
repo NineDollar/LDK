@@ -1,15 +1,10 @@
 package com.sys.ldk;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.sys.ldk.accessibility.api.AcessibilityApi;
-import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
-import com.sys.ldk.serverset.MyNotificationType;
-import com.sys.ldk.xxqg.XXQG;
 
-import static com.sys.ldk.serverset.MainService.notification;
 import static com.sys.ldk.xxqg.ReturnType.my_stop;
 import static java.sql.Types.NULL;
 
@@ -20,9 +15,15 @@ import static java.sql.Types.NULL;
  * @date: 2021/2/3
  */
 public class DG_Thread {
-    private static Context mcontext = MainActivity.getMcontext();
+    public final static String runing = "正在运行";
+    public final static String zan_ting = "暂停";
+    public final static String no_run = "停止";
     public static String mode_thread = "未就绪";
     public static MyThread myThread = new MyThread();
+
+    public static String get_modeThread() {
+        return MyThread.get_mode();
+    }
 
 
     /**
@@ -57,13 +58,13 @@ public class DG_Thread {
         MyThread.mystop();
     }
 
-    public static String get_modeThread() {
-        return MyThread.get_mode();
+    public static void set_modeThread(String mode) {
+        mode_thread = mode;
     }
 
     public static class MyThread extends Thread {
         public static final Object lock = new Object();
-        public static boolean pause = false;
+        public static volatile boolean pause = false;
         public static volatile boolean isrun = true;//真--允许运行
 
         public static boolean mystart() {
@@ -103,6 +104,8 @@ public class DG_Thread {
          */
         public static void resumeThread() {
             pause = false;
+//            mode_thread = runing;
+            FloatingWindow.image_hui_fu();
             synchronized (lock) {
                 lock.notifyAll();
             }
@@ -113,6 +116,7 @@ public class DG_Thread {
          */
         public static void mystop() {
             pause = false;
+
             synchronized (lock) {
                 lock.notifyAll();
             }
@@ -124,14 +128,19 @@ public class DG_Thread {
          * 注意：这个方法只能在run方法里调用，不然会阻塞主线程，导致页面无响应
          */
         public static void onPause() {
+            mode_thread = zan_ting;
+            image_zant_ing();
             synchronized (lock) {
                 try {
-                    mode_thread = "暂停";
                     lock.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+        }
+
+        private static void image_zant_ing() {
+            FloatingWindow.image_zan_ting();
         }
 
         @Override
@@ -141,31 +150,35 @@ public class DG_Thread {
             try {
                 int index = 0;
                 while (true) {
-                    mode_thread = "运行";
-                    /*LogUtil.I(index + "   " + getId());
-                    ++index;*/
+                    mode_thread = runing;
+//                    旋转图标
+                    FloatingWindow.image_run();
+                    LogUtil.I(index + "   " + getId());
+                    ++index;
 
-                    /*if (ThreadSleepTime.sleep2()) {
+                    if (ThreadSleepTime.sleep(1000*5)) {
                         break;
-                    }*/
+                    }
                     /*if (sleepmy(10000) == my_stop) {
                         break;
                     }*/
 
-                    XXQG.openxxqj(mcontext);
-
-                    break;
+//                    XXQG.openxxqj(mcontext);
+//                    break;
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
 
-            mode_thread = "未就绪";
+            mode_thread = no_run;
+//            停止图标
+//            imagestop();
             LogUtil.W("线程停止");
         }
 
         /**
          * 毫秒，用于线程睡眠，可以正常暂停退出
+         *
          * @param time
          * @return
          */
@@ -196,6 +209,10 @@ public class DG_Thread {
                 }
             }
             return NULL;
+        }
+
+        private static void imagestop() {
+            FloatingWindow.image_stop();
         }
     }
 }

@@ -32,7 +32,7 @@ public class MainService extends Service {
 
     @Override
     public void onCreate() {
-        mcontext = MainActivity.getMcontext();
+        mcontext = MainActivity.getMycontext();
         floatingwindow();
         fuzhuservice();
         naozhongserver();
@@ -43,6 +43,7 @@ public class MainService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
+
     }
 
     /**
@@ -74,19 +75,20 @@ public class MainService extends Service {
     }
 
     /**
-     * @description 启动通知栏客户端
      * @param
      * @return
+     * @description 启动通知栏客户端
      * @author Nine_Dollar
      * @time 2020/11/4 15:12
      */
     public static void notification() {
-        Binding binding = new Binding(MyNotificationType.case1,MyNotificationType.key1,MyNotificationType.message1);
+        Binding binding = new Binding(MyNotificationType.case1, MyNotificationType.key1, MyNotificationType.message1);
         binding.doBindService();
     }
 
-    public void floatingwindow(){
-        FloatingWindow floatingWindow = new FloatingWindow();
-        floatingWindow.chekPermission();
+    public void floatingwindow() {
+//        FloatingWindow floatingWindow = new FloatingWindow();
+//        floatingWindow.chekPermission();
+        FloatingWindow.start_float_windows();
     }
 }

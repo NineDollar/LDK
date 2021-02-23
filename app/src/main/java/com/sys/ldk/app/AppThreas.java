@@ -2,17 +2,13 @@ package com.sys.ldk.app;
 
 import android.content.Context;
 
-import com.sys.ldk.FloatingWindow;
 import com.sys.ldk.MainActivity;
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.util.LogUtil;
-import com.sys.ldk.serverset.MessengerService;
-import com.sys.ldk.serverset.MyNotificationType;
 import com.sys.ldk.xxqg.Autoanswer;
 import com.sys.ldk.xxqg.AutoRead;
 import com.sys.ldk.xxqg.AutoVideo;
 import com.sys.ldk.xxqg.XXQG;
-import com.sys.ldk.accessibility.api.User;
 
 /**
  * @author: Nine_Dollar
@@ -25,7 +21,7 @@ public class AppThreas {
     private Context myContext;
 
     void AppThreas() {
-        myContext = MainActivity.getMcontext();
+        myContext = MainActivity.getMycontext();
     }
 
     public void run(String apptype) {

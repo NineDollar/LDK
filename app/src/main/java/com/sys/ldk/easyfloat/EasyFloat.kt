@@ -119,6 +119,7 @@ class EasyFloat {
                 getConfig(tag).let { it?.dragEnable = dragEnable }
 
         /**
+         * -------
          * 获取系统浮窗是否显示，通过浮窗的config，获取显示状态
          */
         @JvmStatic

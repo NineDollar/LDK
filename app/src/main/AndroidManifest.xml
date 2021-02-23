@@ -75,6 +75,7 @@
         <activity android:name=".shellService.ShellActivity" />
 
         <activity android:name=".MainActivityTest" />
+        <activity android:name=".FloatingWindow" />
 
         <service
             android:name=".MainAccessService"

@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.AddclockActivity;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_clock);
 //        getSupportActionBar().hide();//隐藏ActionBar
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明化通知栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -63,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        setContentView(R.layout.activity_clock);
         initView();
         mcontext = this;
 
@@ -73,8 +74,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, MainService.class);
         startService(intent);
 
-        /*FloatingWindow floatingWindow = new FloatingWindow();
-        floatingWindow.chekPermission(this);*/
+        /*new Thread(() -> {
+            LogUtil.D("启动悬浮窗");
+            FloatingWindow floatingWindow = new FloatingWindow();
+            floatingWindow.chekPermission();
+        }).start();*/
+
 //        naozhongserver();
 //        fuzhuserer();
 
@@ -132,12 +137,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
         initDatabase();
         mySimpleAdaptey.notifyDataSetChanged();
-        xufuchuang.setChecked(EasyFloat.appFloatIsShow());
+//        xufuchuang.setChecked(EasyFloat.appFloatIsShow());
     }
 
     @Override
@@ -146,9 +152,10 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
-    public static Context getMcontext() {
+    public static Context getMycontext() {
         return mcontext;
     }
+
     private int deleteItem(ClockBean clockBean) {
         db.delete("clocks", "id=?", new String[]{clockBean.getId() + ""});
         initDatabase();
@@ -220,17 +227,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        xufuchuang = (Switch) findViewById(R.id.xufuchuang);
-        xufuchuang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    FloatingWindow floatingWindow = new FloatingWindow();
-                    floatingWindow.chekPermission();
-                } else {
-                    EasyFloat.dismissAppFloat();
-                }
-            }
-        });
+
     }
 }

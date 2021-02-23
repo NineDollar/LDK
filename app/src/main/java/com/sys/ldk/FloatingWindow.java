@@ -1,12 +1,14 @@
 package com.sys.ldk;
 
-import android.accessibilityservice.GestureDescription;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Path;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -14,150 +16,288 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.sys.ldk.accessibility.api.AcessibilityApi;
-import com.sys.ldk.accessibility.api.User;
-import com.sys.ldk.app.AppThreas;
-import com.sys.ldk.app.Startapp;
+import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.easyfloat.EasyFloat;
+import com.sys.ldk.easyfloat.anim.AppFloatDefaultAnimator;
 import com.sys.ldk.easyfloat.enums.ShowPattern;
 import com.sys.ldk.easyfloat.enums.SidePattern;
+import com.sys.ldk.easyfloat.interfaces.OnFloatCallbacks;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
 import com.sys.ldk.serverset.MyNotificationType;
 import com.sys.ldk.xxqg.Autoanswer;
-import com.sys.ldk.xxqg.XXQG;
-import com.sys.ldk.xxqg.XxqgFuntion;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FloatingWindow {
+    @SuppressLint("StaticFieldLeak")
+    public static Context mcontext;
+    @SuppressLint("StaticFieldLeak")
+    public static ImageView runimage;
+    private static ConstraintLayout constraintLayout;
+    private static AnimationDrawable drawable;
+    @SuppressLint("StaticFieldLeak")
+    private static Button btn_start;
+    @SuppressLint("StaticFieldLeak")
+    private static Button btn_stop;
 
-    private Context mcontext;
-    private AppThreas appThreas = new AppThreas();
-    private Messenger mService;
-    private XXQG xxqg = new XXQG();
-    private ImageView imageView;
-    private Button button1;
-
-    public void chekPermission() {
-        mcontext = MainActivity.getMcontext();
+    public static void start_float_windows() {
+        mcontext = MainActivity.getMycontext();
         if (!PermissionUtils.checkPermission(mcontext)) {
             AlertDialog alertDialog = new AlertDialog.Builder(mcontext)
                     .setTitle("提示")
                     .setMessage("使用浮窗功能，需要您授权悬浮窗权限。")
-                    .setPositiveButton("去开启", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Floating_window();
-//                            Floating_window_1();
-                        }
+                    .setPositiveButton("去开启", (dialog, which) -> {
+                        Floating_windows_1();
+                        Floating_windows_3();
                     })
                     .setNegativeButton("取消", null)
                     .create();
             alertDialog.show();
         } else {
-            Floating_window();
-//            Floating_window_1();
+            Floating_windows_1();
+            Floating_windows_3();
+        }
+    }
+
+    private static void Floating_windows_1() {
+        EasyFloat.with(mcontext)
+                .setShowPattern(ShowPattern.ALL_TIME)
+                .setSidePattern(SidePattern.RESULT_HORIZONTAL)
+                .setTag("1")
+                .setGravity(Gravity.END, 0, 500)
+                .setLayout(R.layout.float1, View -> {
+                    runimage = View.findViewById(R.id.icon);
+                    runimage.setOnClickListener(v ->
+                            show_2_float_windows());
+                })
+                .registerCallbacks(new OnFloatCallbacks() {
+                    @Override
+                    public void createdResult(boolean isCreated, @Nullable String msg, @Nullable View view) {
+                        LogUtil.I("创建第1个悬浮窗");
+                    }
+
+                    @Override
+                    public void show(@NotNull View view) {
+                        LogUtil.I("显示第1个悬浮窗");
+                        EasyFloat.hideAppFloat("2");
+                    }
+
+                    @Override
+                    public void hide(@NotNull View view) {
+                        LogUtil.I("隐藏第1个悬浮窗");
+                    }
+
+                    @Override
+                    public void dismiss() {
+                        LogUtil.I("关闭第1个悬浮窗");
+                    }
+
+                    @Override
+                    public void touchEvent(@NotNull View view, @NotNull MotionEvent event) {
+                        LogUtil.I("触摸第1个悬浮窗");
+                    }
+
+                    @Override
+                    public void drag(@NotNull View view, @NotNull MotionEvent event) {
+//                        LogUtil.I("拖动第1个悬浮窗");
+                    }
+
+                    @Override
+                    public void dragEnd(@NotNull View view) {
+                        LogUtil.I("第1个悬浮窗拖动结束");
+                    }
+                })
+                .show();
+    }
+
+    public static void xuan_zhuan() {
+        LogUtil.D("旋转");
+        runimage.setBackgroundResource(R.drawable.run_xml);
+        drawable = (AnimationDrawable) runimage.getBackground();
+
+        LogUtil.D("旋转开始");
+        if (drawable != null) {
+            drawable.start();
+        }
+    }
+
+    private static void show_2_float_windows() {
+        if (EasyFloat.appFloatIsShow("2")) {
+            EasyFloat.hideAppFloat("2");
+        } else {
+            EasyFloat.showAppFloat("2");
+            if (!EasyFloat.appFloatIsShow("2")) {
+                Floating_windows_2();
+            }
         }
     }
 
     //    悬浮窗
-    private void Floating_window() {
+    private static void Floating_windows_2() {
         EasyFloat.with(mcontext)
                 .setSidePattern(SidePattern.RESULT_HORIZONTAL)
                 .setShowPattern(ShowPattern.ALL_TIME)
                 .setGravity(Gravity.END, 0, 800)
+                .setAppFloatAnimator(new AppFloatDefaultAnimator())
+                .setTag("2")
                 .setLayout(R.layout.activity_floatingwindow, View -> {
-                    View.findViewById(R.id.start).setOnClickListener(v1 -> readandvideo());
+                    constraintLayout = View.findViewById(R.id.parent_float_windows);
+
+                    btn_start = View.findViewById(R.id.start);
+                    btn_start.setOnClickListener(v1 -> start());
+
                     View.findViewById(R.id.btn_dati).setOnClickListener(v1 -> dati());
-                    View.findViewById(R.id.ivClose).setOnClickListener(v1 -> close());
-                 /*   View.findViewById(R.id.alltext).setOnClickListener(v1 -> getfallinfo());
-                    View.findViewById(R.id.btn_test1).setOnClickListener(v1 -> test1());*/
-                    button1 = View.findViewById(R.id.btn_test_3);
-                    button1.setOnClickListener(v -> test3());
-                    imageView = View.findViewById(R.id.im);
-                    imageView.setOnClickListener(v -> im());
-                    /*View.findViewById(R.id.btn_start).setOnClickListener(v1 -> DG_Thread.start());
-                    View.findViewById(R.id.zhanting).setOnClickListener(v1 -> DG_Thread.zhanting());
-                    View.findViewById(R.id.huifu).setOnClickListener(v1 -> DG_Thread.huifu());
-                    View.findViewById(R.id.tingzhi).setOnClickListener(v1 -> DG_Thread.stop());*/
-//                    View.findViewById(R.id.btn_test).setOnClickListener(v1 -> test());
+
+                    btn_stop = View.findViewById(R.id.btn_stop);
+                    btn_stop.setOnClickListener(v1 -> stop());
+
+                    View.findViewById(R.id.ivClose).setOnClickListener(v1 -> hide());
+                })
+                .registerCallbacks(new OnFloatCallbacks() {
+                    @Override
+                    public void createdResult(boolean isCreated, @Nullable String msg, @Nullable View view) {
+                        LogUtil.I("创建第2个悬浮窗");
+                        EasyFloat.dismissAppFloat("1");
+                    }
+
+                    @Override
+                    public void show(@NotNull View view) {
+                        LogUtil.I("显示第2个悬浮窗");
+                        EasyFloat.dismissAppFloat("1");
+                    }
+
+                    @Override
+                    public void hide(@NotNull View view) {
+                        LogUtil.I("隐藏第2个悬浮窗");
+                    }
+
+                    @Override
+                    public void dismiss() {
+                        LogUtil.I("关闭第2个悬浮窗");
+                    }
+
+                    @Override
+                    public void touchEvent(@NotNull View view, @NotNull MotionEvent event) {
+//                        init();
+                        LogUtil.I("触摸第2个悬浮窗");
+                    }
+
+                    @Override
+                    public void drag(@NotNull View view, @NotNull MotionEvent event) {
+//                        LogUtil.I("拖动第2个悬浮窗");
+                        constraintLayout.setBackgroundResource(R.drawable.corners);
+                    }
+
+                    @Override
+                    public void dragEnd(@NotNull View view) {
+                        LogUtil.I("第2个悬浮窗拖动结束");
+                        int[] location = new int[2];
+//                        返回x，y坐标
+                        view.getLocationOnScreen(location);
+                        constraintLayout.setBackgroundResource(location[0] > 3 ? R.drawable.corners_left : R.drawable.corners_right);
+                    }
                 })
                 .show();
     }
 
-    private void im() {
-        imageView.setImageResource(R.drawable.jinri);
-    }
-
-    private void test3() {
-        button1.setText("2");
-    }
-
-    /*private void Floating_window_1() {
-        EasyFloat.with(mcontext)
-                .setSidePattern(SidePattern.RESULT_HORIZONTAL)
-                .setShowPattern(ShowPattern.ALL_TIME)
-                .setGravity(Gravity.END, 0, 500)
-                .setLayout(R.layout.float1, View -> {
-                    imageView = View.findViewById(R.id.icon);
-                    imageView.setOnClickListener(v -> Floating_window());
-                })
-                .show();
-    }*/
-
-    private void test2() {
-        Autoanswer.doactivity();
-
-    }
-
-    private void test1() {
-        XxqgFuntion.back();
-    }
-
-    private void getfallinfo() {
-        User.getallInfo();
-    }
-
-    private void readandvideo() {
-        Thread dg_thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (XXQG.openxxqj(mcontext)) {
-                    AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
-                }
+    private static void start() {
+        /*Thread dg_thread = new Thread(() -> {
+            if (XXQG.openxxqj(mcontext)) {
+                AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
             }
         });
-        dg_thread.start();
+        dg_thread.start();*/
+//        Floating_windows_1();
+//        xuan_zhuan();
+
+
+//        EasyFloat.hideAppFloat("2");
+//        DG_Thread.start();
+//        Floating_windows_1();
+//        xuan_zhuan();
+
+        init();
     }
 
+    @SuppressLint("ResourceAsColor")
+    private static void init() {
+        LogUtil.I("---" + DG_Thread.get_modeThread());
+        switch (DG_Thread.get_modeThread()) {
+            case DG_Thread.runing:
+                btn_start.setText("恢复");
+                btn_start.setTextColor(mcontext.getResources().getColor(R.color.violet, null));
+                btn_stop.setEnabled(true);
+                btn_stop.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
+                DG_Thread.zhanting();
+                break;
+            case DG_Thread.zan_ting:
+                btn_start.setText("暂停");
+                btn_start.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
+                btn_stop.setEnabled(true);
+                btn_stop.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
+                DG_Thread.huifu();
 
-    private void dati() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!Autoanswer.doactivity()) {
-                    AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
-                }
+                Floating_windows_1();
+                break;
+            case DG_Thread.no_run:
+            case "未就绪":
+                btn_start.setText("暂停");
+                btn_start.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
+                btn_stop.setEnabled(true);
+                btn_stop.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
+                DG_Thread.start();
+
+                Floating_windows_1();
+                break;
+        }
+    }
+
+    private static void dati() {
+        /*new Thread(() -> {
+            if (!Autoanswer.doactivity()) {
+                AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
             }
-        }).start();
+        }).start();*/
+        hide();
+        DG_Thread.huifu();
     }
 
-    private void close() {
-        EasyFloat.dismissAppFloat();
+    private static void stop() {
+//        EasyFloat.appFloatIsShow("1");
+
+//        Floating_windows_1();
+
+        btn_start.setText("开始学习");
+        DG_Thread.stop();
+        btn_stop.setTextColor(mcontext.getResources().getColor(R.color.font_common_1, null));
+        btn_stop.setEnabled(false);
+        LogUtil.I("" + DG_Thread.get_modeThread());
+
+        if (DG_Thread.get_modeThread().equals(DG_Thread.runing) || DG_Thread.get_modeThread().equals(DG_Thread.zan_ting)) {
+            btn_stop.setEnabled(true);
+        }
     }
 
-    private void test() {
-        Autoanswer.doactivity();
+    private static void hide() {
+        Floating_windows_1();
+        EasyFloat.hideAppFloat("2");
     }
 
-    public ServiceConnection mConnection = new ServiceConnection() {
+    public static ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d("ClockService", "连接成功");
-            mService = new Messenger(service);
+            Messenger mService = new Messenger(service);
             Message message = Message.obtain(null, MyNotificationType.case3);
             Bundle bundle = new Bundle();
             bundle.putString("app", "test");
@@ -175,28 +315,44 @@ public class FloatingWindow {
         }
     };
 
-    public void doBindService() {
-        Intent intent = new Intent(MyApplication.getContext(), Startapp.class);
-        mcontext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    private static void Floating_windows_3() {
+        EasyFloat.with(mcontext)
+                .setSidePattern(SidePattern.RESULT_HORIZONTAL)
+                .setShowPattern(ShowPattern.ALL_TIME)
+                .setGravity(Gravity.END, 0, 200)
+                .setAppFloatAnimator(new AppFloatDefaultAnimator())
+                .setTag("3")
+                .setLayout(R.layout.test3, View -> {
+                    View.findViewById(R.id.btn_test1).setOnClickListener(v ->
+//                            DG_Thread.set_modeThread(DG_Thread.runing));
+                            DG_Thread.start());
+
+                    View.findViewById(R.id.btn_test2).setOnClickListener(v ->
+                            DG_Thread.zhanting());
+
+                    View.findViewById(R.id.btn_test3).setOnClickListener(v ->
+                            DG_Thread.huifu());
+
+                    View.findViewById(R.id.btn_test4).setOnClickListener(v ->
+                            DG_Thread.stop());
+                })
+                .show();
     }
 
-    // Simulates an L-shaped drag path: 200 pixels right, then 200 pixels down.
-    private void doRightThenDownDrag() {
-        Path dragRightPath = new Path();
-        dragRightPath.moveTo(200, 200);
-        dragRightPath.lineTo(400, 200);
-        long dragRightDuration = 500L; // 0.5 second
+    public static void image_run() {
+        xuan_zhuan();
+    }
 
-        // The starting point of the second path must match
-        // the ending point of the first path.
-        Path dragDownPath = new Path();
-        dragDownPath.moveTo(400, 200);
-        dragDownPath.lineTo(400, 400);
-        long dragDownDuration = 500L;
-        GestureDescription.StrokeDescription rightThenDownDrag =
-                new GestureDescription.StrokeDescription(dragRightPath, 0L,
-                        dragRightDuration, true);
-        rightThenDownDrag.continueStroke(dragDownPath, dragRightDuration,
-                dragDownDuration, false);
+    public static void image_hui_fu() {
+        drawable.start();
+//        runimage.setBackgroundResource(R.drawable.stop);
+    }
+
+    public static void image_zan_ting() {
+        drawable.stop();
+    }
+
+    public static void image_stop() {
+        runimage.setBackgroundResource(R.drawable.stop);
     }
 }
