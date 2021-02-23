@@ -5,10 +5,10 @@ import android.content.Context;
 import com.sys.ldk.MainActivity;
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.util.LogUtil;
-import com.sys.ldk.xxqg.Autoanswer;
-import com.sys.ldk.xxqg.AutoRead;
-import com.sys.ldk.xxqg.AutoVideo;
-import com.sys.ldk.xxqg.XXQG;
+import com.sys.ldk.dg.Autoanswer;
+import com.sys.ldk.dg.AutoRead;
+import com.sys.ldk.dg.AutoVideo;
+import com.sys.ldk.dg.XXQG;
 
 /**
  * @author: Nine_Dollar

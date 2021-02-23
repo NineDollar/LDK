@@ -1,4 +1,4 @@
-package com.sys.ldk.xxqg;
+package com.sys.ldk.dg;
 
 public class ReturnType {
 //    成功

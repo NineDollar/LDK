@@ -9,13 +9,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -27,22 +25,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.AddclockActivity;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.MyDatabaseHelper;
 import com.sys.ldk.clock.MySimpleAdaptey;
-import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.Permission;
 import com.sys.ldk.shellService.Checkshell;
 import com.sys.ldk.shellService.ShellActivity;
+import com.sys.ldk.dg.DG_Config;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
 
 public class MainActivity extends AppCompatActivity {
     private static Context mcontext;
@@ -190,14 +185,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.root_test:
+            /*case R.id.root_test:
                 Checkshell.show_root(this);
-                return true;
-            case R.id.shell:
+                return true;*/
+            /*case R.id.shell:
                 startActivity(new Intent(this, ShellActivity.class));
-                return true;
-            case R.id.test:
-                startActivity(new Intent(this, MainActivityTest.class));
+                return true;*/
+            case R.id.activity_config:
+                startActivity(new Intent(this, DG_Config.class));
                 return true;
             case R.id.setverset:
                 startActivity(new Intent(this, Permission.class));
@@ -207,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestMyPermissions() {
-
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

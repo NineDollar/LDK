@@ -1,4 +1,4 @@
-package com.sys.ldk.xxqg;
+package com.sys.ldk.dg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.sys.ldk.xxqg.ReturnType.FAILURE;
-import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
-import static com.sys.ldk.xxqg.ReturnType.my_stop;
+import static com.sys.ldk.dg.ReturnType.FAILURE;
+import static com.sys.ldk.dg.ReturnType.my_stop;
 
 public class Doxt {
     /**

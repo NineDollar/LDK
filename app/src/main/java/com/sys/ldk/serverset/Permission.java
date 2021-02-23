@@ -1,6 +1,7 @@
 package com.sys.ldk.serverset;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -92,14 +93,11 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
         soding.setOnClickListener(this);
         fuzhutext.setOnClickListener(this);
 
+        switchyinchang.setChecked(true);
         switchyinchang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
 
-                } else {
-
-                }
             }
         });
     }
@@ -110,9 +108,6 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
         }
         if (PermissionUtils.checkPermission(this)) {
             xuanfutext.setText(R.string.ysq);
-        }
-        if (isIgnoringBatteryOptimizations()) {
-            dianliangtext.setText(R.string.ysq);
         }
 
 //                   判断键盘是否锁定
@@ -126,7 +121,7 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
 
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint({"ResourceAsColor", "NonConstantResourceId"})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -143,11 +138,12 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
                 jumpStartInterface(mcontext);
                 break;
             case R.id.dianliang:
-                if (isIgnoringBatteryOptimizations()) {
+                /*if (isIgnoringBatteryOptimizations()) {
                     Toast.makeText(mcontext, "已授权", Toast.LENGTH_SHORT).show();
                 } else {
                     requestIgnoreBatteryOptimizations();
-                }
+                }*/
+                addWhite(this);
                 break;
             case R.id.soding:
                 AcessibilityApi.performAction(AcessibilityApi.ActionType.RECENTS);
@@ -155,27 +151,20 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    //    申请加入白名单
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void requestIgnoreBatteryOptimizations() {
-        try {
-            Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + mcontext.getPackageName()));
-            mcontext.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void addWhite(Activity activity){
+        PowerManager packageManager = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+        //应用是否在 白名单中
+        if (!packageManager.isIgnoringBatteryOptimizations(activity.getPackageName())){
+            //方法1、启动一个  ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS Intent
+//                Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+//                activity.startActivity(intent);
+            //方法2、触发系统对话框
+            @SuppressLint("BatteryLife") Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:"+activity.getPackageName()));
+            activity.startActivity(intent);
+        }else {
+            Toast.makeText(activity, "以加入电池优化白名单", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    //   判断是否在白名单
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public boolean isIgnoringBatteryOptimizations() {
-        boolean isIgnoring = false;
-        PowerManager powerManager = (PowerManager) mcontext.getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null) {
-            isIgnoring = powerManager.isIgnoringBatteryOptimizations(mcontext.getPackageName());
-        }
-        return isIgnoring;
     }
 
     //    后台自启动

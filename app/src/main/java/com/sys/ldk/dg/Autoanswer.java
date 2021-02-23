@@ -1,4 +1,4 @@
-package com.sys.ldk.xxqg;
+package com.sys.ldk.dg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.sys.ldk.serverset.MainService.notification;
-import static com.sys.ldk.xxqg.ReturnType.CLIK;
-import static com.sys.ldk.xxqg.ReturnType.FAILURE;
-import static com.sys.ldk.xxqg.ReturnType.OVER;
-import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
+import static com.sys.ldk.dg.ReturnType.CLIK;
+import static com.sys.ldk.dg.ReturnType.FAILURE;
+import static com.sys.ldk.dg.ReturnType.OVER;
+import static com.sys.ldk.dg.ReturnType.SUCCESS;
 
 public class Autoanswer {
     private final static String mei_ri = "每日答题";

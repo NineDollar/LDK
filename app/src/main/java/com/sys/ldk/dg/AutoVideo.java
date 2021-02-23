@@ -1,11 +1,10 @@
-package com.sys.ldk.xxqg;
+package com.sys.ldk.dg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
-import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 
 import java.util.ArrayList;
@@ -14,13 +13,14 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
-import static com.sys.ldk.xxqg.ReturnType.my_stop;
+import static com.sys.ldk.dg.Config.is_xin_wen_lian_bo;
+import static com.sys.ldk.dg.Config.video_max;
+import static com.sys.ldk.dg.ReturnType.SUCCESS;
+import static com.sys.ldk.dg.ReturnType.my_stop;
 import static java.sql.Types.NULL;
 
 public class AutoVideo {
     //    最大观看时间5分钟
-    private final static int MAXshijina = 1 * 5;
 
     public static boolean auto_video() {
         AcessibilityApi.clickTextViewByText("电视台");
@@ -37,11 +37,14 @@ public class AutoVideo {
         }
 
 //        联播频道
-        AcessibilityApi.clickTextViewByText("联播频道");
-        if (ThreadSleepTime.sleep2()) {
-            return false;
+        if(is_xin_wen_lian_bo){
+            AcessibilityApi.clickTextViewByText("联播频道");
+            if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
+           return startvido(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")));
         }
-        return startvido(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")));
+        return true;
     }
 
     public static boolean startvido(List<AccessibilityNodeInfo> accessibilityNodeInfos) {
@@ -72,7 +75,9 @@ public class AutoVideo {
             }
 //                判断观看是否结束
             int shi_jian = 0;
-            while (shi_jian++ < MAXshijina) {
+            video_max /= 1000;//换成秒
+//            秒计算
+            while (shi_jian++ < video_max) {
                 LogUtil.D("睡眠：" + shi_jian + "秒");
                 if (watch_end() == SUCCESS) {
                     break;

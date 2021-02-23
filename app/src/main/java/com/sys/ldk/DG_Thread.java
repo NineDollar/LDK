@@ -1,11 +1,11 @@
 package com.sys.ldk;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-
+import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.dg.XXQG;
 
-import static com.sys.ldk.xxqg.ReturnType.my_stop;
+import static com.sys.ldk.FloatingWindow.mcontext;
+import static com.sys.ldk.dg.ReturnType.my_stop;
 import static java.sql.Types.NULL;
 
 /**
@@ -104,8 +104,8 @@ public class DG_Thread {
          */
         public static void resumeThread() {
             pause = false;
-//            mode_thread = runing;
-            FloatingWindow.image_hui_fu();
+            mode_thread = runing;
+            xhui_fu();
             synchronized (lock) {
                 lock.notifyAll();
             }
@@ -116,10 +116,10 @@ public class DG_Thread {
          */
         public static void mystop() {
             pause = false;
-
             synchronized (lock) {
                 lock.notifyAll();
             }
+            LogUtil.D("mystop");
             myThread.interrupt();
             isrun = false;
         }
@@ -129,9 +129,9 @@ public class DG_Thread {
          */
         public static void onPause() {
             mode_thread = zan_ting;
-            image_zant_ing();
             synchronized (lock) {
                 try {
+                    image_zant_ing();
                     lock.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -139,32 +139,33 @@ public class DG_Thread {
             }
         }
 
-        private static void image_zant_ing() {
-            FloatingWindow.image_zan_ting();
-        }
-
         @Override
         public void run() {
             super.run();
             LogUtil.D("线程启动");
             try {
-                int index = 0;
+//                int index = 0;
                 while (true) {
                     mode_thread = runing;
-//                    旋转图标
-                    FloatingWindow.image_run();
-                    LogUtil.I(index + "   " + getId());
-                    ++index;
 
-                    if (ThreadSleepTime.sleep(1000*5)) {
+//                    旋转图标
+                    ximage_run();
+
+                   /* LogUtil.I(index + "   " + getId());
+                    ++index;*/
+
+                    /*if (ThreadSleepTime.sleep(10 * 1000)) {
                         break;
-                    }
+                    }*/
                     /*if (sleepmy(10000) == my_stop) {
                         break;
                     }*/
-
-//                    XXQG.openxxqj(mcontext);
-//                    break;
+                    if(XXQG.openxxqj(mcontext)){
+                        AcessibilityApi.performAction(AcessibilityApi.ActionType.HOME);
+                        ThreadSleepTime.sleep1();
+                        AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
+                    }
+                    break;
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -172,7 +173,7 @@ public class DG_Thread {
 
             mode_thread = no_run;
 //            停止图标
-//            imagestop();
+            imagestop();
             LogUtil.W("线程停止");
         }
 
@@ -209,6 +210,18 @@ public class DG_Thread {
                 }
             }
             return NULL;
+        }
+
+        private void ximage_run() {
+            FloatingWindow.image_run();
+        }
+
+        private static void image_zant_ing() {
+            FloatingWindow.image_zan_ting();
+        }
+
+        private static void xhui_fu() {
+            FloatingWindow.image_hui_fu();
         }
 
         private static void imagestop() {

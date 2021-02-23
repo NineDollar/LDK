@@ -1,4 +1,4 @@
-package com.sys.ldk.xxqg;
+package com.sys.ldk.dg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -15,9 +15,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.sys.ldk.xxqg.ReturnType.FAILURE;
-import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
-import static com.sys.ldk.xxqg.ReturnType.my_stop;
+import static com.sys.ldk.dg.ReturnType.FAILURE;
+import static com.sys.ldk.dg.ReturnType.my_stop;
 
 public class Tikot {
     public static int tikot(String questiontype) {

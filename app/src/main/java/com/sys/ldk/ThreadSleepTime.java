@@ -2,7 +2,7 @@ package com.sys.ldk;
 
 import com.sys.ldk.accessibility.api.User;
 
-import static com.sys.ldk.xxqg.ReturnType.my_stop;
+import static com.sys.ldk.dg.ReturnType.my_stop;
 
 public class ThreadSleepTime {
 

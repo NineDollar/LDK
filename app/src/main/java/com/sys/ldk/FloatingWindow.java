@@ -3,12 +3,9 @@ package com.sys.ldk;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -20,11 +17,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.anim.AppFloatDefaultAnimator;
@@ -33,7 +30,6 @@ import com.sys.ldk.easyfloat.enums.SidePattern;
 import com.sys.ldk.easyfloat.interfaces.OnFloatCallbacks;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
 import com.sys.ldk.serverset.MyNotificationType;
-import com.sys.ldk.xxqg.Autoanswer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,14 +54,14 @@ public class FloatingWindow {
                     .setMessage("使用浮窗功能，需要您授权悬浮窗权限。")
                     .setPositiveButton("去开启", (dialog, which) -> {
                         Floating_windows_1();
-                        Floating_windows_3();
+//                        Floating_windows_3();
                     })
                     .setNegativeButton("取消", null)
                     .create();
             alertDialog.show();
         } else {
             Floating_windows_1();
-            Floating_windows_3();
+//            Floating_windows_3();
         }
     }
 
@@ -77,8 +73,9 @@ public class FloatingWindow {
                 .setGravity(Gravity.END, 0, 500)
                 .setLayout(R.layout.float1, View -> {
                     runimage = View.findViewById(R.id.icon);
-                    runimage.setOnClickListener(v ->
-                            show_2_float_windows());
+                    runimage.setOnClickListener(v -> show_2_float_windows());
+
+                    runimage.setOnLongClickListener(v -> into_mainctivi());
                 })
                 .registerCallbacks(new OnFloatCallbacks() {
                     @Override
@@ -89,7 +86,6 @@ public class FloatingWindow {
                     @Override
                     public void show(@NotNull View view) {
                         LogUtil.I("显示第1个悬浮窗");
-                        EasyFloat.hideAppFloat("2");
                     }
 
                     @Override
@@ -118,6 +114,11 @@ public class FloatingWindow {
                     }
                 })
                 .show();
+    }
+
+    private static boolean into_mainctivi() {
+        mcontext.startActivity(new Intent(mcontext, MainActivity.class));
+        return true;
     }
 
     public static void xuan_zhuan() {
@@ -167,18 +168,19 @@ public class FloatingWindow {
                     @Override
                     public void createdResult(boolean isCreated, @Nullable String msg, @Nullable View view) {
                         LogUtil.I("创建第2个悬浮窗");
-                        EasyFloat.dismissAppFloat("1");
+                        EasyFloat.hideAppFloat("1");
                     }
 
                     @Override
                     public void show(@NotNull View view) {
                         LogUtil.I("显示第2个悬浮窗");
-                        EasyFloat.dismissAppFloat("1");
+                        EasyFloat.hideAppFloat("1");
                     }
 
                     @Override
                     public void hide(@NotNull View view) {
                         LogUtil.I("隐藏第2个悬浮窗");
+                        EasyFloat.showAppFloat("1");
                     }
 
                     @Override
@@ -246,18 +248,20 @@ public class FloatingWindow {
                 btn_stop.setEnabled(true);
                 btn_stop.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
                 DG_Thread.huifu();
-
-                Floating_windows_1();
+                EasyFloat.hideAppFloat("2");
                 break;
+
             case DG_Thread.no_run:
             case "未就绪":
                 btn_start.setText("暂停");
                 btn_start.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
                 btn_stop.setEnabled(true);
                 btn_stop.setTextColor(mcontext.getResources().getColor(R.color.colorAccent, null));
-                DG_Thread.start();
 
-                Floating_windows_1();
+                EasyFloat.hideAppFloat("2");
+                EasyFloat.showAppFloat("1");
+
+                DG_Thread.start();
                 break;
         }
     }
@@ -273,23 +277,23 @@ public class FloatingWindow {
     }
 
     private static void stop() {
-//        EasyFloat.appFloatIsShow("1");
-
-//        Floating_windows_1();
-
         btn_start.setText("开始学习");
         DG_Thread.stop();
-        btn_stop.setTextColor(mcontext.getResources().getColor(R.color.font_common_1, null));
-        btn_stop.setEnabled(false);
-        LogUtil.I("" + DG_Thread.get_modeThread());
-
-        if (DG_Thread.get_modeThread().equals(DG_Thread.runing) || DG_Thread.get_modeThread().equals(DG_Thread.zan_ting)) {
-            btn_stop.setEnabled(true);
+        int i = 10;
+        while (i-- > 0) {
+            if (DG_Thread.get_modeThread().equals(DG_Thread.no_run)) {
+                btn_stop.setTextColor(mcontext.getResources().getColor(R.color.font_common_1, null));
+                btn_stop.setEnabled(false);
+                break;
+            }
+        }
+        if (i <= 0) {
+            LogUtil.W("线程关闭失败");
         }
     }
 
     private static void hide() {
-        Floating_windows_1();
+        /* Floating_windows_1();*/
         EasyFloat.hideAppFloat("2");
     }
 
@@ -339,13 +343,27 @@ public class FloatingWindow {
                 .show();
     }
 
+    private static void Floating_windows_4() {
+        EasyFloat.with(mcontext)
+                .setSidePattern(SidePattern.DEFAULT)
+                .setShowPattern(ShowPattern.ALL_TIME)
+                .setGravity(Gravity.END, -290, 650)
+                .setAppFloatAnimator(new AppFloatDefaultAnimator())
+                .setTag("4")
+                .setDragEnable(false)
+                .setLayout(R.layout.float_progressbar, View -> {
+                    ProgressBar progressBar = (ProgressBar) View.findViewById(R.id.progressbar);
+                    progressBar.setVisibility(android.view.View.VISIBLE);
+                })
+                .show();
+    }
+
     public static void image_run() {
         xuan_zhuan();
     }
 
     public static void image_hui_fu() {
         drawable.start();
-//        runimage.setBackgroundResource(R.drawable.stop);
     }
 
     public static void image_zan_ting() {

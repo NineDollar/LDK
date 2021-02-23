@@ -310,8 +310,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view7" />
 
-
-
         <Switch
             android:id="@+id/switchyinchang"
             android:layout_width="wrap_content"
@@ -319,8 +317,18 @@
             android:paddingRight="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view7" />
+            app:layout_constraintTop_toBottomOf="@id/view7"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="20dp"
+        android:text="@string/copyRight"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

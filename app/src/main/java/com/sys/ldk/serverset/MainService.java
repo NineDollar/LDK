@@ -35,7 +35,7 @@ public class MainService extends Service {
         mcontext = MainActivity.getMycontext();
         floatingwindow();
         fuzhuservice();
-        naozhongserver();
+//        naozhongserver();
         notification();
         super.onCreate();
     }

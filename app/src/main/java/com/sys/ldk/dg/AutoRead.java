@@ -1,8 +1,7 @@
-package com.sys.ldk.xxqg;
+package com.sys.ldk.dg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.sys.ldk.DG_Thread;
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.User;
@@ -10,9 +9,10 @@ import com.sys.ldk.accessibility.util.LogUtil;
 
 import java.util.List;
 
+import static com.sys.ldk.dg.Config.read_time;
+
 public class AutoRead {
-    private static final int read_time = 1 * 5;
-    private static int reading_times = 10;
+    public static int reading_times = 10;
 
     public static boolean auto_read() {
         LogUtil.D("要闻---开始阅读");
@@ -34,8 +34,8 @@ public class AutoRead {
         assert accessibilityNodeInfoList != null;
         int m = accessibilityNodeInfoList.size();
         LogUtil.I("size： " + m);
-        for (AccessibilityNodeInfo a:accessibilityNodeInfoList
-             ) {
+        for (AccessibilityNodeInfo a : accessibilityNodeInfoList
+        ) {
             LogUtil.V("text: " + a.getText());
         }
         if (m < reading_times) {
@@ -51,15 +51,17 @@ public class AutoRead {
 //            如果页面有视频，则点击页面视频button
             video();
 //            阅读时间
-            LogUtil.W("阅读：" + read_time + "秒");
-            if (ThreadSleepTime.sleep(read_time * 1000)) {
+            long read_time1 = read_time;
+            LogUtil.W("阅读：" + (double) read_time1 / 1000 + "秒");
+//             毫秒
+            if (ThreadSleepTime.sleep(read_time)) {
                 return false;
             }
 
             if (reading_times > q && q >= 0) {
                 if (ThreadSleepTime.sleep1()) {
-            return false;
-        }
+                    return false;
+                }
                 if (!shoucangAndfenxiang()) {
                     LogUtil.E("未找到发表你的观点");
                 } else {
@@ -88,9 +90,9 @@ public class AutoRead {
     private static void video() {
         List<AccessibilityNodeInfo> accessibilityNodeInfos = AcessibilityApi.findViewByCls("android.widget.Button");
         assert accessibilityNodeInfos != null;
-        if(accessibilityNodeInfos.size()>0){
+        if (accessibilityNodeInfos.size() > 0) {
             AcessibilityApi.performViewClick(accessibilityNodeInfos.get(0));
-        }else {
+        } else {
             LogUtil.D("页面没有视频");
         }
     }
@@ -110,12 +112,12 @@ public class AutoRead {
         try {
             AcessibilityApi.performViewClick(allInfo.get(size - 1));
             if (ThreadSleepTime.sleep1()) {
-            return false;
-        }
+                return false;
+            }
             AcessibilityApi.performViewClick(allInfo.get(size - 2));
             if (ThreadSleepTime.sleep1()) {
-            return false;
-        }
+                return false;
+            }
         } catch (Exception e) {
             LogUtil.E("出错： " + e);
         }

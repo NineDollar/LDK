@@ -8,7 +8,7 @@ import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.jrxy.JRXY;
 
 import com.sys.ldk.weixin.WXDK;
-import com.sys.ldk.xxqg.XXQG;
+import com.sys.ldk.dg.XXQG;
 
 public class Appchoose extends Thread {
     private String apptype;

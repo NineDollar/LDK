@@ -1,4 +1,4 @@
-package com.sys.ldk.xxqg;
+package com.sys.ldk.dg;
 
 import android.accessibilityservice.AccessibilityService;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.sys.ldk.xxqg.ReturnType.CLIK;
-import static com.sys.ldk.xxqg.ReturnType.FAILURE;
-import static com.sys.ldk.xxqg.ReturnType.OVER;
-import static com.sys.ldk.xxqg.ReturnType.SUCCESS;
-import static com.sys.ldk.xxqg.ReturnType.my_stop;
+import static com.sys.ldk.dg.ReturnType.CLIK;
+import static com.sys.ldk.dg.ReturnType.FAILURE;
+import static com.sys.ldk.dg.ReturnType.OVER;
+import static com.sys.ldk.dg.ReturnType.SUCCESS;
+import static com.sys.ldk.dg.ReturnType.my_stop;
 
 public class IntoAnswer {
     public static int intoanswer() {
