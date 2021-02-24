@@ -53,6 +53,7 @@ public class User {
 
     /**
      * 单位毫秒
+     *
      * @param time
      * @return
      */
@@ -238,6 +239,7 @@ public class User {
 
     /**
      * 函数功能是查找text后或者前的第几个Info，String【】第一个是查找的text，第二个是查找N个后的text，确认查找正确
+     *
      * @param getInfoBytextaftermap
      * @return
      */
@@ -272,14 +274,15 @@ public class User {
 
     /**
      * 查找text后n个info
+     *
      * @param text
      * @param n
      * @return
      */
-    public static AccessibilityNodeInfo get_text_after_info(String text,int n){
+    public static AccessibilityNodeInfo get_text_after_info(String text, int n) {
         List<AccessibilityNodeInfo> accessibilityNodeInfos = AcessibilityApi.getAllNode(null, null);
-        for(int i = 0; i < accessibilityNodeInfos.size(); i++){
-            if(text.equals(accessibilityNodeInfos.get(i).getText()+"")){
+        for (int i = 0; i < accessibilityNodeInfos.size(); i++) {
+            if (text.equals(accessibilityNodeInfos.get(i).getText() + "")) {
                 LogUtil.D("找到" + text + "后" + "第" + n + "个info");
                 return accessibilityNodeInfos.get(i + n);
             }
@@ -333,7 +336,7 @@ public class User {
     public static boolean isApkInDebug(Context context) {
         try {
             ApplicationInfo info = context.getApplicationInfo();
-            LogUtil.D("is debug");
+            LogUtil.D("mode：" + ((info.flags & ApplicationInfo.FLAG_DEBUGGABLE)!=0));
             return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (Exception e) {
             return false;

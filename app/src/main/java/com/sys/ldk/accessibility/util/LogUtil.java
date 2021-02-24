@@ -2,6 +2,7 @@ package com.sys.ldk.accessibility.util;
 
 import android.util.Log;
 
+import com.sys.ldk.MainActivity;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.sdcard.SaveLog;
 import com.sys.ldk.serverset.Keyguard;
@@ -14,7 +15,7 @@ import static com.sys.ldk.dg.Config.issave;
 
 public class LogUtil {
     private static final String TS = "Log";
-    private static boolean isSHow = User.isApkInDebug(Keyguard.context);
+    private static final boolean isSHow = User.isApkInDebug(MainActivity.getMycontext());
 
     public static void E(String msg) {
         if (isSHow) {
