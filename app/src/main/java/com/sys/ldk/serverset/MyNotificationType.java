@@ -8,7 +8,7 @@ package com.sys.ldk.serverset;
 public class MyNotificationType {
     public static final int case1 = 10;
     public static final String key1 = "1";
-    public static String message1 = "通知1";
+    public static String message1 = "还未学习";
 
     public static final int case2 = 20;
     public static final String key2 = "2";

@@ -46,11 +46,11 @@
             app:layout_constraintTop_toBottomOf="@id/view1" />
 
         <TextView
+            android:id="@+id/fuzhutext"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/wsq"
             android:textSize="15dp"
-            android:id="@+id/fuzhutext"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/mage1"
             app:layout_constraintTop_toTopOf="parent" />
@@ -91,14 +91,7 @@
             android:text="允许使用悬浮窗"
             android:textSize="15dp"
             app:layout_constraintTop_toBottomOf="@id/view2" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="建议不开"/>
+
 
         <TextView
             android:id="@+id/xuanfutext"

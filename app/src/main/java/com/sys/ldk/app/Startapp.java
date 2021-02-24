@@ -36,7 +36,6 @@ public class Startapp extends Service {
     @Override
     public void onCreate() {
 //        设置文件名
-        LogUtil.setFilename(User.gettimelog()+".txt");
         super.onCreate();
     }
 

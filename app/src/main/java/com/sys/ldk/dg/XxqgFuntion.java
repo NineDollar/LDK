@@ -19,7 +19,6 @@ import java.util.List;
  */
 public class XxqgFuntion {
 
-
     /**
      * 用于点击listview
      *

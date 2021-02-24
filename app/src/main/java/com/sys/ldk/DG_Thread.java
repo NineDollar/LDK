@@ -3,6 +3,7 @@ package com.sys.ldk;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.dg.XXQG;
+import com.sys.ldk.sdcard.SaveLog;
 
 import static com.sys.ldk.FloatingWindow.mcontext;
 import static com.sys.ldk.dg.ReturnType.my_stop;
@@ -20,7 +21,7 @@ public class DG_Thread {
     public final static String no_run = "停止";
     public static String mode_thread = "未就绪";
     public static MyThread myThread = new MyThread();
-
+    private static boolean isAutoKeyBoard = true;
     public static String get_modeThread() {
         return MyThread.get_mode();
     }
@@ -119,7 +120,6 @@ public class DG_Thread {
             synchronized (lock) {
                 lock.notifyAll();
             }
-            LogUtil.D("mystop");
             myThread.interrupt();
             isrun = false;
         }
@@ -143,11 +143,12 @@ public class DG_Thread {
         public void run() {
             super.run();
             LogUtil.D("线程启动");
+//            保存日志
+            savelog();
             try {
 //                int index = 0;
                 while (true) {
                     mode_thread = runing;
-
 //                    旋转图标
                     ximage_run();
 
@@ -175,6 +176,11 @@ public class DG_Thread {
 //            停止图标
             imagestop();
             LogUtil.W("线程停止");
+        }
+
+        private void savelog() {
+//            获取时间设置log文件名
+            SaveLog.setSave_file_name(SaveLog.get_time_name());
         }
 
         /**
@@ -218,9 +224,17 @@ public class DG_Thread {
 
         private static void image_zant_ing() {
             FloatingWindow.image_zan_ting();
+//            恢复键盘
+           if( AcessibilityApi.AutoKeyBoard()){
+               isAutoKeyBoard = true;
+           }
         }
 
         private static void xhui_fu() {
+            if(isAutoKeyBoard){
+                isAutoKeyBoard = false;
+                AcessibilityApi.closeKeyBoard();
+            }
             FloatingWindow.image_hui_fu();
         }
 

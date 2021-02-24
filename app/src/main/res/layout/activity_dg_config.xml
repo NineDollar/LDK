@@ -89,17 +89,35 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="新闻联播"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/edit_read"
         app:layout_constraintTop_toBottomOf="@id/btn_save_video" />
+
+    <Switch
+        android:id="@+id/sw_save_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="日志"
+        app:layout_constraintRight_toRightOf="@id/edit_read"
+        app:layout_constraintTop_toTopOf="@+id/sw_xin_wen" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sw_xin_wen"
+        android:fillViewport="true">
 
     <EditText
         android:id="@+id/edit_log"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="240dp"
+        android:layout_height="0dp"
         android:background="#FAF0E6"
+        android:paddingLeft="5dp"
         android:hint="日志"
-        android:minLines="3" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sw_xin_wen"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

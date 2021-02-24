@@ -464,11 +464,26 @@ public class AcessibilityApi {
     /**
      * 关闭软件盘,需要7.0版本
      */
-    public static void closeKeyBoard(int mode) {
+    public static void closeKeyBoard()  {
         if (mAccessibilityService != null) {
             AccessibilityService.SoftKeyboardController softKeyboardController = mAccessibilityService.getSoftKeyboardController();
-            softKeyboardController.setShowMode(mode);
+            softKeyboardController.setShowMode(AccessibilityService.SHOW_MODE_HIDDEN);
         }
+    }
+
+    /**
+     * 自动返回true
+     * @return
+     */
+    public static boolean AutoKeyBoard( ) {
+        if (mAccessibilityService != null) {
+            AccessibilityService.SoftKeyboardController softKeyboardController = mAccessibilityService.getSoftKeyboardController();
+           if( softKeyboardController.getShowMode()==AccessibilityService.SHOW_MODE_HIDDEN){
+               softKeyboardController.setShowMode(AccessibilityService.SHOW_MODE_AUTO);
+               return true;
+           }
+        }
+        return false;
     }
 
 

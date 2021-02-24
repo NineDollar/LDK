@@ -1,13 +1,16 @@
 package com.sys.ldk;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -18,11 +21,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.sys.ldk.accessibility.api.AcessibilityApi;
+import com.sys.ldk.accessibility.api.User;
+import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.dg.Autoanswer;
+import com.sys.ldk.dg.IntoAnswer;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.anim.AppFloatDefaultAnimator;
 import com.sys.ldk.easyfloat.enums.ShowPattern;
@@ -33,6 +44,8 @@ import com.sys.ldk.serverset.MyNotificationType;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.logging.Logger;
 
 public class FloatingWindow {
     @SuppressLint("StaticFieldLeak")
@@ -46,6 +59,8 @@ public class FloatingWindow {
     @SuppressLint("StaticFieldLeak")
     private static Button btn_stop;
 
+    private Handler handler = new Handler(Looper.myLooper());
+
     public static void start_float_windows() {
         mcontext = MainActivity.getMycontext();
         if (!PermissionUtils.checkPermission(mcontext)) {
@@ -54,14 +69,13 @@ public class FloatingWindow {
                     .setMessage("使用浮窗功能，需要您授权悬浮窗权限。")
                     .setPositiveButton("去开启", (dialog, which) -> {
                         Floating_windows_1();
-//                        Floating_windows_3();
                     })
                     .setNegativeButton("取消", null)
                     .create();
             alertDialog.show();
         } else {
             Floating_windows_1();
-//            Floating_windows_3();
+//            test_float();
         }
     }
 
@@ -100,7 +114,7 @@ public class FloatingWindow {
 
                     @Override
                     public void touchEvent(@NotNull View view, @NotNull MotionEvent event) {
-                        LogUtil.I("触摸第1个悬浮窗");
+//                        LogUtil.I("触摸第1个悬浮窗");
                     }
 
                     @Override
@@ -123,13 +137,20 @@ public class FloatingWindow {
 
     public static void xuan_zhuan() {
         LogUtil.D("旋转");
-        runimage.setBackgroundResource(R.drawable.run_xml);
-        drawable = (AnimationDrawable) runimage.getBackground();
+//        回主线程
+        runimage.post(new Runnable() {
+            @Override
+            public void run() {
+                runimage.setBackgroundResource(R.drawable.run_xml);
+                drawable = (AnimationDrawable) runimage.getBackground();
 
-        LogUtil.D("旋转开始");
-        if (drawable != null) {
-            drawable.start();
-        }
+                LogUtil.D("旋转开始");
+                if (drawable != null) {
+                    drawable.start();
+                }
+            }
+        });
+
     }
 
     private static void show_2_float_windows() {
@@ -190,8 +211,7 @@ public class FloatingWindow {
 
                     @Override
                     public void touchEvent(@NotNull View view, @NotNull MotionEvent event) {
-//                        init();
-                        LogUtil.I("触摸第2个悬浮窗");
+//                        LogUtil.I("触摸第2个悬浮窗");
                     }
 
                     @Override
@@ -213,21 +233,10 @@ public class FloatingWindow {
     }
 
     private static void start() {
-        /*Thread dg_thread = new Thread(() -> {
-            if (XXQG.openxxqj(mcontext)) {
-                AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
-            }
-        });
-        dg_thread.start();*/
-//        Floating_windows_1();
-//        xuan_zhuan();
-
-
-//        EasyFloat.hideAppFloat("2");
-//        DG_Thread.start();
-//        Floating_windows_1();
-//        xuan_zhuan();
-
+        if (!ApiUtil.isAccessibilityServiceOn(mcontext, MainAccessService.class)) {
+            Toast.makeText(mcontext, "请开启辅助服务", Toast.LENGTH_SHORT).show();
+            return;
+        }
         init();
     }
 
@@ -267,30 +276,67 @@ public class FloatingWindow {
     }
 
     private static void dati() {
-        /*new Thread(() -> {
-            if (!Autoanswer.doactivity()) {
-                AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
-            }
-        }).start();*/
         hide();
-        DG_Thread.huifu();
+        new Thread(IntoAnswer::intoanswer).start();
     }
 
     private static void stop() {
-        btn_start.setText("开始学习");
+//        加载悬浮窗
+        Floating_windows_3();
         DG_Thread.stop();
-        int i = 10;
-        while (i-- > 0) {
-            if (DG_Thread.get_modeThread().equals(DG_Thread.no_run)) {
-                btn_stop.setTextColor(mcontext.getResources().getColor(R.color.font_common_1, null));
-                btn_stop.setEnabled(false);
-                break;
+        Toast.makeText(mcontext, "正在停止", Toast.LENGTH_SHORT).show();
+        new Thread(new Runnable() {
+            int i = 20;
+
+            @Override
+            public void run() {
+                while (i-- > 0) {
+                    LogUtil.W("关闭第 " + i + " 次");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (DG_Thread.get_modeThread().equals(DG_Thread.no_run)) {
+                        LogUtil.D("线程成功停止");
+                        Message msg = Message.obtain();
+                        msg.what = 50;   //标志消息的标志
+                        handler1.sendMessage(msg);
+                        break;
+                    }
+
+                    DG_Thread.stop();
+                }
+                if (i <= 0) {
+                    LogUtil.W("线程关闭失败");
+                }
+            }
+        }).start();
+    }
+
+    //    UI线程
+    public static Handler handler1 = new Handler() {
+        @SuppressLint("HandlerLeak")
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 50:
+                    LogUtil.D("更新UI");
+                    btn_start.setText("开始学习");
+                    btn_stop.setTextColor(mcontext.getResources().getColor(R.color.font_common_1, null));
+                    btn_stop.setEnabled(false);
+
+                    if (EasyFloat.appFloatIsShow("3")) {
+                        LogUtil.I("关闭加载悬浮窗");
+                        EasyFloat.dismissAppFloat("3");
+                    }
+                    Toast.makeText(mcontext, "停止", Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
-        if (i <= 0) {
-            LogUtil.W("线程关闭失败");
-        }
-    }
+    };
 
     private static void hide() {
         /* Floating_windows_1();*/
@@ -319,17 +365,18 @@ public class FloatingWindow {
         }
     };
 
-    private static void Floating_windows_3() {
+    private static void test_float() {
         EasyFloat.with(mcontext)
                 .setSidePattern(SidePattern.RESULT_HORIZONTAL)
                 .setShowPattern(ShowPattern.ALL_TIME)
                 .setGravity(Gravity.END, 0, 200)
                 .setAppFloatAnimator(new AppFloatDefaultAnimator())
-                .setTag("3")
+                .setTag("4")
                 .setLayout(R.layout.test3, View -> {
                     View.findViewById(R.id.btn_test1).setOnClickListener(v ->
-//                            DG_Thread.set_modeThread(DG_Thread.runing));
-                            DG_Thread.start());
+//                            DG_Thread.start()
+                                    stop()
+                    );
 
                     View.findViewById(R.id.btn_test2).setOnClickListener(v ->
                             DG_Thread.zhanting());
@@ -343,13 +390,13 @@ public class FloatingWindow {
                 .show();
     }
 
-    private static void Floating_windows_4() {
+    private static void Floating_windows_3() {
         EasyFloat.with(mcontext)
                 .setSidePattern(SidePattern.DEFAULT)
                 .setShowPattern(ShowPattern.ALL_TIME)
                 .setGravity(Gravity.END, -290, 650)
                 .setAppFloatAnimator(new AppFloatDefaultAnimator())
-                .setTag("4")
+                .setTag("3")
                 .setDragEnable(false)
                 .setLayout(R.layout.float_progressbar, View -> {
                     ProgressBar progressBar = (ProgressBar) View.findViewById(R.id.progressbar);

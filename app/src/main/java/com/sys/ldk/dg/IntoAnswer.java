@@ -27,7 +27,7 @@ public class IntoAnswer {
         LogUtil.D("开始自动答题");
 
 //        关闭键盘
-        AcessibilityApi.closeKeyBoard(AccessibilityService.SHOW_MODE_HIDDEN);
+        AcessibilityApi.closeKeyBoard();
 
         String questiontype = getquestiontype();
         String questiontypeflag = questiontype.length() > 3 ? questiontype.substring(0, 3) : questiontype;
@@ -105,7 +105,7 @@ public class IntoAnswer {
         AccessibilityNodeInfo a = getallInfotextandafterInfo(hashMap).get("确定");
         AcessibilityApi.performViewClick(a);*/
 //        打开键盘
-        AcessibilityApi.closeKeyBoard(AccessibilityService.SHOW_MODE_AUTO);
+        AcessibilityApi.AutoKeyBoard();
         return ReFlag;
     }
 

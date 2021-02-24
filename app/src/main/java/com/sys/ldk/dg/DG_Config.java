@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sys.ldk.R;
+import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.sdcard.SaveLog;
 
 public class DG_Config extends AppCompatActivity implements View.OnClickListener {
     private EditText edit_read;
@@ -22,6 +24,7 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch sw_xin_wen;
     public static EditText edit_log;
+    private Switch sw_save_log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +37,11 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        edit_read.setText((int)Config.read_time/60/1000+"");
-        edit_video.setText((int)Config.video_max/60/1000+"");
+        edit_read.setText((int) Config.read_time / 60 / 1000 + "");
+        edit_video.setText((int) Config.video_max / 60 / 1000 + "");
         sw_xin_wen.setChecked(Config.is_xin_wen_lian_bo);
+
+        submit();
     }
 
     private void initView() {
@@ -44,7 +49,6 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         btn_save_read = (Button) findViewById(R.id.btn_save_read);
         edit_video = (EditText) findViewById(R.id.edit_video);
         btn_save_video = (Button) findViewById(R.id.btn_save_video);
-        sw_xin_wen = (Switch) findViewById(R.id.sw_xin_wen);
         edit_log = (EditText) findViewById(R.id.edit_log);
 
         btn_save_read.setOnClickListener(this);
@@ -53,6 +57,7 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         edit_log.setFocusable(false);
         edit_log.setFocusableInTouchMode(false);
 
+        sw_xin_wen = (Switch) findViewById(R.id.sw_xin_wen);
         sw_xin_wen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -61,6 +66,21 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
                     Toast.makeText(DG_Config.this, "打开", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(DG_Config.this, "关闭", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        sw_save_log = (Switch) findViewById(R.id.sw_save_log);
+        sw_save_log.setChecked(Config.issave);
+        sw_save_log.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Config.issave = isChecked;
+                if(isChecked){
+                    Toast.makeText(DG_Config.this, "保存日志", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(DG_Config.this, "取消保存", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -139,13 +159,12 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     }
 
     private void submit() {
-        String log = edit_log.getText().toString().trim();
-        if (TextUtils.isEmpty(log)) {
-            Toast.makeText(this, "日志", Toast.LENGTH_SHORT).show();
+        LogUtil.D("file_name：" + SaveLog.getSave_file_name());
+        String log_text = null;
+        log_text = SaveLog.getLog(SaveLog.getSave_file_name());
+        if(log_text==null){
             return;
         }
-
-
-
+        edit_log.setText(log_text);
     }
 }

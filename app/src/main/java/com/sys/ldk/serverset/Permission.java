@@ -26,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sys.ldk.MainAccessService;
+import com.sys.ldk.MainActivity;
 import com.sys.ldk.MyApplication;
 import com.sys.ldk.R;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
@@ -42,6 +43,7 @@ import com.sys.ldk.easyfloat.permission.PermissionUtils;
 import java.util.List;
 
 public class Permission extends AppCompatActivity implements View.OnClickListener {
+    private static PowerManager packageManager;
     private Context mcontext;
     private TextView textview1;
     private Button fuzhu;
@@ -64,9 +66,34 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_server_set);
         mcontext = MyApplication.getContext();
+        packageManager = (PowerManager) mcontext.getSystemService(Context.POWER_SERVICE);
+
         initView();
         initflag();
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ApiUtil.isAccessibilityServiceOn(mcontext, MainAccessService.class)) {
+            fuzhutext.setText(R.string.ysq);
+        }else {
+            fuzhutext.setText(R.string.wsq);
+        }
+        if (PermissionUtils.checkPermission(mcontext)) {
+            xuanfutext.setText(R.string.ysq);
+//            mcontext.stopService(new Intent(this, MainService.class));
+            Intent intent = new Intent(this, MainService.class);
+            startService(intent);
+        }else {
+            xuanfutext.setText(R.string.wsq);
+        }
+        if (packageManager.isIgnoringBatteryOptimizations(mcontext.getPackageName())){
+            dianliangtext.setText(R.string.ysq);
+        }else {
+            dianliangtext.setText(R.string.wsq);
+        }
     }
 
     private void initView() {
@@ -118,7 +145,6 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
            LogUtil.V("判断是否由图案或者PIN锁定："+keyguardManager.isKeyguardSecure());
 //           判断当前设备是否需要图案或者PIN输入
            LogUtil.V("判断当前设备是否需要图案或者PIN输入："+keyguardManager.isDeviceLocked());*/
-
     }
 
     @SuppressLint({"ResourceAsColor", "NonConstantResourceId"})
@@ -151,18 +177,17 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    public static void addWhite(Activity activity){
-        PowerManager packageManager = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+    public static void addWhite(Activity activity) {
         //应用是否在 白名单中
-        if (!packageManager.isIgnoringBatteryOptimizations(activity.getPackageName())){
+        if (!packageManager.isIgnoringBatteryOptimizations(activity.getPackageName())) {
             //方法1、启动一个  ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS Intent
 //                Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
 //                activity.startActivity(intent);
             //方法2、触发系统对话框
             @SuppressLint("BatteryLife") Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:"+activity.getPackageName()));
+            intent.setData(Uri.parse("package:" + activity.getPackageName()));
             activity.startActivity(intent);
-        }else {
+        } else {
             Toast.makeText(activity, "以加入电池优化白名单", Toast.LENGTH_SHORT).show();
         }
     }
@@ -175,9 +200,9 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
     }
 
     /**
-     * @description
      * @param context 上下文
      * @return
+     * @description
      * @author Nine_Dollar
      * @time 2020/11/3 1:48
      */

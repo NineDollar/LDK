@@ -1,6 +1,5 @@
 package com.sys.ldk.accessibility.util;
 
-
 import android.util.Log;
 
 import com.sys.ldk.accessibility.api.User;
@@ -11,18 +10,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.sys.ldk.dg.Config.issave;
+
 public class LogUtil {
-    private static final String TAG = User.gettime();
     private static final String TS = "Log";
     private static boolean isSHow = User.isApkInDebug(Keyguard.context);
-    public static boolean issave = true;
-    public static String filename = "1.txt";
+
     public static void E(String msg) {
         if (isSHow) {
             Log.e(TS + " ", msg);
         }
-        if(issave){
-            savelog(msg);
+        if (issave) {
+            SaveLog.save("E: " + msg);
         }
     }
 
@@ -30,8 +29,8 @@ public class LogUtil {
         if (isSHow) {
             Log.d(TS + " ", msg);
         }
-        if(issave){
-            savelog(msg);
+        if (issave) {
+            SaveLog.save("D: " + msg);
         }
     }
 
@@ -39,8 +38,8 @@ public class LogUtil {
         if (isSHow) {
             Log.i(TS + " ", msg);
         }
-        if(issave){
-            savelog(msg);
+        if (issave) {
+            SaveLog.save("I: " + msg);
         }
     }
 
@@ -48,8 +47,8 @@ public class LogUtil {
         if (isSHow) {
             Log.v(TS + " ", msg);
         }
-        if(issave){
-            savelog(msg);
+        if (issave) {
+            SaveLog.save("V: " + msg);
         }
     }
 
@@ -57,16 +56,9 @@ public class LogUtil {
         if (isSHow) {
             Log.w(TS + " ", msg);
         }
-        if(issave){
-            savelog(msg);
+        if (issave) {
+            SaveLog.save("W: " + msg);
         }
     }
 
-    public static void setFilename(String filename) {
-        LogUtil.filename = filename;
-    }
-
-    public static void savelog(String msg) {
-        SaveLog.saveUserInfo(msg, filename);
-    }
 }

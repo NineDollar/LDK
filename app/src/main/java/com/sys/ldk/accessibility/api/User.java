@@ -77,7 +77,7 @@ public class User {
                         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
-                        show_root(context);
+//                        show_root(context);
                     }
                 })
                 .create();
