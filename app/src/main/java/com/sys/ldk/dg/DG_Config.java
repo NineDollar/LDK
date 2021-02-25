@@ -2,7 +2,6 @@ package com.sys.ldk.dg;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -38,7 +37,7 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     protected void onResume() {
         super.onResume();
         edit_read.setText((int) Config.read_time / 60 / 1000 + "");
-        edit_video.setText((int) Config.video_max / 60 / 1000 + "");
+        edit_video.setText((int) Config.video_time / 60 / 1000 + "");
         sw_xin_wen.setChecked(Config.is_xin_wen_lian_bo);
 
         submit();
@@ -70,18 +69,14 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
             }
         });
 
-
         sw_save_log = (Switch) findViewById(R.id.sw_save_log);
         sw_save_log.setChecked(Config.issave);
-        sw_save_log.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Config.issave = isChecked;
-                if(isChecked){
-                    Toast.makeText(DG_Config.this, "保存日志", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(DG_Config.this, "取消保存", Toast.LENGTH_SHORT).show();
-                }
+        sw_save_log.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Config.issave = isChecked;
+            if(isChecked){
+                Toast.makeText(DG_Config.this, "保存日志", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(DG_Config.this, "取消保存", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -110,7 +105,14 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         read_time = Integer.parseInt(str);
 //        毫秒
         Config.read_time = read_time * 60 * 1000;
-        Toast.makeText(this, "保存成功：" + read_time, Toast.LENGTH_SHORT).show();
+        if(read_time >= 1000){
+            LogUtil.D("--------:");
+            Config.read_time = read_time;
+            Toast.makeText(this, "保存成功：" + (int)read_time/1000+" 秒", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "保存成功：" + read_time + " 分钟", Toast.LENGTH_SHORT).show();
+            LogUtil.D("++++++++++++：");
+        }
     }
 
     private void save_video_time() {
@@ -121,8 +123,13 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
             return;
         }
         video_time = Integer.parseInt(str);
-        Config.video_max = video_time * 60 * 1000;
-        Toast.makeText(this, "保存成功：" + video_time, Toast.LENGTH_SHORT).show();
+        Config.video_time = video_time * 60 * 1000;
+        if(video_time>=1000){
+            Config.video_time = video_time;
+            Toast.makeText(this, "保存成功：" + (int)video_time/1000+" 秒", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "保存成功：" + video_time+" 分钟", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

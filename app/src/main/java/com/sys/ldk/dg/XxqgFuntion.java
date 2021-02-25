@@ -34,13 +34,13 @@ public class XxqgFuntion {
             LogUtil.W("未找到info");
             return null;
         }
-        LogUtil.V("总共：" + accessibilityNodeInfoList.size());
+        LogUtil.D("总共：" + accessibilityNodeInfoList.size());
         for (AccessibilityNodeInfo a : accessibilityNodeInfoList
         ) {
             j++;
             if (id.equals(a.getViewIdResourceName() + "")) {
                 if (text.equals(accessibilityNodeInfoList.get(j).getText() + "")) {
-                    LogUtil.V("text：" + a.getText());
+                    LogUtil.D("text：" + a.getText());
                     Idlist.add(a);
                 }
             }
@@ -49,28 +49,32 @@ public class XxqgFuntion {
             LogUtil.W("未找到");
             return null;
         }
-        LogUtil.V("新闻总共：" + Idlist.size());
+        LogUtil.D("新闻总共：" + Idlist.size());
         return Idlist;
     }
 
     public static boolean back() {
-//        返回两次
-        int count = 2;
-        while (UiApi.findNodeByTextWithTimeOut(3000, "学习积分") == null && count-- > 0) {
-            AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
+//        判断三次
+        for(int i = 0; i < 3; i++){
+            if (ThreadSleepTime.sleep1()) {
+                return false;
+            }
+            if(UiApi.findNodeByTextWithTimeOut(2000, "学习积分") != null){
+                LogUtil.D("退回到积分页了");
+                if (ThreadSleepTime.sleep1()) {
+                    return false;
+                }
+                return true;
+            }
             if (User.findtext("电视台")) {
-                count--;
-                LogUtil.D("退回到首页了");
                 if (ThreadSleepTime.sleep1()) {
                     return false;
                 }
                 Autoanswer.into_ji_fen_page();
+                continue;
             }
+            AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
         }
-        if (count <= 0) {
-            LogUtil.W("返回积分页面失败");
-            return false;
-        }
-        return true;
+        return false;
     }
 }

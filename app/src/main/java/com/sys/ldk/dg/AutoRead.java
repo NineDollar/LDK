@@ -12,6 +12,7 @@ import java.util.List;
 import static com.sys.ldk.dg.Config.read_time;
 
 public class AutoRead {
+    //    观看次数
     public static int reading_times = 10;
 
     public static boolean auto_read() {
@@ -36,43 +37,32 @@ public class AutoRead {
         LogUtil.I("size： " + m);
         for (AccessibilityNodeInfo a : accessibilityNodeInfoList
         ) {
-            LogUtil.V("text: " + a.getText());
+            LogUtil.D("text: " + a.getText());
         }
         if (m < reading_times) {
             reading_times = m;
         }
+
         for (AccessibilityNodeInfo a : accessibilityNodeInfoList
         ) {
-            LogUtil.I("观看: " + reading_times);
+            LogUtil.D("观看: " + reading_times);
             LogUtil.D(a.getText() + "");
             if (!AcessibilityApi.performViewClick(a)) {
                 return false;
             }
 //            如果页面有视频，则点击页面视频button
+            if(ThreadSleepTime.sleep2()){
+                return false;
+            }
             video();
 //            阅读时间
             long read_time1 = read_time;
-            LogUtil.W("阅读：" + (double) read_time1 / 1000 + "秒");
+            LogUtil.D("阅读：" + (double) read_time1 / 1000 + "秒");
 //             毫秒
             if (ThreadSleepTime.sleep(read_time)) {
                 return false;
             }
 
-            if (reading_times > q && q >= 0) {
-                if (ThreadSleepTime.sleep1()) {
-                    return false;
-                }
-                if (!shoucangAndfenxiang()) {
-                    LogUtil.E("未找到发表你的观点");
-                } else {
-                    q -= 1;
-                }
-            } else {
-                LogUtil.D("收藏任务完成");
-            }
-            if (ThreadSleepTime.sleep0D5()) {
-                return false;
-            }
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
             reading_times -= 1;
             if (ThreadSleepTime.sleep1()) {

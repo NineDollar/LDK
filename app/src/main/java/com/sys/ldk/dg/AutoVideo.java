@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.sys.ldk.dg.Config.is_xin_wen_lian_bo;
-import static com.sys.ldk.dg.Config.video_max;
+import static com.sys.ldk.dg.Config.video_time;
 import static com.sys.ldk.dg.ReturnType.SUCCESS;
 import static com.sys.ldk.dg.ReturnType.my_stop;
 import static java.sql.Types.NULL;
@@ -37,12 +37,12 @@ public class AutoVideo {
         }
 
 //        联播频道
-        if(is_xin_wen_lian_bo){
+        if (is_xin_wen_lian_bo) {
             AcessibilityApi.clickTextViewByText("联播频道");
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-           return startvido(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")));
+            return startvido(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")));
         }
         return true;
     }
@@ -53,14 +53,14 @@ public class AutoVideo {
         }
         for (AccessibilityNodeInfo a : accessibilityNodeInfos
         ) {
-            LogUtil.V("time: " + a.getText());
+            LogUtil.D("time: " + a.getText());
         }
         for (AccessibilityNodeInfo a : accessibilityNodeInfos
         ) {
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-            LogUtil.V("text: " + a.getText());
+            LogUtil.D("text: " + a.getText());
             AcessibilityApi.performViewClick(a);
             if (UiApi.findNodeByTextWithTimeOut(2000, "欢迎发表你的观点") == null) {
                 LogUtil.W("观看失败");
@@ -75,8 +75,10 @@ public class AutoVideo {
             }
 //                判断观看是否结束
             int shi_jian = 0;
-            video_max /= 1000;//换成秒
+            int video_max = 0;
+            video_max = video_time /= 1000;//换成秒
 //            秒计算
+            LogUtil.D("观看视频：" + video_max + "秒");
             while (shi_jian++ < video_max) {
                 LogUtil.D("睡眠：" + shi_jian + "秒");
                 if (watch_end() == SUCCESS) {
@@ -85,7 +87,7 @@ public class AutoVideo {
                     return false;
                 }
             }
-            LogUtil.V("结束");
+            LogUtil.D("结束");
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
         }
         LogUtil.D("视频观看完毕");
@@ -144,7 +146,7 @@ public class AutoVideo {
         if (timeinfo.isEmpty()) {
             return null;
         }
-        LogUtil.V("第一视频总数：" + timeinfo.size());
+        LogUtil.D("第一视频总数：" + timeinfo.size());
         return timeinfo;
     }
 }

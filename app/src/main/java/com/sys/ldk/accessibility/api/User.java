@@ -232,7 +232,7 @@ public class User {
                 textstr = a.getText().toString();
             }
 
-            LogUtil.V("Info " + count + " : text: " + textstr + ", getPackageName: " + a.getPackageName() + ", getClassName: " + a.getClassName() +
+            LogUtil.D("Info " + count + " : text: " + textstr + ", getPackageName: " + a.getPackageName() + ", getClassName: " + a.getClassName() +
                     ", viewIdResName: " + a.getViewIdResourceName() + ", clickable: " + a.isClickable() + ", enabled: " + ", scrollable: " + a.isScrollable());
         }
     }

@@ -321,13 +321,16 @@ public class IntoAnswer {
                 return FAILURE;
             }
             if (ThreadSleepTime.sleep0D5()) {
-            return my_stop;
-        }
+                return my_stop;
+            }
             CReFlag = overanswer();
             switch (CReFlag) {
                 case OVER:
                     LogUtil.D("答题完成");
-                    XxqgFuntion.back();
+                    if (!XxqgFuntion.back()) {
+                        return FAILURE;
+                    }
+                    LogUtil.D("结束back");
                     break;
                 case SUCCESS:
                     LogUtil.D("继续答题");

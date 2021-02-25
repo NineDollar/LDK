@@ -48,9 +48,10 @@ public class LogUtil {
         if (isSHow) {
             Log.v(TS + " ", msg);
         }
-        if (issave) {
+//        线程睡眠不保存
+        /*if (issave) {
             SaveLog.save("V: " + msg);
-        }
+        }*/
     }
 
     public static void W(String msg) {

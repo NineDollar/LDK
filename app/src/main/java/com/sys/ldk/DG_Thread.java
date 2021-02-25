@@ -6,6 +6,7 @@ import com.sys.ldk.dg.XXQG;
 import com.sys.ldk.sdcard.SaveLog;
 
 import static com.sys.ldk.FloatingWindow.mcontext;
+import static com.sys.ldk.FloatingWindow.runimage;
 import static com.sys.ldk.dg.ReturnType.my_stop;
 import static java.sql.Types.NULL;
 
@@ -152,16 +153,8 @@ public class DG_Thread {
 //                    旋转图标
                     ximage_run();
 
-                   /* LogUtil.I(index + "   " + getId());
-                    ++index;*/
-
-                    /*if (ThreadSleepTime.sleep(10 * 1000)) {
-                        break;
-                    }*/
-                    /*if (sleepmy(10000) == my_stop) {
-                        break;
-                    }*/
                     if(XXQG.openxxqj(mcontext)){
+                        ThreadSleepTime.sleep1();
                         AcessibilityApi.performAction(AcessibilityApi.ActionType.HOME);
                         ThreadSleepTime.sleep1();
                         AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
@@ -174,8 +167,10 @@ public class DG_Thread {
 
             mode_thread = no_run;
 //            停止图标
-            imagestop();
+//            imagestop();
             LogUtil.W("线程停止");
+            //意外停止 回UI线程
+            runimage.post(FloatingWindow::stop);
         }
 
         private void savelog() {
@@ -239,6 +234,7 @@ public class DG_Thread {
         }
 
         private static void imagestop() {
+
             FloatingWindow.image_stop();
         }
     }

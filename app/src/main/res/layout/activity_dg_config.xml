@@ -114,6 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="#FAF0E6"
+        android:textSize="12dp"
         android:paddingLeft="5dp"
         android:hint="日志"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -47,6 +47,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.logging.Logger;
 
+import static com.sys.ldk.serverset.MainService.notification;
+
 public class FloatingWindow {
     @SuppressLint("StaticFieldLeak")
     public static Context mcontext;
@@ -58,8 +60,6 @@ public class FloatingWindow {
     private static Button btn_start;
     @SuppressLint("StaticFieldLeak")
     private static Button btn_stop;
-
-    private Handler handler = new Handler(Looper.myLooper());
 
     public static void start_float_windows() {
         mcontext = MainActivity.getMycontext();
@@ -275,13 +275,15 @@ public class FloatingWindow {
         }
     }
 
+
     private static void dati() {
         hide();
         new Thread(IntoAnswer::intoanswer).start();
     }
 
-    private static void stop() {
+    public static void stop() {
 //        加载悬浮窗
+
         Floating_windows_3();
         DG_Thread.stop();
         Toast.makeText(mcontext, "正在停止", Toast.LENGTH_SHORT).show();
@@ -332,6 +334,7 @@ public class FloatingWindow {
                         LogUtil.I("关闭加载悬浮窗");
                         EasyFloat.dismissAppFloat("3");
                     }
+                    image_stop();
                     Toast.makeText(mcontext, "停止", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -374,12 +377,11 @@ public class FloatingWindow {
                 .setTag("4")
                 .setLayout(R.layout.test3, View -> {
                     View.findViewById(R.id.btn_test1).setOnClickListener(v ->
-//                            DG_Thread.start()
-                                    stop()
+                            Autoanswer.doactivity()
                     );
 
                     View.findViewById(R.id.btn_test2).setOnClickListener(v ->
-                            DG_Thread.zhanting());
+                            test2());
 
                     View.findViewById(R.id.btn_test3).setOnClickListener(v ->
                             DG_Thread.huifu());
@@ -388,6 +390,16 @@ public class FloatingWindow {
                             DG_Thread.stop());
                 })
                 .show();
+    }
+
+    private static void test2() {
+        new Thread(() -> {
+            runimage.post(() -> {
+                MyNotificationType.message1 = "test";
+                notification();
+            });
+        }).start();
+
     }
 
     private static void Floating_windows_3() {
@@ -418,6 +430,7 @@ public class FloatingWindow {
     }
 
     public static void image_stop() {
+//        回主线程
         runimage.setBackgroundResource(R.drawable.stop);
     }
 }

@@ -2,6 +2,7 @@ package com.sys.ldk.dg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.sys.ldk.FloatingWindow;
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
@@ -27,9 +28,14 @@ public class Autoanswer {
     private final static int chen_gong = 1;
     private final static int shi_bai = -1;
 
+    /**
+     * 进入积分页面
+     *
+     * @return
+     */
     public static boolean doactivity() {
-//进入积分页面
-        if(!into_ji_fen_page()){
+
+        if (!into_ji_fen_page()) {
             return false;
         }
 
@@ -40,7 +46,7 @@ public class Autoanswer {
         return !auto_answer();
     }
 
-    public static boolean into_ji_fen_page(){
+    public static boolean into_ji_fen_page() {
         String temp1 = "{"
                 + "'maxWClickMSec':1000,"
                 + "'click':{'id':'cn.xuexi.android:id/comm_head_xuexi_score'},"
@@ -87,7 +93,7 @@ public class Autoanswer {
             String[] key = (String[]) e.getKey();
             switch (key[0]) {
                 case mei_ri:
-
+                    LogUtil.D(mei_ri + "开始");
                     ThreadSleepTime.sleep3();
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
                     if (ThreadSleepTime.sleep2()) {
@@ -99,12 +105,12 @@ public class Autoanswer {
                     }
                     break;
                 case mei_zhou:
+                    LogUtil.D(mei_zhou + "开始");
                     ThreadSleepTime.sleep3();
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
-                    if (ThreadSleepTime.sleep2()) {
+                    if (ThreadSleepTime.sleep3()) {
                         return false;
                     }
-                    LogUtil.D(mei_zhou);
                     switch (find_wei_zuo_da("未作答")) {
                         case chen_gong:
                             if (ThreadSleepTime.sleep2()) {
@@ -113,18 +119,19 @@ public class Autoanswer {
                             if (!startanswer()) {
                                 return false;
                             }
+                            break;
                         case shi_bai:
                             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
                             break;
                     }
                     break;
                 case zhuan_xiang:
+                    LogUtil.D(zhuan_xiang + "开始");
                     ThreadSleepTime.sleep3();
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
                     if (ThreadSleepTime.sleep2()) {
                         return false;
                     }
-                    LogUtil.D(zhuan_xiang);
                     switch (find_wei_zuo_da("开始答题")) {
                         case chen_gong:
                             if (ThreadSleepTime.sleep2()) {
@@ -133,6 +140,7 @@ public class Autoanswer {
                             if (!startanswer()) {
                                 return false;
                             }
+                            break;
                         case shi_bai:
                             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
                             break;
@@ -141,22 +149,34 @@ public class Autoanswer {
             }
         }
 //        AcessibilityApi.performViewClick(hashMap1.get(strings));
-        if(ThreadSleepTime.sleep1()){
+        if (ThreadSleepTime.sleep1()) {
             return false;
         }
+
+
         fen_shu();
         return true;
     }
 
     public static void fen_shu() {
         AccessibilityNodeInfo accessibilityNodeInfo = User.get_text_after_info("积分规则", 1);
-        if(accessibilityNodeInfo != null){
+        if (accessibilityNodeInfo != null) {
             LogUtil.D("" + accessibilityNodeInfo.getText());
         }
-        MyNotificationType.message1 = accessibilityNodeInfo.getText()+"";
-        notification();
+        assert accessibilityNodeInfo != null;
+//        回UI线程
+        FloatingWindow.runimage.post(() -> {
+            MyNotificationType.message1 = accessibilityNodeInfo.getText() + "";
+            notification();
+        });
     }
 
+    /**
+     * 点击未作答
+     *
+     * @param string
+     * @return
+     */
     private static int find_wei_zuo_da(String string) {
         List<AccessibilityNodeInfo> accessibilityNodeInfoList = AcessibilityApi.getAllNode(null, null);
         List<AccessibilityNodeInfo> accessibilityNodeInfoList1 = new ArrayList<>();
@@ -169,7 +189,7 @@ public class Autoanswer {
             LogUtil.W("没有未作答");
             return shi_bai;
         }
-        LogUtil.V("" + accessibilityNodeInfoList1.size());
+        LogUtil.D("" + accessibilityNodeInfoList1.size());
         AcessibilityApi.performViewClick(accessibilityNodeInfoList1.get(0));
         return chen_gong;
     }
@@ -184,7 +204,9 @@ public class Autoanswer {
                     break;
                 case FAILURE:
                     LogUtil.E("答题失败结束程序");
-                    XxqgFuntion.back();
+                    if (!XxqgFuntion.back()) {
+                        return false;
+                    }
                     return false;
                 case OVER:
                     LogUtil.D("答题结束");
