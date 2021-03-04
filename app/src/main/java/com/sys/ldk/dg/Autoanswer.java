@@ -34,7 +34,7 @@ public class Autoanswer {
      * @return
      */
     public static boolean doactivity() {
-
+        LogUtil.D("开始答题");
         if (!into_ji_fen_page()) {
             return false;
         }

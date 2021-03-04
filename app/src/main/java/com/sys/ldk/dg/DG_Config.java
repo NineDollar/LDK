@@ -22,8 +22,8 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     private Button btn_save_video;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch sw_xin_wen;
+    @SuppressLint("StaticFieldLeak")
     public static EditText edit_log;
-    private Switch sw_save_log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
             }
         });
 
-        sw_save_log = (Switch) findViewById(R.id.sw_save_log);
+        Switch sw_save_log = (Switch) findViewById(R.id.sw_save_log);
         sw_save_log.setChecked(Config.issave);
         sw_save_log.setOnCheckedChangeListener((buttonView, isChecked) -> {
             Config.issave = isChecked;
@@ -106,12 +106,10 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
 //        毫秒
         Config.read_time = read_time * 60 * 1000;
         if(read_time >= 1000){
-            LogUtil.D("--------:");
             Config.read_time = read_time;
             Toast.makeText(this, "保存成功：" + (int)read_time/1000+" 秒", Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(this, "保存成功：" + read_time + " 分钟", Toast.LENGTH_SHORT).show();
-            LogUtil.D("++++++++++++：");
         }
     }
 

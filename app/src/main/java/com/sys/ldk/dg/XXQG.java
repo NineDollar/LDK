@@ -22,12 +22,15 @@ public class XXQG {
         }
 
 //      判断是否为当前页面
+        if (ThreadSleepTime.sleep3()) {
+            return false;
+        }
         if (!isLearning_power()) {
             return false;
         }
 
 //        自动阅读
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
         if (!AutoRead.auto_read()) {
@@ -35,7 +38,7 @@ public class XXQG {
         }
 
         //      打开四川频道
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
         if (!opensichuan()) {
@@ -43,7 +46,7 @@ public class XXQG {
         }
 
 //        视频
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
         if (!AutoVideo.auto_video()) {
@@ -51,7 +54,7 @@ public class XXQG {
         }
 
 //      进入积分页面，自动答题
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
         if (!Autoanswer.doactivity()) {
@@ -60,7 +63,7 @@ public class XXQG {
 
 //        返回桌面
         UiApi.backToDesk();
-        if (ThreadSleepTime.sleep1()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
 
@@ -72,11 +75,11 @@ public class XXQG {
         LogUtil.D("点击四川频道");
         if (UiApi.clickNodeByDesWithTimeOut(2000, "工作")) {
             LogUtil.D("首页点击成功");
-            if (ThreadSleepTime.sleep1()) {
+            if (ThreadSleepTime.sleep2()) {
                 return false;
             }
             UiApi.clickNodeByDesWithTimeOut(2000, "工作");
-            if (ThreadSleepTime.sleep2()) {
+            if (ThreadSleepTime.sleep3()) {
                 return false;
             }
             if (AcessibilityApi.clickTextViewByText("四川")) {
@@ -85,15 +88,16 @@ public class XXQG {
                     return false;
                 }
                 AcessibilityApi.clickTextViewByText("四川");
-                if (ThreadSleepTime.sleep2()) {
+                if (ThreadSleepTime.sleep3()) {
                     return false;
                 }
                 if (AcessibilityApi.clickTextViewByText("四川学习平台")) {
                     LogUtil.D("点击四川学习平台成功");
-                    if (ThreadSleepTime.sleep2()) {
+                    if (ThreadSleepTime.sleep3()) {
                         return false;
                     }
                     AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
+                    return true;
                 } else {
                     LogUtil.D("点击四川学习平台失败");
                 }
@@ -124,9 +128,6 @@ public class XXQG {
 
     public static boolean isLearning_power() {
 //        判断页面次数
-        if (ThreadSleepTime.sleep1()) {
-            return false;
-        }
         int frequency = 3;
 //        判断是否进入软件
         while (frequency > 0) {
@@ -148,29 +149,12 @@ public class XXQG {
 
     //    判断是否在学习强国首页
     public static boolean isPage() {
-        String pageStr = "{maxMustMills:5000,"
+        String pageStr = "{maxMustMills:10000,"
                 + "'maxOptionMills':10000,"
                 + "'must':{'text':[],'id':[],'desc':[]},"
                 + "'option':{'text':[],'id':['cn.xuexi.android:id/comm_head_title'],'desc':[]}"
                 + "}";
 
         return UiApi.isMyNeedPage(pageStr);
-    }
-
-
-    /**
-     * 找text
-     *
-     * @param findtext
-     * @return
-     */
-    public static boolean XXQGBACK(String findtext) {
-        if (User.findtext(findtext)) {
-            AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
-            return true;
-        } else {
-            LogUtil.E(findtext + "返回失败");
-        }
-        return false;
     }
 }

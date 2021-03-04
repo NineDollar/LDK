@@ -8,6 +8,7 @@ public class ThreadSleepTime {
 
     /**
      * 自己设定，单位秒
+     *
      * @param time
      * @return
      */
@@ -17,6 +18,7 @@ public class ThreadSleepTime {
 
     /**
      * 自己设定，单位毫秒
+     *
      * @param time
      * @return
      */
@@ -31,6 +33,11 @@ public class ThreadSleepTime {
         return DG_Thread.MyThread.sleepmy(3000) == my_stop;
     }
 
+    /**
+     * 睡眠两秒
+     *
+     * @return
+     */
     public static boolean sleep2() {
         return DG_Thread.MyThread.sleepmy(2000) == my_stop;
     }

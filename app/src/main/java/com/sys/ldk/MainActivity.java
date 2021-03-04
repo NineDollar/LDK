@@ -25,15 +25,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.sys.ldk.clock.AddclockActivity;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.MyDatabaseHelper;
 import com.sys.ldk.clock.MySimpleAdaptey;
+import com.sys.ldk.qqlogin.LoginActivity;
 import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.Permission;
-import com.sys.ldk.shellService.Checkshell;
-import com.sys.ldk.shellService.ShellActivity;
 import com.sys.ldk.dg.DG_Config;
 
 import java.util.ArrayList;
@@ -52,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clock);
+
+        setContentView(R.layout.activity_main);
 //        getSupportActionBar().hide();//隐藏ActionBar
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明化通知栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -92,7 +91,11 @@ public class MainActivity extends AppCompatActivity {
         addclock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddclockActivity.class);
+               /* Intent intent = new Intent(MainActivity.this, AddclockActivity.class);
+                startActivity(intent);
+                finish();*/
+
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

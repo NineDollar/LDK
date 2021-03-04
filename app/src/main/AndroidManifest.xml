@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
     package="com.sys.ldk">
 
-    <!-- 振动权限 -->
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />   <!-- 振动权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -18,6 +17,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -25,12 +26,13 @@
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/user_ic_launcher_round"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity android:name=".serverset.Permission" />
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,6 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".clock.AddclockActivity" />
+        <activity android:name=".qqlogin.LoginActivity"/>
 
         <!-- 注册服务 process:将service放在独立的进程中 -->
         <!--<service
@@ -62,11 +65,11 @@
             android:exported="true" />
 
         <!-- 注册广播 -->
-       <!-- <receiver
-            android:name=".clock.ClockReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:process=":remote" />-->
+        <!-- <receiver
+             android:name=".clock.ClockReceiver"
+             android:enabled="true"
+             android:exported="true"
+             android:process=":remote" />-->
 
         <receiver
             android:name=".app.StartAppReceiver"
@@ -87,6 +90,30 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
-    </application>
 
+        <!--QQSDK-->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent101911283" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+    </application>
 </manifest>

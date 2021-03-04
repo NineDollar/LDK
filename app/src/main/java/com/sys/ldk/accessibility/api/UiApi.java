@@ -125,7 +125,7 @@ public class UiApi {
                 LogUtil.D("找到："+text);
                 break;
             } else {
-                LogUtil.D("未找到："+text);
+                LogUtil.V("未找到："+text);
                 curUtcMsc = System.currentTimeMillis();
                 if ((curUtcMsc - beginUtcMsc) < maxMills) {
                     ApiUtil.sleepTime(CHECK_UI_SLEEP_GAP_MSEC);

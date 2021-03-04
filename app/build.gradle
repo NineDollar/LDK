@@ -10,14 +10,14 @@ android {
         minSdkVersion 29
         targetSdkVersion 29
         versionCode 1
-        versionName '3.2'
+        versionName '3.3'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -36,6 +36,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//导入QQSDK
+    implementation fileTree(dir: 'libs', include: '*.jar')
 }
 repositories {
     mavenCentral()

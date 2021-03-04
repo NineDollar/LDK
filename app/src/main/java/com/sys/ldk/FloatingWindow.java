@@ -34,6 +34,7 @@ import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.dg.Autoanswer;
 import com.sys.ldk.dg.IntoAnswer;
+import com.sys.ldk.dg.XXQG;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.anim.AppFloatDefaultAnimator;
 import com.sys.ldk.easyfloat.enums.ShowPattern;
@@ -278,15 +279,15 @@ public class FloatingWindow {
 
     private static void dati() {
         hide();
-        new Thread(IntoAnswer::intoanswer).start();
+        new Thread(Autoanswer::startanswer).start();
     }
 
     public static void stop() {
 //        加载悬浮窗
-
+        AcessibilityApi.AutoKeyBoard();
+        Toast.makeText(mcontext, "正在停止", Toast.LENGTH_SHORT).show();
         Floating_windows_3();
         DG_Thread.stop();
-        Toast.makeText(mcontext, "正在停止", Toast.LENGTH_SHORT).show();
         new Thread(new Runnable() {
             int i = 20;
 
@@ -393,13 +394,7 @@ public class FloatingWindow {
     }
 
     private static void test2() {
-        new Thread(() -> {
-            runimage.post(() -> {
-                MyNotificationType.message1 = "test";
-                notification();
-            });
-        }).start();
-
+        new Thread(XXQG::opensichuan).start();
     }
 
     private static void Floating_windows_3() {

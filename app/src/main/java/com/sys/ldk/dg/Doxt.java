@@ -63,7 +63,7 @@ public class Doxt {
             LogUtil.D("全选");
             for (HashMap.Entry e : hashMapabcdInfo.entrySet()
             ) {
-                if (ThreadSleepTime.sleep0D5()) {
+                if (ThreadSleepTime.sleep0D2()) {
                     return my_stop;
                 }
                 AcessibilityApi.performViewClick(hashMapabcdInfo.get(e.getKey()));

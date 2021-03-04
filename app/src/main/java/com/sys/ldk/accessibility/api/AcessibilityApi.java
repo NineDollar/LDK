@@ -155,7 +155,6 @@ public class AcessibilityApi {
         } else {
             LogUtil.E("未找到:" + text + "Info");
         }
-
         return flg;
     }
 
