@@ -24,6 +24,7 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     private Switch sw_xin_wen;
     @SuppressLint("StaticFieldLeak")
     public static EditText edit_log;
+    private Switch sw_save_log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +37,20 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        edit_read.setText((int) Config.read_time / 60 / 1000 + "");
-        edit_video.setText((int) Config.video_time / 60 / 1000 + "");
-        sw_xin_wen.setChecked(Config.is_xin_wen_lian_bo);
+        if (Config.read_time > 1000 * 60) {
+            int n = Config.getRead_time();
+            edit_read.setText((int) n / 60 / 1000 + "");
+        } else {
+            int m = Config.getRead_time();
+            edit_read.setText((int) m+"");
+        }
+        if (Config.video_time > 1000 * 60) {
+            int n = Config.getVideo_time();
+            edit_video.setText((int) n / 60 / 1000 + "");
+        } else {
+            int m = Config.getVideo_time();
+            edit_video.setText((int) m+"");
+        }
 
         submit();
     }
@@ -57,25 +69,24 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         edit_log.setFocusableInTouchMode(false);
 
         sw_xin_wen = (Switch) findViewById(R.id.sw_xin_wen);
-        sw_xin_wen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Config.is_xin_wen_lian_bo = isChecked;
-                if (isChecked) {
-                    Toast.makeText(DG_Config.this, "打开", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(DG_Config.this, "关闭", Toast.LENGTH_SHORT).show();
-                }
+        sw_save_log = (Switch) findViewById(R.id.sw_save_log);
+
+        sw_xin_wen.setChecked(Config.is_xin_wen_lian_bo);
+        sw_xin_wen.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Config.is_xin_wen_lian_bo = isChecked;
+            if (isChecked) {
+                Toast.makeText(DG_Config.this, "打开", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DG_Config.this, "关闭", Toast.LENGTH_SHORT).show();
             }
         });
 
-        Switch sw_save_log = (Switch) findViewById(R.id.sw_save_log);
         sw_save_log.setChecked(Config.issave);
         sw_save_log.setOnCheckedChangeListener((buttonView, isChecked) -> {
             Config.issave = isChecked;
-            if(isChecked){
+            if (isChecked) {
                 Toast.makeText(DG_Config.this, "保存日志", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 Toast.makeText(DG_Config.this, "取消保存", Toast.LENGTH_SHORT).show();
             }
         });
@@ -105,10 +116,10 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         read_time = Integer.parseInt(str);
 //        毫秒
         Config.read_time = read_time * 60 * 1000;
-        if(read_time >= 1000){
+        if (read_time >= 1000) {
             Config.read_time = read_time;
-            Toast.makeText(this, "保存成功：" + (int)read_time/1000+" 秒", Toast.LENGTH_SHORT).show();
-        }else {
+            Toast.makeText(this, "保存成功：" + (int) read_time / 1000 + " 秒", Toast.LENGTH_SHORT).show();
+        } else {
             Toast.makeText(this, "保存成功：" + read_time + " 分钟", Toast.LENGTH_SHORT).show();
         }
     }
@@ -122,11 +133,11 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         }
         video_time = Integer.parseInt(str);
         Config.video_time = video_time * 60 * 1000;
-        if(video_time>=1000){
+        if (video_time >= 1000) {
             Config.video_time = video_time;
-            Toast.makeText(this, "保存成功：" + (int)video_time/1000+" 秒", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "保存成功：" + video_time+" 分钟", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "保存成功：" + (int) video_time / 1000 + " 秒", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "保存成功：" + video_time + " 分钟", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -167,7 +178,7 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         LogUtil.D("file_name：" + SaveLog.getSave_file_name());
         String log_text = null;
         log_text = SaveLog.getLog(SaveLog.getSave_file_name());
-        if(log_text==null){
+        if (log_text == null) {
             return;
         }
         edit_log.setText(log_text);

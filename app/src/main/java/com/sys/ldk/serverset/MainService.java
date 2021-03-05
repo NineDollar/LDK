@@ -36,7 +36,7 @@ public class MainService extends Service {
         fuzhuservice();
 //        naozhongserver();
         notification();
-        floatingwindow();
+//        floatingwindow();
         super.onCreate();
     }
 

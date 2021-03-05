@@ -76,5 +76,11 @@ public class ThreadSleepTime {
     public static boolean sleep0D2() {
         return DG_Thread.MyThread.sleepmy(200) == my_stop;
     }
+    /**
+     * 睡眠0.2秒
+     */
+    public static boolean sleep0D1() {
+        return DG_Thread.MyThread.sleepmy(100) == my_stop;
+    }
 
 }

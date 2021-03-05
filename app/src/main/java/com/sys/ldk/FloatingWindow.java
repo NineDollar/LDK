@@ -95,22 +95,22 @@ public class FloatingWindow {
                 .registerCallbacks(new OnFloatCallbacks() {
                     @Override
                     public void createdResult(boolean isCreated, @Nullable String msg, @Nullable View view) {
-                        LogUtil.I("创建第1个悬浮窗");
+                        LogUtil.V("创建第1个悬浮窗");
                     }
 
                     @Override
                     public void show(@NotNull View view) {
-                        LogUtil.I("显示第1个悬浮窗");
+                        LogUtil.V("显示第1个悬浮窗");
                     }
 
                     @Override
                     public void hide(@NotNull View view) {
-                        LogUtil.I("隐藏第1个悬浮窗");
+                        LogUtil.V("隐藏第1个悬浮窗");
                     }
 
                     @Override
                     public void dismiss() {
-                        LogUtil.I("关闭第1个悬浮窗");
+                        LogUtil.V("关闭第1个悬浮窗");
                     }
 
                     @Override
@@ -125,7 +125,7 @@ public class FloatingWindow {
 
                     @Override
                     public void dragEnd(@NotNull View view) {
-                        LogUtil.I("第1个悬浮窗拖动结束");
+                        LogUtil.V("第1个悬浮窗拖动结束");
                     }
                 })
                 .show();
@@ -189,25 +189,25 @@ public class FloatingWindow {
                 .registerCallbacks(new OnFloatCallbacks() {
                     @Override
                     public void createdResult(boolean isCreated, @Nullable String msg, @Nullable View view) {
-                        LogUtil.I("创建第2个悬浮窗");
+                        LogUtil.V("创建第2个悬浮窗");
                         EasyFloat.hideAppFloat("1");
                     }
 
                     @Override
                     public void show(@NotNull View view) {
-                        LogUtil.I("显示第2个悬浮窗");
+                        LogUtil.V("显示第2个悬浮窗");
                         EasyFloat.hideAppFloat("1");
                     }
 
                     @Override
                     public void hide(@NotNull View view) {
-                        LogUtil.I("隐藏第2个悬浮窗");
+                        LogUtil.V("隐藏第2个悬浮窗");
                         EasyFloat.showAppFloat("1");
                     }
 
                     @Override
                     public void dismiss() {
-                        LogUtil.I("关闭第2个悬浮窗");
+                        LogUtil.V("关闭第2个悬浮窗");
                     }
 
                     @Override
@@ -223,7 +223,7 @@ public class FloatingWindow {
 
                     @Override
                     public void dragEnd(@NotNull View view) {
-                        LogUtil.I("第2个悬浮窗拖动结束");
+                        LogUtil.V("第2个悬浮窗拖动结束");
                         int[] location = new int[2];
 //                        返回x，y坐标
                         view.getLocationOnScreen(location);

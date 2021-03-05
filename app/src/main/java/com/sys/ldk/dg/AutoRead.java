@@ -12,8 +12,6 @@ import java.util.List;
 import static com.sys.ldk.dg.Config.read_time;
 
 public class AutoRead {
-    //    观看次数
-    public static int reading_times = 10;
 
     public static boolean auto_read() {
         LogUtil.D("要闻---开始阅读");
@@ -39,19 +37,20 @@ public class AutoRead {
         ) {
             LogUtil.D("text: " + a.getText());
         }
-        if (m < reading_times) {
-            reading_times = m;
-        }
 
         for (AccessibilityNodeInfo a : accessibilityNodeInfoList
         ) {
-            LogUtil.D("观看: " + reading_times);
+            LogUtil.D("观看: " + m);
             LogUtil.D(a.getText() + "");
             if (!AcessibilityApi.performViewClick(a)) {
                 return false;
             }
 //            如果页面有视频，则点击页面视频button
-            if(ThreadSleepTime.sleep2()){
+            if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
+            fenxiang();
+            if (ThreadSleepTime.sleep2()) {
                 return false;
             }
             video();
@@ -64,13 +63,8 @@ public class AutoRead {
             }
 
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
-            reading_times -= 1;
-            if (ThreadSleepTime.sleep1()) {
+            if (ThreadSleepTime.sleep2()) {
                 return false;
-            }
-            if (reading_times <= 0) {
-                LogUtil.D("观看结束");
-                return true;
             }
         }
         LogUtil.D("观看出错");
@@ -88,28 +82,25 @@ public class AutoRead {
     }
 
     //  收藏和分享
-    private static boolean shoucangAndfenxiang() {
+    private static boolean fenxiang() {
         if (!User.findtext("欢迎发表你的观点")) {
             return false;
         }
-        LogUtil.D("开始收藏和分享");
+        LogUtil.D("开始分享");
         List<AccessibilityNodeInfo> allInfo = AcessibilityApi.getAllNode(null, null);
         int size = allInfo.size();
-        LogUtil.E("sixe: " + size);
+        LogUtil.D("sixe: " + size);
         if (allInfo.isEmpty()) {
             return false;
         }
-        try {
-            AcessibilityApi.performViewClick(allInfo.get(size - 1));
-            if (ThreadSleepTime.sleep1()) {
-                return false;
-            }
-            AcessibilityApi.performViewClick(allInfo.get(size - 2));
-            if (ThreadSleepTime.sleep1()) {
-                return false;
-            }
-        } catch (Exception e) {
-            LogUtil.E("出错： " + e);
+
+        AcessibilityApi.performViewClick(allInfo.get(size - 1));
+        if (ThreadSleepTime.sleep1()) {
+            return false;
+        }
+
+        if (ThreadSleepTime.sleep1()) {
+            return false;
         }
         AcessibilityApi.clickTextViewByText("分享到学习强国");
         if (ThreadSleepTime.sleep1()) {

@@ -67,9 +67,9 @@ public class Doxt {
                     return my_stop;
                 }
                 AcessibilityApi.performViewClick(hashMapabcdInfo.get(e.getKey()));
-                if (ThreadSleepTime.sleep0D2()) {
-                    return my_stop;
-                }
+            }
+            if (ThreadSleepTime.sleep0D2()) {
+                return my_stop;
             }
             return IntoAnswer.cliknext(null);
         } else {

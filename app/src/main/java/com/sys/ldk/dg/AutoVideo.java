@@ -89,8 +89,8 @@ public class AutoVideo {
             video_max = vido_time / 1000;//换成秒
 //            秒计算
             LogUtil.D("观看视频：" + video_max + "秒");
-            while (shi_jian++ < video_max) {
-                LogUtil.D("睡眠：" + shi_jian + "秒");
+            while (shi_jian++ < video_max-1) {
+                LogUtil.V("睡眠：" + shi_jian + "秒");
                 if (watch_end() == SUCCESS) {
                     break;
                 } else if (watch_end() == my_stop) {
