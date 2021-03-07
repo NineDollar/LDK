@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -38,18 +37,18 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     protected void onResume() {
         super.onResume();
         if (Config.read_time > 1000 * 60) {
-            int n = Config.getRead_time();
-            edit_read.setText((int) n / 60 / 1000 + "");
+            int n = Config.getRead_time_second();
+            edit_read.setText((int) n / 60 + "");
         } else {
-            int m = Config.getRead_time();
-            edit_read.setText((int) m+"");
+            int m = Config.getRead_time_second();
+            edit_read.setText((int) m + "");
         }
         if (Config.video_time > 1000 * 60) {
-            int n = Config.getVideo_time();
-            edit_video.setText((int) n / 60 / 1000 + "");
+            int n = Config.getVideo_time_second();
+            edit_video.setText((int) n / 60  + "");
         } else {
-            int m = Config.getVideo_time();
-            edit_video.setText((int) m+"");
+            int m = Config.getVideo_time_second();
+            edit_video.setText((int) m + "");
         }
 
         submit();

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sys.ldk">
 
     <uses-permission android:name="android.permission.VIBRATE" />   <!-- 振动权限 -->
@@ -21,13 +22,13 @@
 
     <application
         android:name=".MyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/user_ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/user_ic_launcher_round"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity android:name=".serverset.Permission" />
         <activity
             android:name=".MainActivity"
@@ -40,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".clock.AddclockActivity" />
-        <activity android:name=".qqlogin.LoginActivity"/>
+        <activity android:name=".qqlogin.LoginActivity" />
 
         <!-- 注册服务 process:将service放在独立的进程中 -->
         <!--<service

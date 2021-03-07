@@ -61,13 +61,6 @@ public class XXQG {
             return false;
         }
 
-//        返回桌面
-        UiApi.backToDesk();
-        if (ThreadSleepTime.sleep3()) {
-            return false;
-        }
-
-        AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
         return true;
     }
 

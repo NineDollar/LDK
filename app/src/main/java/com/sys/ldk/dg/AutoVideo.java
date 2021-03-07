@@ -13,6 +13,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.sys.ldk.dg.Config.getRead_time_second;
+import static com.sys.ldk.dg.Config.getVideo_time_Mill;
+import static com.sys.ldk.dg.Config.getVideo_time_second;
 import static com.sys.ldk.dg.Config.is_xin_wen_lian_bo;
 import static com.sys.ldk.dg.Config.video_time;
 import static com.sys.ldk.dg.ReturnType.SUCCESS;
@@ -23,19 +26,19 @@ public class AutoVideo {
     //    最大观看时间5分钟
 
     public static boolean auto_video() {
-        if(!AcessibilityApi.clickTextViewByText("电视台")){
+        if (!AcessibilityApi.clickTextViewByText("电视台")) {
             return false;
         }
         if (ThreadSleepTime.sleep2()) {
             return false;
         }
-        if(!AcessibilityApi.clickTextViewByText("第一频道")){
+        if (!AcessibilityApi.clickTextViewByText("第一频道")) {
             return false;
         }
         if (ThreadSleepTime.sleep2()) {
             return false;
         }
-        if(!startvido(Objects.requireNonNull(di_yi_ping_dao()))){
+        if (!startvido(Objects.requireNonNull(di_yi_ping_dao()))) {
             return false;
         }
         if (ThreadSleepTime.sleep2()) {
@@ -45,7 +48,7 @@ public class AutoVideo {
 //        联播频道
         if (is_xin_wen_lian_bo) {
             LogUtil.D("开始观看新闻联播");
-            if(!AcessibilityApi.clickTextViewByText("联播频道")){
+            if (!AcessibilityApi.clickTextViewByText("联播频道")) {
                 return false;
             }
             if (ThreadSleepTime.sleep2()) {
@@ -57,19 +60,29 @@ public class AutoVideo {
     }
 
     public static boolean startvido(List<AccessibilityNodeInfo> accessibilityNodeInfos) {
+        int q = 0;
+        int video_max = getVideo_time_second();//换成秒
+        int shi_jian = 0;
+
         if (accessibilityNodeInfos.isEmpty()) {
             return false;
         }
+        LogUtil.D("总共：" + accessibilityNodeInfos.size() + " 个视频");
         for (AccessibilityNodeInfo a : accessibilityNodeInfos
         ) {
-            LogUtil.D("time: " + a.getText());
+            LogUtil.D("text: " + a.getText());
         }
+
         for (AccessibilityNodeInfo a : accessibilityNodeInfos
         ) {
+            q++;
+            shi_jian = 1;
+            LogUtil.D("开始观看第 " + q + " 个视频");
+            LogUtil.D("text: " + a.getText());
+            LogUtil.D("观看视频：" + video_max + "秒");
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-            LogUtil.D("text: " + a.getText());
             AcessibilityApi.performViewClick(a);
             if (UiApi.findNodeByTextWithTimeOut(2000, "欢迎发表你的观点") == null) {
                 LogUtil.W("观看失败");
@@ -83,13 +96,7 @@ public class AutoVideo {
                 return false;
             }
 //                判断观看是否结束
-            int shi_jian = 0;
-            int video_max = 0;
-            int vido_time = video_time;
-            video_max = vido_time / 1000;//换成秒
-//            秒计算
-            LogUtil.D("观看视频：" + video_max + "秒");
-            while (shi_jian++ < video_max-1) {
+            while (shi_jian++ < video_max) {
                 LogUtil.V("睡眠：" + shi_jian + "秒");
                 if (watch_end() == SUCCESS) {
                     break;
@@ -97,7 +104,7 @@ public class AutoVideo {
                     return false;
                 }
             }
-            LogUtil.D(a.getText()+"结束");
+            LogUtil.D(a.getText() + "结束");
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
         }
         LogUtil.D("视频观看完毕");

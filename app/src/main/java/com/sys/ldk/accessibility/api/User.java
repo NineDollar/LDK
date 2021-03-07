@@ -336,7 +336,9 @@ public class User {
     public static boolean isApkInDebug(Context context) {
         try {
             ApplicationInfo info = context.getApplicationInfo();
-            LogUtil.D("mode：" + ((info.flags & ApplicationInfo.FLAG_DEBUGGABLE)!=0));
+            if ((info.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
+                LogUtil.D("模式：release");
+            }
             return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (Exception e) {
             return false;

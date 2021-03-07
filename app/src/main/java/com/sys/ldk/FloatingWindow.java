@@ -1,16 +1,15 @@
 package com.sys.ldk;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -25,16 +24,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.sys.ldk.accessibility.api.AcessibilityApi;
-import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.dg.Autoanswer;
-import com.sys.ldk.dg.IntoAnswer;
-import com.sys.ldk.dg.XXQG;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.anim.AppFloatDefaultAnimator;
 import com.sys.ldk.easyfloat.enums.ShowPattern;
@@ -46,11 +41,10 @@ import com.sys.ldk.serverset.MyNotificationType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.logging.Logger;
-
-import static com.sys.ldk.serverset.MainService.notification;
+import static android.content.Context.MODE_PRIVATE;
 
 public class FloatingWindow {
+    private static int clickNum = 0;
     @SuppressLint("StaticFieldLeak")
     public static Context mcontext;
     @SuppressLint("StaticFieldLeak")
@@ -88,9 +82,26 @@ public class FloatingWindow {
                 .setGravity(Gravity.END, 0, 500)
                 .setLayout(R.layout.float1, View -> {
                     runimage = View.findViewById(R.id.icon);
-                    runimage.setOnClickListener(v -> show_2_float_windows());
 
-                    runimage.setOnLongClickListener(v -> into_mainctivi());
+                    runimage.setOnClickListener(v -> {
+                        clickNum++;
+                        runimage.postDelayed(() -> {
+                            if (clickNum == 1) {
+                                LogUtil.V("单击");
+                                lick_runimage();
+                            } else if (clickNum == 2) {
+                                LogUtil.V("双击");
+                                mcontext.startActivity(new Intent(mcontext, MainActivity.class));
+                            }
+                            clickNum = 0;
+                        }, 300);
+                    });
+
+                    runimage.setOnLongClickListener(v -> {
+                        EasyFloat.hideAppFloat("1");
+                        Toast.makeText(mcontext, "隐藏悬浮窗", Toast.LENGTH_SHORT).show();
+                        return true;
+                    });
                 })
                 .registerCallbacks(new OnFloatCallbacks() {
                     @Override
@@ -131,30 +142,22 @@ public class FloatingWindow {
                 .show();
     }
 
-    private static boolean into_mainctivi() {
-        mcontext.startActivity(new Intent(mcontext, MainActivity.class));
-        return true;
-    }
-
     public static void xuan_zhuan() {
         LogUtil.D("旋转");
 //        回主线程
-        runimage.post(new Runnable() {
-            @Override
-            public void run() {
-                runimage.setBackgroundResource(R.drawable.run_xml);
-                drawable = (AnimationDrawable) runimage.getBackground();
+        runimage.post(() -> {
+            runimage.setBackgroundResource(R.drawable.run_xml);
+            drawable = (AnimationDrawable) runimage.getBackground();
 
-                LogUtil.D("旋转开始");
-                if (drawable != null) {
-                    drawable.start();
-                }
+            LogUtil.D("旋转开始");
+            if (drawable != null) {
+                drawable.start();
             }
         });
-
     }
 
-    private static void show_2_float_windows() {
+    private static void lick_runimage() {
+        LogUtil.V("单击");
         if (EasyFloat.appFloatIsShow("2")) {
             EasyFloat.hideAppFloat("2");
         } else {
@@ -394,8 +397,12 @@ public class FloatingWindow {
     }
 
     private static void test2() {
-        new Thread(XXQG::opensichuan).start();
+        String m = "0";
+        SharedPreferences sp = mcontext.getSharedPreferences("data", MODE_PRIVATE);
+        m = sp.getString("password","");
+        LogUtil.V("local_password: " + m);
     }
+
 
     private static void Floating_windows_3() {
         EasyFloat.with(mcontext)

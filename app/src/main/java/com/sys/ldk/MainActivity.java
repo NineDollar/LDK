@@ -2,18 +2,22 @@ package com.sys.ldk;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -25,17 +29,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.sys.ldk.Users.Password;
+import com.sys.ldk.accessibility.api.UiApi;
+import com.sys.ldk.accessibility.util.ApiUtil;
+import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.MyDatabaseHelper;
 import com.sys.ldk.clock.MySimpleAdaptey;
+import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.qqlogin.LoginActivity;
 import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.Permission;
 import com.sys.ldk.dg.DG_Config;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
     private static Context mcontext;
@@ -46,27 +57,39 @@ public class MainActivity extends AppCompatActivity {
     private List<ClockBean> clockBeanList = new ArrayList<>();
     private ImageView addclock;
     private Switch xufuchuang;
+    public List<Activity> activityList = new LinkedList();
+    private static String local_password = "0";
+    private int passwordsCount = 3;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-//        getSupportActionBar().hide();//隐藏ActionBar
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明化通知栏
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
         getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        initView();
         mcontext = this;
 
-        requestMyPermissions();
+        SharedPreferences sp = getSharedPreferences("data", MODE_PRIVATE);
+        local_password = sp.getString("password", "");
+        password = Password.getpassword("http://www.songyun.work/ldk/ldk.php");
+
+        if (!local_password.equals(password)) {
+            LogUtil.V("开始验证");
+            Init();
+        } else {
+            LogUtil.V("不需要验证");
+            requestMyPermissions();
+//        启动服务
+            Intent intent = new Intent(MainActivity.this, MainService.class);
+            startService(intent);
+        }
+
+//        requestMyPermissions();
 
 //        启动服务
-        Intent intent = new Intent(MainActivity.this, MainService.class);
-        startService(intent);
+      /*  Intent intent = new Intent(MainActivity.this, MainService.class);
+        startService(intent);*/
 
         /*new Thread(() -> {
             LogUtil.D("启动悬浮窗");
@@ -101,27 +124,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        clockItmesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog alertDialog;
-                alertDialog = new AlertDialog.Builder(MainActivity.this)   //提示信息
-                        .setTitle("您确定删除吗?")   //标题
-                        .setNegativeButton("取消", null)    //取消按钮
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (deleteItem(clockBeanList.get(position)) == 1) {
-                                    Toast.makeText(getApplicationContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                                }
-                                dialog.dismiss();  //对话框消失
+        clockItmesList.setOnItemLongClickListener((parent, view, position, id) -> {
+            AlertDialog alertDialog;
+            alertDialog = new AlertDialog.Builder(MainActivity.this)   //提示信息
+                    .setTitle("您确定删除吗?")   //标题
+                    .setNegativeButton("取消", null)    //取消按钮
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (deleteItem(clockBeanList.get(position)) == 1) {
+                                Toast.makeText(getApplicationContext(), "删除成功", Toast.LENGTH_SHORT).show();
                             }
-                        })
-                        .create();  //创建
-                alertDialog.show();  //显示
-                return true;
-            }
+                            dialog.dismiss();  //对话框消失
+                        }
+                    })
+                    .create();  //创建
+            alertDialog.show();  //显示
+            return true;
         });
+
         Intent jumpType = getIntent();
         if (jumpType.getStringExtra("addType") != null) {
             if (jumpType.getStringExtra("addType").equals("yes")) {
@@ -133,14 +154,89 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+
+        xufuchuang = findViewById(R.id.sw_float);
+        xufuchuang.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                EasyFloat.showAppFloat("1");
+            } else {
+                EasyFloat.hideAppFloat("1");
+            }
+        });
     }
 
+    private void setpassword() {
+        SharedPreferences sp = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("password", password);
+        if (editor.commit()) {
+            LogUtil.V("保存成功");
+        }
+    }
+
+    private void Init() {
+        if (password.equals("0")) {
+            Toast.makeText(mcontext, "错误", Toast.LENGTH_LONG).show();
+            new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                exit();
+            }).start();
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            final EditText editText = new EditText(MainActivity.this);
+            editText.setTransformationMethod(new PasswordTransformationMethod());
+            dialog.setTitle("请输入邀请码");
+            dialog.setView(editText);
+            dialog.setCancelable(false);
+            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String m = editText.getText().toString();
+                    if (m.equals(password)) {
+                        Toast.makeText(MainActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
+//                    存储
+                        requestMyPermissions();
+//        启动服务
+                        Intent intent = new Intent(MainActivity.this, MainService.class);
+                        startService(intent);
+                        setpassword();
+                    } else {
+                        if (passwordsCount <= 1) {
+                            exit();
+                        }
+                        passwordsCount--;
+                        Toast.makeText(MainActivity.this, "你还有 " + passwordsCount + " 次机会", Toast.LENGTH_SHORT).show();
+                        Init();
+                    }
+                }
+            });
+            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    exit();
+                }
+            });
+            dialog.show();
+        }
+    }
+
+    public void exit() {
+        for (Activity act : activityList) {
+            act.finish();
+        }
+        System.exit(0);
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         initDatabase();
         mySimpleAdaptey.notifyDataSetChanged();
+        xufuchuang.setChecked(EasyFloat.appFloatIsShow("1"));
 //        xufuchuang.setChecked(EasyFloat.appFloatIsShow());
     }
 
@@ -223,7 +319,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initView() {
-
-    }
 }

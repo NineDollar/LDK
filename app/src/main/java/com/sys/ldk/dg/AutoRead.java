@@ -4,11 +4,14 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
+import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 
 import java.util.List;
 
+import static com.sys.ldk.dg.Config.getRead_time_Mill;
+import static com.sys.ldk.dg.Config.getRead_time_second;
 import static com.sys.ldk.dg.Config.read_time;
 
 public class AutoRead {
@@ -40,8 +43,9 @@ public class AutoRead {
 
         for (AccessibilityNodeInfo a : accessibilityNodeInfoList
         ) {
-            LogUtil.D("观看: " + m);
+            LogUtil.D("观看: " + q++ + " 次");
             LogUtil.D(a.getText() + "");
+            LogUtil.D("阅读：" + getRead_time_second() + " 秒");
             if (!AcessibilityApi.performViewClick(a)) {
                 return false;
             }
@@ -49,29 +53,28 @@ public class AutoRead {
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-            fenxiang();
+            if (q++ < 3) {
+                fenxiang();
+            }
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-            video();
-//            阅读时间
-            long read_time1 = read_time;
-            LogUtil.D("阅读：" + (double) read_time1 / 1000 + "秒");
+            isvideo();
 //             毫秒
-            if (ThreadSleepTime.sleep(read_time)) {
+//            阅读时间
+            if (ThreadSleepTime.sleep(getRead_time_Mill())) {
                 return false;
             }
-
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
         }
-        LogUtil.D("观看出错");
-        return false;
+        LogUtil.D("观看完毕");
+        return true;
     }
 
-    private static void video() {
+    private static void isvideo() {
         List<AccessibilityNodeInfo> accessibilityNodeInfos = AcessibilityApi.findViewByCls("android.widget.Button");
         assert accessibilityNodeInfos != null;
         if (accessibilityNodeInfos.size() > 0) {
@@ -106,7 +109,9 @@ public class AutoRead {
         if (ThreadSleepTime.sleep1()) {
             return false;
         }
-        AcessibilityApi.clickTextViewByText("余波...");
+//        AcessibilityApi.clickTextViewByText("余波...");
+        UiApi.clickNodeByIdWithTimeOut(3000, "cn.xuexi.android:id/session_icon");
+
         if (ThreadSleepTime.sleep1()) {
             return false;
         }

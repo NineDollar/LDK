@@ -43,7 +43,7 @@ public class Autoanswer {
         if (ThreadSleepTime.sleep2()) {
             return false;
         }
-        return !auto_answer();
+        return auto_answer();
     }
 
     public static boolean into_ji_fen_page() {

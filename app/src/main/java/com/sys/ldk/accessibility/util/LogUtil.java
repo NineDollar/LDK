@@ -14,7 +14,7 @@ import java.util.Date;
 import static com.sys.ldk.dg.Config.issave;
 
 public class LogUtil {
-    private static final String TS = "Log";
+    private static final String TS = "SYS: ";
     private static final boolean isSHow = User.isApkInDebug(MainActivity.getMycontext());
 
     public static void E(String msg) {
