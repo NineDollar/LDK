@@ -11,18 +11,21 @@ import androidx.annotation.Nullable;
 import com.sys.ldk.FloatingWindow;
 import com.sys.ldk.MainAccessService;
 import com.sys.ldk.MainActivity;
+import com.sys.ldk.MainConfig;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.ApiUtil;
+import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.ServiceUtil;
+import com.sys.ldk.http.Http;
+import com.sys.ldk.http.JsonHelper;
+import com.sys.ldk.http.JsonString;
+
+import org.json.JSONObject;
 
 
 public class MainService extends Service {
     private Context mcontext;
-    private static final String CHANNEL_ID = "10";
-    public static CharSequence textTitle = "服务检查";
-    public static CharSequence textContent = "检查失败";
-    public int notificationId = 123;
 
     @Nullable
     @Override
@@ -82,7 +85,13 @@ public class MainService extends Service {
      * @time 2020/11/4 15:12
      */
     public static void notification() {
-        Binding binding = new Binding(MyNotificationType.case1, MyNotificationType.key1, MyNotificationType.message1);
+        String s = Http.get_http(MainConfig.url);
+        JSONObject jsonObject = JsonHelper.getJsonObject(s);
+        assert jsonObject != null;
+        JsonString myjson = new JsonString(jsonObject);
+        MyNotificationType.setMessagetext1(myjson.getContent());
+
+        Binding binding = new Binding(MyNotificationType.case1, MyNotificationType.keytitle1,MyNotificationType.messagetitle1,MyNotificationType.keytext1, MyNotificationType.messagetext1);
         binding.doBindService();
     }
 

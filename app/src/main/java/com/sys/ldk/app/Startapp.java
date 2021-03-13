@@ -53,28 +53,28 @@ public class Startapp extends Service {
     private class IncomingHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            LogUtil.D("启动app");
+           /* LogUtil.D("启动app");
             switch (msg.what) {
                 case MyNotificationType.case3:
                     String apptype = msg.getData().getString("app");
                     LogUtil.D("apptype： " + apptype);
-                    Binding binding = new Binding(MyNotificationType.case3, MyNotificationType.key3, MyNotificationType.value3);
-                    binding.doBindService();
+                 Binding binding = new Binding(MyNotificationType.case3, MyNotificationType.key3, MyNotificationType.value3);
+                  binding.doBindService();
                     startappchoose(apptype);
                     break;
                 default:
                     super.handleMessage(msg);
                     break;
-            }
+            }*/
         }
     }
 
     final Messenger mMessenger = new Messenger(new Startapp.IncomingHandler());
 
     /**
+     * @param
+     * @return
      * @description 启动app
-     * @param 
-     * @return 
      * @author Nine_Dollar
      * @time 2020/11/5 2:48
      */
@@ -91,9 +91,9 @@ public class Startapp extends Service {
     }
 
     /**
+     * @param
+     * @return
      * @description 停止服务
-     * @param 
-     * @return 
      * @author Nine_Dollar
      * @time 2020/11/5 2:48
      */

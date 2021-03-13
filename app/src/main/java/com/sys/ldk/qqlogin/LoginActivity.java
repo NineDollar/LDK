@@ -5,12 +5,14 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sys.ldk.R;
@@ -42,6 +44,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         initView();
 
         mTencent = Tencent.createInstance(AppConstants.APP_ID, this.getApplicationContext(), AppConstants.APP_AUTHORITIES);
@@ -55,7 +62,15 @@ public class LoginActivity extends AppCompatActivity {
             qq_login();
         });
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish(); // back button
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private void qq_login() {
         if (!mTencent.isSessionValid()) {
             HashMap<String, Object> params = new HashMap<String, Object>();

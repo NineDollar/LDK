@@ -27,18 +27,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.sys.ldk.Users.Password;
-import com.sys.ldk.accessibility.api.User;
+import com.sys.ldk.http.Http;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.MyDatabaseHelper;
 import com.sys.ldk.clock.MySimpleAdaptey;
+import com.sys.ldk.dg.SandTimer;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.qqlogin.LoginActivity;
 import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.Permission;
-import com.sys.ldk.dg.Acticity_Config;
+import com.sys.ldk.dg.ActicityConfig;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private final List<ClockBean> clockBeanList = new ArrayList<>();
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch xufuchuang;
-    private LinkedList activityList = new LinkedList();
+    private final LinkedList activityList = new LinkedList();
     private int passwordsCount = 3;
     private String password;
 
@@ -61,14 +61,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mcontext = this;
-        getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-                android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        isdebug();
+        SandTimer sandTimer = new SandTimer();
+        sandTimer.timerRun();
 
         SharedPreferences sp = getSharedPreferences("data", MODE_PRIVATE);
         String local_password = sp.getString("password", "");
-        password = Password.getpassword("http://www.songyun.work/ldk/ldk.php");
+        password = Http.get_http("http://www.songyun.work/ldk/ldk.php");
 
         if (!local_password.equals(password)) {
             LogUtil.V("开始验证");
@@ -116,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -161,14 +159,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void isdebug() {
-        if (User.isApkInDebug(mcontext)) {
-            LogUtil.D("Debug");
-        }else{
-            LogUtil.D("Release");
-        }
-    }
-
     private void setpassword() {
         SharedPreferences sp = getSharedPreferences("data", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -196,26 +186,23 @@ public class MainActivity extends AppCompatActivity {
             dialog.setTitle("请输入邀请码");
             dialog.setView(editText);
             dialog.setCancelable(false);
-            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String m = editText.getText().toString();
-                    if (m.equals(password)) {
-                        Toast.makeText(MainActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
+            dialog.setPositiveButton("确定", (dialog1, which) -> {
+                String m = editText.getText().toString();
+                if (m.equals(password)) {
+                    Toast.makeText(MainActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
 //                    存储
-                        requestMyPermissions();
+                    requestMyPermissions();
 //        启动服务
-                        Intent intent = new Intent(MainActivity.this, MainService.class);
-                        startService(intent);
-                        setpassword();
-                    } else {
-                        if (passwordsCount <= 1) {
-                            exit();
-                        }
-                        passwordsCount--;
-                        Toast.makeText(MainActivity.this, "你还有 " + passwordsCount + " 次机会", Toast.LENGTH_SHORT).show();
-                        Init();
+                    Intent intent = new Intent(MainActivity.this, MainService.class);
+                    startService(intent);
+                    setpassword();
+                } else {
+                    if (passwordsCount <= 1) {
+                        exit();
                     }
+                    passwordsCount--;
+                    Toast.makeText(MainActivity.this, "你还有 " + passwordsCount + " 次机会", Toast.LENGTH_SHORT).show();
+                    Init();
                 }
             });
             dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -295,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ShellActivity.class));
                 return true;*/
             case R.id.activity_config:
-                startActivity(new Intent(this, Acticity_Config.class));
+                startActivity(new Intent(this, ActicityConfig.class));
                 return true;
             case R.id.setverset:
                 startActivity(new Intent(this, Permission.class));

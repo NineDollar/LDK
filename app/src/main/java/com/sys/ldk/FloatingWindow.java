@@ -28,10 +28,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.sys.ldk.accessibility.api.AcessibilityApi;
+import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.dg.Autoanswer;
+import com.sys.ldk.dg.SandTimer;
 import com.sys.ldk.dg.XxqgFuntion;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.anim.AppFloatDefaultAnimator;
@@ -39,15 +41,22 @@ import com.sys.ldk.easyfloat.enums.ShowPattern;
 import com.sys.ldk.easyfloat.enums.SidePattern;
 import com.sys.ldk.easyfloat.interfaces.OnFloatCallbacks;
 import com.sys.ldk.easyfloat.permission.PermissionUtils;
+import com.sys.ldk.http.Http;
+import com.sys.ldk.http.JsonHelper;
+import com.sys.ldk.http.JsonString;
+import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.MyNotificationType;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FloatingWindow {
     private static int clickNum = 0;
@@ -61,12 +70,11 @@ public class FloatingWindow {
     private static Button btn_start;
     @SuppressLint("StaticFieldLeak")
     private static Button btn_stop;
-    //要注意的是这个初始化最好不要是放在方法中，会导致没法管理
-    private static final Handler handler = new Handler();
-    private static Runnable runnable;
+    private static Timer timer;
 
     public static void start_float_windows() {
         mcontext = MainActivity.getMycontext();
+        timer = new Timer();
         if (!PermissionUtils.checkPermission(mcontext)) {
             AlertDialog alertDialog = new AlertDialog.Builder(mcontext)
                     .setTitle("提示")
@@ -79,20 +87,8 @@ public class FloatingWindow {
             alertDialog.show();
         } else {
             Floating_windows_1();
-            test_float();
+//            test_float();
         }
-
-        runnable = () -> handler.postDelayed(() -> {
-            if (clickNum == 1) {
-                LogUtil.V("单击");
-                lick_runimage();
-            } else if (clickNum == 2) {
-                LogUtil.V("双击");
-                mcontext.startActivity(new Intent(mcontext, MainActivity.class));
-                handler.removeCallbacks(runnable);
-            }
-            clickNum = 0;
-        }, 250);
     }
 
     private static void Floating_windows_1() {
@@ -106,7 +102,22 @@ public class FloatingWindow {
 
                     runimage.setOnClickListener(v -> {
                         clickNum++;
-                        handler.post(runnable);
+                        // 初始化定时器
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                //这里写处理功能
+                                if (clickNum == 1) {
+                                    LogUtil.V("单击");
+                                    runimage.post(FloatingWindow::lick_runimage);
+                                } else if (clickNum == 2) {
+                                    LogUtil.V("双击");
+                                    mcontext.startActivity(new Intent(mcontext, MainActivity.class));
+//                                    handler.removeCallbacks(runnable);
+                                }
+                                clickNum = 0;
+                            }
+                        }, 200);
                     });
 
                     runimage.setOnLongClickListener(v -> {
@@ -294,8 +305,16 @@ public class FloatingWindow {
 
 
     private static void dati() {
+        if (!ApiUtil.isAccessibilityServiceOn(mcontext, MainAccessService.class)) {
+            Toast.makeText(mcontext, "请开启辅助服务", Toast.LENGTH_SHORT).show();
+            return;
+        }
         hide();
-        new Thread(Autoanswer::startanswer).start();
+        image_run();
+        new Thread(() -> {
+            Autoanswer.startanswer();
+            runimage.post(FloatingWindow::image_stop);
+        }).start();
     }
 
     public static void stop() {
@@ -363,7 +382,7 @@ public class FloatingWindow {
         EasyFloat.hideAppFloat("2");
     }
 
-    public static ServiceConnection mConnection = new ServiceConnection() {
+    /*public static ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d("ClockService", "连接成功");
@@ -383,7 +402,7 @@ public class FloatingWindow {
         public void onServiceDisconnected(ComponentName name) {
             Log.d("ClockService", "连接失败");
         }
-    };
+    };*/
 
     private static void test_float() {
         EasyFloat.with(mcontext)
@@ -416,39 +435,19 @@ public class FloatingWindow {
     }
 
     private static void test2() {
-        LogUtil.D("点击悬浮窗第2个按钮");
-        HashMap<String[], AccessibilityNodeInfo> hashMap = new HashMap<>();
-        List<AccessibilityNodeInfo> alllist = AcessibilityApi.getAllNode(null, null);
-        HashMap<String[], Integer> hashMap1 = new HashMap<>();
-        List<String> timeList = new ArrayList<>();
-
-        for (AccessibilityNodeInfo a : alllist
-        ) {
-            String s = a.getText() + "";
-            if (XxqgFuntion.is_video_time(s)) {
-                timeList.add(s);
-            }
-        }
-        for (String s1 : timeList
-        ) {
-            String[] s2 = {s1, "null"};
-            hashMap1.put(s2, 1);
-        }
-        hashMap = User.get_alter_info(alllist, hashMap1);
-        LogUtil.D("短视频共有：" + hashMap.size());
-        for (Map.Entry e:hashMap.entrySet()
-             ) {
-            AcessibilityApi.performViewClick(hashMap.get(e.getKey()));
-            ThreadSleepTime.sleep2();
-            AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
-        }
 
     }
 
     private static void test3() {
+        LogUtil.D("点击悬浮窗第3个按钮");
+        UiApi.clickNodeByTextWithTimeOut(2000, "百灵");
+
     }
 
+
     private static void test4() {
+
+        MainService.notification();
     }
 
     private static void Floating_windows_3() {

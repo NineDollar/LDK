@@ -328,7 +328,7 @@ public class IntoAnswer {
                 case OVER:
                     LogUtil.D("答题完成");
                     if (!XxqgFuntion.back()) {
-                        return FAILURE;
+                        return SUCCESS;
                     }
                     LogUtil.D("结束back");
                     break;
@@ -345,7 +345,7 @@ public class IntoAnswer {
                     return FAILURE;
             }
         }
-        LogUtil.D("---------CReFlag:" + CReFlag);
+        LogUtil.D("ReFlag:" + CReFlag);
         return CReFlag;
     }
 

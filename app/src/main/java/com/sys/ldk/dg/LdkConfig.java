@@ -10,11 +10,34 @@ public class LdkConfig {
     //    毫秒
     private static int read_time = 60 * 1000;
     private static int video_time = 60 * 1000;
+    private static int duan_video_time = 60 * 1000 * 3;//短视频时间
     private static int reading_times = 5;//文章阅读次数
     private static int videoing_times = 5;//视频阅读次数
-    private static boolean is_xin_wen_lian_bo = false;
+    private static boolean xin_wen_lian_bo = false;
     private static boolean save = true;
     private static boolean duan_video = false;
+    private static boolean dati = true;
+
+    public static boolean isDati() {
+        return dati;
+    }
+
+    public static void setDati(boolean dati) {
+        LdkConfig.dati = dati;
+    }
+
+    public static int getDuan_video_time_second() {
+        return duan_video_time / 60 / 1000;
+    }
+
+    public static int getDuan_video_time_Mill() {
+        return duan_video_time;
+    }
+
+    public static void setDuan_video_time(int duan_video_time) {
+        duan_video_time *= 60 * 1000;
+        LdkConfig.duan_video_time = duan_video_time;
+    }
 
     public static boolean isDuan_video() {
         return duan_video;
@@ -32,12 +55,12 @@ public class LdkConfig {
         LdkConfig.videoing_times = videoing_times;
     }
 
-    public static boolean isIs_xin_wen_lian_bo() {
-        return is_xin_wen_lian_bo;
+    public static boolean isXin_wen_lian_bo() {
+        return xin_wen_lian_bo;
     }
 
-    public static void setIs_xin_wen_lian_bo(boolean is_xin_wen_lian_bo) {
-        LdkConfig.is_xin_wen_lian_bo = is_xin_wen_lian_bo;
+    public static void setXin_wen_lian_bo(boolean xin_wen_lian_bo) {
+        LdkConfig.xin_wen_lian_bo = xin_wen_lian_bo;
     }
 
     public static boolean isSave() {

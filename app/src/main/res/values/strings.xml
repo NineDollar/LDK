@@ -29,4 +29,5 @@
     <string name="accessibility">本应用不会收集个人隐私，放心使用</string>
     <string name="start_xue_xi">开始学习</string>
     <string name="stop">结束</string>
+    <string name="ticker">通知来了</string>
 </resources>

@@ -5,6 +5,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
+import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 
 import java.util.ArrayList;
@@ -34,12 +35,12 @@ public class AutoVideo {
 
             return false;
         }
-        if (!startvido(Objects.requireNonNull(di_yi_ping_dao()))) {
+        if (!startvideo(Objects.requireNonNull(di_yi_ping_dao()))) {
             return false;
         }
 
 //        联播频道
-        if (LdkConfig.isIs_xin_wen_lian_bo()) {
+        if (LdkConfig.isXin_wen_lian_bo()) {
             LogUtil.D("开始观看新闻联播");
             if (ThreadSleepTime.sleep2()) {
                 return false;
@@ -50,15 +51,22 @@ public class AutoVideo {
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-            if(!startvido(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")))){
+            if (!startvideo(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")))) {
                 return false;
             }
         }
 
 //       短视频
-        if(LdkConfig.isDuan_video()){
+        if (LdkConfig.isDuan_video()) {
             LogUtil.D("开始短视频");
             if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
+            UiApi.clickNodeByTextWithTimeOut(2000, "百灵");
+            if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
+            if (!start_duan_video()) {
                 return false;
             }
         }
@@ -66,7 +74,28 @@ public class AutoVideo {
         return true;
     }
 
-    public static boolean startvido(List<AccessibilityNodeInfo> accessibilityNodeInfos) {
+    private static boolean start_duan_video() {
+        List<String> stringList = User.getallInfottext(false);
+        for (String s : stringList
+        ) {
+            if (XxqgFuntion.is_video_time(s)) {
+                if (!UiApi.clickNodeByTextWithTimeOut(2000, s)) {
+                    return false;
+                }
+                break;
+            }
+        }
+        long time = LdkConfig.getDuan_video_time_second();
+        LogUtil.D("观看短视频：" + time+ " 分钟");
+        if (ThreadSleepTime.sleep(LdkConfig.getDuan_video_time_Mill())) {
+            return false;
+        }
+        LogUtil.D("短视频观看结束");
+        AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
+        return true;
+    }
+
+    public static boolean startvideo(List<AccessibilityNodeInfo> accessibilityNodeInfos) {
 
         if (accessibilityNodeInfos.isEmpty()) {
             return false;
@@ -140,7 +169,6 @@ public class AutoVideo {
         }
         return NULL;
     }
-
 
 
     /**

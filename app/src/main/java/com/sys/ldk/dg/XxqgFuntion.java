@@ -58,18 +58,18 @@ public class XxqgFuntion {
     public static boolean back() {
 //        判断三次
         for(int i = 0; i < 3; i++){
-            if (ThreadSleepTime.sleep1()) {
+            if (ThreadSleepTime.sleep0D5()) {
                 return false;
             }
-            if(UiApi.findNodeByTextWithTimeOut(2000, "学习积分") != null){
+            if(UiApi.findNodeByTextWithTimeOut(1000, "学习积分") != null){
                 LogUtil.D("退回到积分页了");
-                if (ThreadSleepTime.sleep1()) {
+                if (ThreadSleepTime.sleep0D5()) {
                     return false;
                 }
                 return true;
             }
             if (User.findtext("电视台")) {
-                if (ThreadSleepTime.sleep1()) {
+                if (ThreadSleepTime.sleep0D5()) {
                     return false;
                 }
                 Autoanswer.into_ji_fen_page();

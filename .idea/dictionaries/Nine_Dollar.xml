@@ -2,6 +2,7 @@
   <dictionary name="Nine_Dollar">
     <words>
       <w>addclock</w>
+      <w>alllist</w>
       <w>alltext</w>
       <w>answr</w>
       <w>apptype</w>
@@ -15,10 +16,13 @@
       <w>isdebug</w>
       <w>isinfo</w>
       <w>isrun</w>
+      <w>jsoner</w>
+      <w>jsontext</w>
       <w>listinfo</w>
       <w>listview</w>
       <w>mcontext</w>
       <w>modethread</w>
+      <w>myjson</w>
       <w>mystart</w>
       <w>mystop</w>
       <w>mythreadsleep</w>
@@ -31,6 +35,7 @@
       <w>setpassword</w>
       <w>sleepmy</w>
       <w>startapp</w>
+      <w>startvideo</w>
       <w>tencent</w>
       <w>textstr</w>
       <w>theat</w>

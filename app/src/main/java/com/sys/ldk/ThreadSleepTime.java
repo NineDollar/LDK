@@ -7,7 +7,7 @@ import static com.sys.ldk.dg.ReturnType.my_stop;
 public class ThreadSleepTime {
 
     /**
-     * 自己设定，单位秒
+     * 自己设定，单位毫秒
      *
      * @param time
      * @return

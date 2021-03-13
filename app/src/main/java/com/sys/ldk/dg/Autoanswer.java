@@ -40,7 +40,7 @@ public class Autoanswer {
         }
 
 //        自动答题
-        if (ThreadSleepTime.sleep3()) {
+        if (ThreadSleepTime.sleep2()) {
             return false;
         }
         return auto_answer();
@@ -104,9 +104,11 @@ public class Autoanswer {
                     break;
                 case mei_zhou:
                     LogUtil.D(mei_zhou + "开始");
-                    ThreadSleepTime.sleep3();
+                    if(ThreadSleepTime.sleep2()){
+                        return false;
+                    }
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
-                    if (ThreadSleepTime.sleep3()) {
+                    if (ThreadSleepTime.sleep2()) {
                         return false;
                     }
                     switch (find_wei_zuo_da("未作答")) {
@@ -125,7 +127,9 @@ public class Autoanswer {
                     break;
                 case zhuan_xiang:
                     LogUtil.D(zhuan_xiang + "开始");
-                    ThreadSleepTime.sleep3();
+                    if(ThreadSleepTime.sleep2()){
+                        return false;
+                    }
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
                     if (ThreadSleepTime.sleep2()) {
                         return false;
@@ -151,7 +155,6 @@ public class Autoanswer {
             return false;
         }
 
-
         fen_shu();
         return true;
     }
@@ -164,7 +167,7 @@ public class Autoanswer {
         assert accessibilityNodeInfo != null;
 //        回UI线程
         FloatingWindow.runimage.post(() -> {
-            MyNotificationType.message1 = accessibilityNodeInfo.getText() + "";
+            MyNotificationType.setMessagetitle1(accessibilityNodeInfo.getText() + "");
             notification();
         });
     }
@@ -205,7 +208,7 @@ public class Autoanswer {
                     if (!XxqgFuntion.back()) {
                         return false;
                     }
-                    return false;
+                    return true;
                 case OVER:
                     LogUtil.D("答题结束");
                     return true;

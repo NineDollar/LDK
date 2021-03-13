@@ -12,10 +12,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 import com.sys.ldk.MyApplication;
 import com.sys.ldk.R;
@@ -29,22 +26,26 @@ import com.sys.ldk.accessibility.util.LogUtil;
 public class Binding extends Activity {
     private Context mcontext;
     private int mywhat;
-    private String key;
-    private String value;
+    private String keytext;
+    private String valuetext;
+    private String keytitle;
+    private String valuetitle;
 
     /**
-     * @description 发送通知类
-     * @param mywhat: 消息选择
-     * @param key:传递消息的key
-     * @param value:通过键获取的值
+     * @param mywhat:           消息选择
+     * @param keytext:传递消息的key
+     * @param valuetext:通过键获取的值
      * @return
+     * @description 发送通知类
      * @author Nine_Dollar
      * @time 2020/11/5 1:47
      */
-    public Binding(int mywhat,String key, String value) {
+    public Binding(int mywhat, String keytitle, String valuetitle, String keytext, String valuetext) {
         this.mywhat = mywhat;
-        this.key = key;
-        this.value = value;
+        this.keytitle = keytitle;
+        this.valuetitle = valuetitle;
+        this.keytext = keytext;
+        this.valuetext = valuetext;
         this.mcontext = MyApplication.getContext();
     }
 
@@ -77,8 +78,7 @@ public class Binding extends Activity {
                     break;
                 case MyNotificationType.case1:
                     break;
-                case MyNotificationType.case2:
-                    break;
+
                 default:
                     super.handleMessage(msg);
             }
@@ -97,7 +97,7 @@ public class Binding extends Activity {
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            Log.e("Binding", "连接成功");
+            LogUtil.I("连接成功");
             // This is called when the connection with the service has been
             // established, giving us the service object we can use to
             // interact with the service.  We are communicating with our
@@ -108,7 +108,8 @@ public class Binding extends Activity {
             try {
                 Message msg = Message.obtain(null, mywhat);
                 Bundle bundle = new Bundle();
-                bundle.putString(key,value);
+                bundle.putString(keytext, valuetext);
+                bundle.putString(keytitle, valuetitle);
                 msg.setData(bundle);
                 msg.replyTo = mMessenger;
                 mService.send(msg);
@@ -144,7 +145,7 @@ public class Binding extends Activity {
         // Establish a connection with the service.  We use an explicit
         // class name because there is no reason to be able to let other
         // applications replace our component.
-        Log.d("binding： ", "发送通知");
+        LogUtil.I("发送通知");
         Intent intent = new Intent(mcontext, MessengerService.class);
         mcontext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;

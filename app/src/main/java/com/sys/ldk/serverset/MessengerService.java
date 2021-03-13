@@ -1,21 +1,21 @@
 package com.sys.ldk.serverset;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.sys.ldk.MainActivity;
 import com.sys.ldk.MyApplication;
@@ -32,8 +32,6 @@ import java.util.ArrayList;
 public class MessengerService extends Service {
     private String string;
     private static final String CHANNEL_ID = "10";
-    public static CharSequence textTitle = "服务检查";
-    public static CharSequence textContent = "检查失败";
     public int notificationId = 123;
 
     /**
@@ -69,15 +67,17 @@ public class MessengerService extends Service {
      * any registered clients with the new value.
      */
     public static final int MSG_SET_VALUE = 3;
-    public static String mytext = "未接收到消息";
+    public static String text = "未接收到消息";
+    public static String title = "";
 
     /**
      * Handler of incoming messages from clients.
      */
+    @SuppressLint("HandlerLeak")
     public class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Log.e("Messeng", "服务端接收到客户端消息");
+            LogUtil.I("收到消息");
             switch (msg.what) {
                 case MSG_REGISTER_CLIENT:
                     mClients.add(msg.replyTo);
@@ -100,19 +100,11 @@ public class MessengerService extends Service {
                     }
                     break;
                 case MyNotificationType.case1:
-                    mytext = msg.getData().getString(MyNotificationType.key1);
-                    Log.e("mess: ", mytext);
-                    showNotification(mytext);
-                    break;
-                case MyNotificationType.case2 :
-                    mytext = msg.getData().getString(MyNotificationType.key2);
-                    Log.e("mess: ", mytext);
-                    showNotification(mytext);
-                    break;
-                    case MyNotificationType.case3 :
-                    mytext = msg.getData().getString(MyNotificationType.key3);
-                    Log.e("mess: ", mytext);
-                    showNotification(mytext);
+                    title = msg.getData().getString(MyNotificationType.keytitle1);
+                    text = msg.getData().getString(MyNotificationType.keytext1);
+                    LogUtil.V("title: " + title);
+                    LogUtil.V("text: " + text);
+                    showNotification(title, text);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -157,36 +149,41 @@ public class MessengerService extends Service {
     /**
      * Show a notification while this service is running.
      */
-    private void showNotification(String text) {
+    private void showNotification(String title, String text) {
 
         CharSequence name = getString(R.string.channel_name);
         String description = getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
 
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
-        sendMessage(text);
+        sendMessage(title, text);
     }
 
-    private void sendMessage(String text) {
+    private void sendMessage(String title, String text) {
         PendingIntent contentIntent = PendingIntent.getActivity(MyApplication.getContext(), 0,
                 new Intent(this, MainActivity.class), 0);
-        CharSequence titext = getText(R.string.remote_service_started);
         // Set the info for the views that show in the notification panel.
+        String ticker = getResources().getString(R.string.ticker);
         Notification notification = new Notification.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.user_ic_launcher_round)  // the status icon
-                .setTicker(titext)  // the status text
-                .setContentTitle(getText(R.string.local_service_label))  // the label of the entry
-                .setContentText(text)  // the contents of the entry
+                .setTicker(ticker)  // the status text
+                .setContentTitle(title)  // the label of the entry
+//                .setContentText(text)  // the contents of the entry
+                .setStyle(new Notification.BigTextStyle().bigText(text))
+//                .setBadgeIconType(R.drawable.add)
+//                .setWhen(System.currentTimeMillis())
+                .setShowWhen(true)
+//                .setOnlyAlertOnce(true)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.tubiao))
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
                 .build();
         // Send the notification.
         // We use a string id because it is a unique number.  We use it later to cancel.
 //        mNM.notify(R.string.remote_service_started, notification);
+
         startForeground(notificationId, notification);
     }
-
-
 }

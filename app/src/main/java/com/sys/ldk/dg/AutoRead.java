@@ -24,7 +24,7 @@ public class AutoRead {
 
     public static boolean yao_wen(String tuijianORyaowen) {
         AcessibilityApi.clickTextViewByText(tuijianORyaowen);
-        if (ThreadSleepTime.sleep3()) {
+        if (ThreadSleepTime.sleep2()) {
             return false;
         }
         /*AcessibilityApi.clickTextViewByText(tuijianORyaowen);

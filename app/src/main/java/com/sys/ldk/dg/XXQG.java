@@ -22,7 +22,7 @@ public class XXQG {
         }
 
 //      判断是否为当前页面
-        if (ThreadSleepTime.sleep3()) {
+        if (ThreadSleepTime.sleep2()) {
             return false;
         }
         if (!isLearning_power()) {
@@ -30,7 +30,7 @@ public class XXQG {
         }
 
 //        自动阅读
-        if (ThreadSleepTime.sleep3()) {
+        if (ThreadSleepTime.sleep2()) {
             return false;
         }
         if (!AutoRead.auto_read()) {
@@ -38,7 +38,7 @@ public class XXQG {
         }
 
         //      打开四川频道
-        if (ThreadSleepTime.sleep3()) {
+        if (ThreadSleepTime.sleep2()) {
             return false;
         }
         if (!opensichuan()) {
@@ -46,7 +46,7 @@ public class XXQG {
         }
 
 //        视频
-        if (ThreadSleepTime.sleep3()) {
+        if (ThreadSleepTime.sleep2()) {
             return false;
         }
         if (!AutoVideo.auto_video()) {
@@ -54,11 +54,15 @@ public class XXQG {
         }
 
 //      进入积分页面，自动答题
-        if (ThreadSleepTime.sleep3()) {
-            return false;
-        }
-        if (!Autoanswer.doactivity()) {
-            return false;
+        if(LdkConfig.isDati()){
+            if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
+            if (!Autoanswer.doactivity()) {
+                return false;
+            }
+        }else {
+            LogUtil.D("不答题");
         }
 
         return true;
@@ -86,7 +90,7 @@ public class XXQG {
                 }*/
                 if (AcessibilityApi.clickTextViewByText("四川学习平台")) {
                     LogUtil.D("点击四川学习平台成功");
-                    if (ThreadSleepTime.sleep3()) {
+                    if (ThreadSleepTime.sleep2()) {
                         return false;
                     }
                     AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);

@@ -161,18 +161,28 @@
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="短视频次数："
+        android:layout_marginLeft="5dp"
+        android:text="短视频时间："
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/edit_duan_video_times"
+        app:layout_constraintBottom_toBottomOf="@id/edit_duan_video_time"
         app:layout_constraintTop_toBottomOf="@+id/btn_video_times" />
 
     <EditText
-        android:id="@+id/edit_duan_video_times"
+        android:id="@+id/edit_duan_video_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:inputType="number"
         app:layout_constraintLeft_toRightOf="@+id/text_duan_video"
         app:layout_constraintRight_toRightOf="@id/edit_video"
         app:layout_constraintTop_toTopOf="@+id/text_duan_video" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="分"
+        app:layout_constraintBottom_toBottomOf="@id/text_duan_video"
+        app:layout_constraintRight_toRightOf="@id/edit_duan_video_time"
+        app:layout_constraintTop_toTopOf="@id/edit_duan_video_time" />
 
     <Button
         android:id="@+id/btn_duan_video"
@@ -185,7 +195,7 @@
 
 
     <Switch
-        android:id="@+id/sw_xin_wen"
+        android:id="@+id/sw_is_xin_wen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -199,19 +209,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="日志"
-        app:layout_constraintLeft_toRightOf="@+id/sw_xin_wen"
-        app:layout_constraintRight_toLeftOf="@id/sw_duan_video"
-        app:layout_constraintTop_toTopOf="@+id/sw_xin_wen" />
+        app:layout_constraintLeft_toRightOf="@+id/sw_is_xin_wen"
+        app:layout_constraintRight_toLeftOf="@id/sw_is_duan_video"
+        app:layout_constraintTop_toTopOf="@+id/sw_is_xin_wen" />
 
     <Switch
-        android:id="@+id/sw_duan_video"
+        android:id="@+id/sw_is_duan_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="短视频"
         app:layout_constraintLeft_toRightOf="@+id/sw_save_log"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sw_xin_wen" />
+        app:layout_constraintRight_toLeftOf="@+id/sw_dati"
+        app:layout_constraintTop_toTopOf="@+id/sw_is_xin_wen" />
 
+    <Switch
+        android:id="@+id/sw_dati"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="答题"
+        app:layout_constraintTop_toTopOf="@+id/sw_is_duan_video"
+        app:layout_constraintLeft_toRightOf="@id/sw_is_duan_video"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -222,7 +240,7 @@
         android:scrollbarSize="25dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sw_xin_wen">
+        app:layout_constraintTop_toBottomOf="@+id/sw_is_xin_wen">
 
         <EditText
             android:id="@+id/edit_log"
@@ -233,7 +251,7 @@
             android:paddingLeft="5dp"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sw_xin_wen" />
+            app:layout_constraintTop_toBottomOf="@+id/sw_is_xin_wen" />
     </ScrollView>
 
     <Button

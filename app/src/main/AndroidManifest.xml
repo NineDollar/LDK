@@ -31,11 +31,14 @@
         android:roundIcon="@mipmap/user_ic_launcher_round"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".serverset.Permission" />
+        <activity android:name=".serverset.Permission"
+            android:label="权限设置"/>
         <activity
             android:name=".MainActivity"
             android:excludeFromRecents="false"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:taskAffinity=".MainActivity"
+            android:autoRemoveFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,7 +46,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".clock.AddclockActivity" />
-        <activity android:name=".qqlogin.LoginActivity" />
+        <activity android:name=".qqlogin.LoginActivity"
+            android:label="登录"/>
 
         <!-- 注册服务 process:将service放在独立的进程中 -->
         <!--<service
@@ -81,7 +85,8 @@
 
         <activity android:name=".shellService.ShellActivity" />
 
-        <activity android:name=".dg.Acticity_Config" />
+        <activity android:name=".dg.ActicityConfig"
+            android:label="参数设置"/>
 
         <service
             android:name=".MainAccessService"

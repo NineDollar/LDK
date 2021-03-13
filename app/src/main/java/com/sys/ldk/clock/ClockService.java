@@ -205,15 +205,15 @@ public class ClockService extends Service {
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d("ClockService", "连接成功");
             mService = new Messenger(service);
-            Message message = Message.obtain(null, MyNotificationType.case3);
-            Bundle bundle = new Bundle();
+//            Message message = Message.obtain(null, MyNotificationType.case3);
+            /*Bundle bundle = new Bundle();
             bundle.putString("app", clockBean.getApptype());
             message.setData(bundle);
             try {
                 mService.send(message);
             } catch (RemoteException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
