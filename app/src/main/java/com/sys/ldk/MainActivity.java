@@ -2,7 +2,6 @@ package com.sys.ldk;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -30,8 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.sys.ldk.Users.Password;
-import com.sys.ldk.accessibility.api.UiApi;
-import com.sys.ldk.accessibility.util.ApiUtil;
+import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.clock.ClockBean;
 import com.sys.ldk.clock.ClockService;
@@ -41,24 +38,21 @@ import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.qqlogin.LoginActivity;
 import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.Permission;
-import com.sys.ldk.dg.DG_Config;
+import com.sys.ldk.dg.Acticity_Config;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
+    @SuppressLint("StaticFieldLeak")
     private static Context mcontext;
-    private ListView clockItmesList;
     private MySimpleAdaptey mySimpleAdaptey;
-    private MyDatabaseHelper myDatabaseHelper;
     private SQLiteDatabase db;
-    private List<ClockBean> clockBeanList = new ArrayList<>();
-    private ImageView addclock;
+    private final List<ClockBean> clockBeanList = new ArrayList<>();
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch xufuchuang;
-    public List<Activity> activityList = new LinkedList();
-    private static String local_password = "0";
+    private LinkedList activityList = new LinkedList();
     private int passwordsCount = 3;
     private String password;
 
@@ -66,12 +60,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mcontext = this;
         getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mcontext = this;
+
+        isdebug();
 
         SharedPreferences sp = getSharedPreferences("data", MODE_PRIVATE);
-        local_password = sp.getString("password", "");
+        String local_password = sp.getString("password", "");
         password = Password.getpassword("http://www.songyun.work/ldk/ldk.php");
 
         if (!local_password.equals(password)) {
@@ -103,14 +99,14 @@ public class MainActivity extends AppCompatActivity {
         /*Intent in = new Intent(this, MessengerService.class);
         startService(in);*/
 
-        myDatabaseHelper = new MyDatabaseHelper(getApplicationContext(), "Items.db", null, 1);
+        MyDatabaseHelper myDatabaseHelper = new MyDatabaseHelper(getApplicationContext(), "Items.db", null, 1);
         db = myDatabaseHelper.getWritableDatabase();
-        clockItmesList = findViewById(R.id.clockItmesList);
+        ListView clockItmesList = findViewById(R.id.clockItmesList);
         initDatabase();
         mySimpleAdaptey = new MySimpleAdaptey(getApplicationContext(), clockBeanList);
         clockItmesList.setAdapter(mySimpleAdaptey);
 
-        addclock = findViewById(R.id.addclock);
+        ImageView addclock = findViewById(R.id.addclock);
         addclock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +159,14 @@ public class MainActivity extends AppCompatActivity {
                 EasyFloat.hideAppFloat("1");
             }
         });
+    }
+
+    private void isdebug() {
+        if (User.isApkInDebug(mcontext)) {
+            LogUtil.D("Debug");
+        }else{
+            LogUtil.D("Release");
+        }
     }
 
     private void setpassword() {
@@ -225,8 +229,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void exit() {
-        for (Activity act : activityList) {
-            act.finish();
+        for (Object act : activityList) {
+            act.notifyAll();
         }
         System.exit(0);
     }
@@ -291,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ShellActivity.class));
                 return true;*/
             case R.id.activity_config:
-                startActivity(new Intent(this, DG_Config.class));
+                startActivity(new Intent(this, Acticity_Config.class));
                 return true;
             case R.id.setverset:
                 startActivity(new Intent(this, Permission.class));

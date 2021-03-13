@@ -10,6 +10,8 @@ import com.sys.ldk.accessibility.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>大国共用方法</p>
@@ -76,5 +78,16 @@ public class XxqgFuntion {
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
         }
         return false;
+    }
+
+    public static boolean is_video_time(String str) {
+        String regex = "[0-9]{2}:[0-9]{2}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher m = pattern.matcher(str);
+        boolean dateFlag = m.matches();
+        if (!dateFlag) {
+            return false;
+        }
+        return true;
     }
 }

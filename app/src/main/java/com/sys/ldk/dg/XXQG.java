@@ -68,22 +68,22 @@ public class XXQG {
         LogUtil.D("点击四川频道");
         if (UiApi.clickNodeByDesWithTimeOut(2000, "工作")) {
             LogUtil.D("首页点击成功");
-            if (ThreadSleepTime.sleep2()) {
-                return false;
-            }
-            UiApi.clickNodeByDesWithTimeOut(2000, "工作");
             if (ThreadSleepTime.sleep3()) {
                 return false;
             }
+            /*UiApi.clickNodeByDesWithTimeOut(2000, "工作");*/
+            /*if (ThreadSleepTime.sleep3()) {
+                return false;
+            }*/
             if (AcessibilityApi.clickTextViewByText("四川")) {
                 LogUtil.D("四川点击成功");
-                if (ThreadSleepTime.sleep2()) {
-                    return false;
-                }
-                AcessibilityApi.clickTextViewByText("四川");
                 if (ThreadSleepTime.sleep3()) {
                     return false;
                 }
+                /*AcessibilityApi.clickTextViewByText("四川");
+                if (ThreadSleepTime.sleep3()) {
+                    return false;
+                }*/
                 if (AcessibilityApi.clickTextViewByText("四川学习平台")) {
                     LogUtil.D("点击四川学习平台成功");
                     if (ThreadSleepTime.sleep3()) {

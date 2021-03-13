@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class User {
 
@@ -176,7 +178,6 @@ public class User {
         return false;
     }
 
-
     @NotNull
     public static List<AccessibilityNodeInfo> getScrollNodeInfo() {
         List<AccessibilityNodeInfo> getScrollNodeInfo = new ArrayList<>();
@@ -290,6 +291,34 @@ public class User {
         return null;
     }
 
+    public static HashMap<String[], AccessibilityNodeInfo> get_alter_info(List<AccessibilityNodeInfo> accessibilityNodeInfoList,
+                                                                          HashMap<String[], Integer> hashMap) {
+        int m = 0;
+        HashMap<String[], AccessibilityNodeInfo> hashMap1 = new HashMap();
+        for (AccessibilityNodeInfo accessibilityNodeInfo : accessibilityNodeInfoList
+        ) {
+            String text1 = accessibilityNodeInfo.getText() + "";
+            for (Map.Entry e : hashMap.entrySet()
+            ) {
+                String[] key = (String[]) e.getKey();
+                int index = (int) e.getValue();
+                LogUtil.V(key[0]+" " + index+"");
+                if (text1.equals(key[0])) {
+                    LogUtil.D("查找：" + text1 + " 成功");
+                    AccessibilityNodeInfo accessibilityNodeInfo1 = accessibilityNodeInfoList.get(m + index);
+                    String text2 = accessibilityNodeInfo1.getText() + "";
+                    LogUtil.D("text2:"+text2);
+                    if (text2.equals(key[1])) {
+                        LogUtil.D("查找" + key[0] + "后第" + index + "个Info的Text确认成功");
+                        hashMap1.put(key, accessibilityNodeInfo);
+                    }
+                }
+            }
+            m++;
+        }
+        return hashMap1;
+    }
+
     //    查找页面是否有存在text
     public static boolean findtext(String findtext) {
         List<String> stringList = User.getallInfottext(false);
@@ -336,9 +365,6 @@ public class User {
     public static boolean isApkInDebug(Context context) {
         try {
             ApplicationInfo info = context.getApplicationInfo();
-            if ((info.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
-                LogUtil.D("模式：release");
-            }
             return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (Exception e) {
             return false;

@@ -10,20 +10,15 @@ import com.sys.ldk.accessibility.util.LogUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static com.sys.ldk.dg.Config.getRead_time_second;
-import static com.sys.ldk.dg.Config.getVideo_time_Mill;
-import static com.sys.ldk.dg.Config.getVideo_time_second;
-import static com.sys.ldk.dg.Config.is_xin_wen_lian_bo;
-import static com.sys.ldk.dg.Config.video_time;
+import static com.sys.ldk.dg.LdkConfig.getVideo_time_second;
 import static com.sys.ldk.dg.ReturnType.SUCCESS;
 import static com.sys.ldk.dg.ReturnType.my_stop;
 import static java.sql.Types.NULL;
 
 public class AutoVideo {
-    //    最大观看时间5分钟
+    private static int q = 0;//次数
+    private static int time = 0;
 
     public static boolean auto_video() {
         if (!AcessibilityApi.clickTextViewByText("电视台")) {
@@ -36,33 +31,42 @@ public class AutoVideo {
             return false;
         }
         if (ThreadSleepTime.sleep2()) {
+
             return false;
         }
         if (!startvido(Objects.requireNonNull(di_yi_ping_dao()))) {
             return false;
         }
-        if (ThreadSleepTime.sleep2()) {
-            return false;
-        }
 
 //        联播频道
-        if (is_xin_wen_lian_bo) {
+        if (LdkConfig.isIs_xin_wen_lian_bo()) {
             LogUtil.D("开始观看新闻联播");
+            if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
             if (!AcessibilityApi.clickTextViewByText("联播频道")) {
                 return false;
             }
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-            return startvido(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")));
+            if(!startvido(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")))){
+                return false;
+            }
         }
+
+//       短视频
+        if(LdkConfig.isDuan_video()){
+            LogUtil.D("开始短视频");
+            if (ThreadSleepTime.sleep2()) {
+                return false;
+            }
+        }
+
         return true;
     }
 
     public static boolean startvido(List<AccessibilityNodeInfo> accessibilityNodeInfos) {
-        int q = 0;
-        int video_max = getVideo_time_second();//换成秒
-        int shi_jian = 0;
 
         if (accessibilityNodeInfos.isEmpty()) {
             return false;
@@ -76,10 +80,17 @@ public class AutoVideo {
         for (AccessibilityNodeInfo a : accessibilityNodeInfos
         ) {
             q++;
-            shi_jian = 1;
+            //最大观看时间
+            if (q > LdkConfig.getVideoing_times()) {
+                LogUtil.I("到达视频最大观看次数");
+                if (ThreadSleepTime.sleep1()) {
+                    return false;
+                }
+                break;
+            }
+            int video_max = getVideo_time_second();
             LogUtil.D("开始观看第 " + q + " 个视频");
             LogUtil.D("text: " + a.getText());
-            LogUtil.D("观看视频：" + video_max + "秒");
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
@@ -95,18 +106,24 @@ public class AutoVideo {
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-//                判断观看是否结束
-            while (shi_jian++ < video_max) {
-                LogUtil.V("睡眠：" + shi_jian + "秒");
-                if (watch_end() == SUCCESS) {
+
+            LogUtil.I("观看视频：" + video_max + "秒");
+            while (true) {
+                LogUtil.V("睡眠：" + time + "秒");
+
+                int i = watch_end();
+                if (time++ > video_max || i == SUCCESS) {
                     break;
-                } else if (watch_end() == my_stop) {
+                } else if (i == my_stop) {
                     return false;
                 }
+
             }
-            LogUtil.D(a.getText() + "结束");
+            time = 0;
+            LogUtil.D("第" + q + " 个视频结束");
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
         }
+        q = 0;
         LogUtil.D("视频观看完毕");
         return true;
     }
@@ -124,16 +141,7 @@ public class AutoVideo {
         return NULL;
     }
 
-    public static boolean Data(String str) {
-        String regex = "[0-9]{2}:[0-9]{2}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher m = pattern.matcher(str);
-        boolean dateFlag = m.matches();
-        if (!dateFlag) {
-            return false;
-        }
-        return true;
-    }
+
 
     /**
      * 获取第一视频里的info
@@ -152,7 +160,7 @@ public class AutoVideo {
             if (j < sum) {
                 i = j;
             }
-            if (AutoVideo.Data(a.getText() + "")) {
+            if (XxqgFuntion.is_video_time(a.getText() + "")) {
                 if ("中央广播电视总台".equals(accessibilityNodeInfoList.get(i - 2).getText() + "") || "中央广播电视总台".equals(accessibilityNodeInfoList.get(i + 2).getText() + "")) {
                     timeinfo.add(a);
                 }

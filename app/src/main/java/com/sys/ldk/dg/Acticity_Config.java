@@ -1,7 +1,10 @@
 package com.sys.ldk.dg;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,21 +12,25 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import com.sys.ldk.MainActivity;
 import com.sys.ldk.R;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.sdcard.SaveLog;
 
-public class DG_Config extends AppCompatActivity implements View.OnClickListener {
+import java.io.File;
+
+public class Acticity_Config extends AppCompatActivity implements View.OnClickListener {
     private EditText edit_read;
-    private Button btn_save_read;
     private EditText edit_video;
-    private Button btn_save_video;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch sw_xin_wen;
     @SuppressLint("StaticFieldLeak")
-    public static EditText edit_log;
-    private Switch sw_save_log;
+    private EditText edit_log;
+    private EditText edit_read_times;
+    private EditText edit_video_times;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,29 +43,36 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        if (Config.read_time > 1000 * 60) {
-            int n = Config.getRead_time_second();
+        if (LdkConfig.getRead_time_Mill() >= 1000 * 60) {
+            int n = LdkConfig.getRead_time_second();
+            LogUtil.D("---" + n);
             edit_read.setText((int) n / 60 + "");
         } else {
-            int m = Config.getRead_time_second();
-            edit_read.setText((int) m + "");
+            int m = LdkConfig.getRead_time_second();
+            edit_read.setText((int) m + "秒");
         }
-        if (Config.video_time > 1000 * 60) {
-            int n = Config.getVideo_time_second();
-            edit_video.setText((int) n / 60  + "");
+        if (LdkConfig.getVideo_time_Mill() >= 1000 * 60) {
+            int n = LdkConfig.getVideo_time_second();
+            edit_video.setText((int) n / 60 + "");
         } else {
-            int m = Config.getVideo_time_second();
-            edit_video.setText((int) m + "");
+            int m = LdkConfig.getVideo_time_second();
+            edit_video.setText((int) m + "秒");
         }
+
+        edit_read_times.setText(LdkConfig.getReading_times() + "");
+        edit_video_times.setText(LdkConfig.getVideoing_times() + "");
 
         submit();
     }
 
     private void initView() {
+        edit_read_times = (EditText) findViewById(R.id.edit_read_times);
+        edit_video_times = (EditText) findViewById(R.id.edit_video_times);
+
         edit_read = (EditText) findViewById(R.id.edit_read);
-        btn_save_read = (Button) findViewById(R.id.btn_save_read);
+        Button btn_save_read = (Button) findViewById(R.id.btn_save_read);
         edit_video = (EditText) findViewById(R.id.edit_video);
-        btn_save_video = (Button) findViewById(R.id.btn_save_video);
+        Button btn_save_video = (Button) findViewById(R.id.btn_save_video);
         edit_log = (EditText) findViewById(R.id.edit_log);
 
         btn_save_read.setOnClickListener(this);
@@ -68,28 +82,63 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
         edit_log.setFocusableInTouchMode(false);
 
         sw_xin_wen = (Switch) findViewById(R.id.sw_xin_wen);
-        sw_save_log = (Switch) findViewById(R.id.sw_save_log);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw_save_log = (Switch) findViewById(R.id.sw_save_log);
 
-        sw_xin_wen.setChecked(Config.is_xin_wen_lian_bo);
+        sw_xin_wen.setChecked(LdkConfig.isIs_xin_wen_lian_bo());
         sw_xin_wen.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Config.is_xin_wen_lian_bo = isChecked;
+            LdkConfig.setIs_xin_wen_lian_bo(isChecked);
             if (isChecked) {
-                Toast.makeText(DG_Config.this, "打开", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Acticity_Config.this, "打开", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(DG_Config.this, "关闭", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Acticity_Config.this, "关闭", Toast.LENGTH_SHORT).show();
             }
         });
 
-        sw_save_log.setChecked(Config.issave);
+        sw_save_log.setChecked(LdkConfig.isSave());
         sw_save_log.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Config.issave = isChecked;
+            LdkConfig.setSave(isChecked);
             if (isChecked) {
-                Toast.makeText(DG_Config.this, "保存日志", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Acticity_Config.this, "保存日志", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(DG_Config.this, "取消保存", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Acticity_Config.this, "取消保存", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        Button btn_log = findViewById(R.id.btn_log);
+        btn_log.setOnClickListener(v -> openlog());
+
+        Button btn_read_times = findViewById(R.id.btn_read_times);
+        btn_read_times.setOnClickListener(v -> {
+            String s = edit_read_times.getText().toString();
+            int i = Integer.parseInt(s);
+            LdkConfig.setReading_times(i);
+            Toast.makeText(this, "保存成功：" + i + " 次", Toast.LENGTH_SHORT).show();
+        });
+
+        Button btn_video_times = findViewById(R.id.btn_video_times);
+        btn_video_times.setOnClickListener(v -> {
+            String s = edit_video_times.getText().toString();
+            int i = Integer.parseInt(s);
+            LdkConfig.setVideoing_times(i);
+            Toast.makeText(this, "保存成功：" + i + " 次", Toast.LENGTH_SHORT).show();
         });
     }
+
+    private void openlog() {
+        File sdCardFile = Environment.getExternalStorageDirectory();
+        File file = new File(sdCardFile + "/LDK");
+        if (!file.exists()) {
+            return;
+        }
+
+        Uri contentUri = FileProvider.getUriForFile(MainActivity.getMycontext(), ".fileprovider", file);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setDataAndType(contentUri, "*/*");
+        startActivity(intent);
+    }
+
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -114,9 +163,9 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
 //        分钟
         read_time = Integer.parseInt(str);
 //        毫秒
-        Config.read_time = read_time * 60 * 1000;
+        LdkConfig.setRead_time(read_time * 60 * 1000);
         if (read_time >= 1000) {
-            Config.read_time = read_time;
+            LdkConfig.setRead_time(read_time);
             Toast.makeText(this, "保存成功：" + (int) read_time / 1000 + " 秒", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "保存成功：" + read_time + " 分钟", Toast.LENGTH_SHORT).show();
@@ -131,9 +180,9 @@ public class DG_Config extends AppCompatActivity implements View.OnClickListener
             return;
         }
         video_time = Integer.parseInt(str);
-        Config.video_time = video_time * 60 * 1000;
+        LdkConfig.setVideo_time(video_time * 60 * 1000);
         if (video_time >= 1000) {
-            Config.video_time = video_time;
+            LdkConfig.setVideo_time(video_time);
             Toast.makeText(this, "保存成功：" + (int) video_time / 1000 + " 秒", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "保存成功：" + video_time + " 分钟", Toast.LENGTH_SHORT).show();

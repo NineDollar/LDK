@@ -7,9 +7,13 @@
       <w>apptype</w>
       <w>autoanswer</w>
       <w>dati</w>
+      <w>duan</w>
+      <w>fileprovider</w>
       <w>funtion</w>
       <w>getall</w>
       <w>getfallinfo</w>
+      <w>isdebug</w>
+      <w>isinfo</w>
       <w>isrun</w>
       <w>listinfo</w>
       <w>listview</w>
@@ -24,6 +28,7 @@
       <w>readvideo</w>
       <w>sdfasdfsf</w>
       <w>serverset</w>
+      <w>setpassword</w>
       <w>sleepmy</w>
       <w>startapp</w>
       <w>tencent</w>

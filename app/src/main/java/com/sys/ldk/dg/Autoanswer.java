@@ -40,7 +40,7 @@ public class Autoanswer {
         }
 
 //        自动答题
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
         return auto_answer();
@@ -65,7 +65,7 @@ public class Autoanswer {
 //      向上滚动
         AcessibilityApi.ScrollNode(Objects.requireNonNull(AcessibilityApi.findViewByCls("android.webkit.WebView")).get(0));
 
-        if (ThreadSleepTime.sleep3()) {
+        if (ThreadSleepTime.sleep2()) {
             return false;
         }
 
@@ -74,7 +74,6 @@ public class Autoanswer {
         }
         return true;
     }
-
 
     public static boolean into_da_ti() {
         String[] strings = {"每日答题", "去答题"};
@@ -94,7 +93,6 @@ public class Autoanswer {
             switch (key[0]) {
                 case mei_ri:
                     LogUtil.D(mei_ri + "开始");
-                    ThreadSleepTime.sleep3();
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
                     if (ThreadSleepTime.sleep2()) {
                         return false;

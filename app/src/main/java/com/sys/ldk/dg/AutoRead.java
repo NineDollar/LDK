@@ -10,11 +10,12 @@ import com.sys.ldk.accessibility.util.LogUtil;
 
 import java.util.List;
 
-import static com.sys.ldk.dg.Config.getRead_time_Mill;
-import static com.sys.ldk.dg.Config.getRead_time_second;
-import static com.sys.ldk.dg.Config.read_time;
+import static com.sys.ldk.dg.LdkConfig.getRead_time_Mill;
+import static com.sys.ldk.dg.LdkConfig.getRead_time_second;
 
 public class AutoRead {
+    //        观看次数
+    private static int q = 0;
 
     public static boolean auto_read() {
         LogUtil.D("要闻---开始阅读");
@@ -22,30 +23,32 @@ public class AutoRead {
     }
 
     public static boolean yao_wen(String tuijianORyaowen) {
-//        观看次数
-        int q = 1;
         AcessibilityApi.clickTextViewByText(tuijianORyaowen);
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
-        AcessibilityApi.clickTextViewByText(tuijianORyaowen);
+        /*AcessibilityApi.clickTextViewByText(tuijianORyaowen);
         if (ThreadSleepTime.sleep2()) {
             return false;
-        }
+        }*/
         List<AccessibilityNodeInfo> accessibilityNodeInfoList = AcessibilityApi.findViewByid_list("cn.xuexi.android:id/general_card_title_id");
         assert accessibilityNodeInfoList != null;
         int m = accessibilityNodeInfoList.size();
-        LogUtil.I("size： " + m);
-        for (AccessibilityNodeInfo a : accessibilityNodeInfoList
+        LogUtil.I("总共： " + m);
+    /*    for (AccessibilityNodeInfo a : accessibilityNodeInfoList
         ) {
             LogUtil.D("text: " + a.getText());
-        }
+        }*/
 
         for (AccessibilityNodeInfo a : accessibilityNodeInfoList
         ) {
-            LogUtil.D("观看: " + q++ + " 次");
+            q++;
+            if (q > LdkConfig.getReading_times()){
+                LogUtil.I("到达最大文章阅读次数");
+                break;
+            }
+            LogUtil.D("观看第: " + q + " 次");
             LogUtil.D(a.getText() + "");
-            LogUtil.D("阅读：" + getRead_time_second() + " 秒");
             if (!AcessibilityApi.performViewClick(a)) {
                 return false;
             }
@@ -53,7 +56,7 @@ public class AutoRead {
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
-            if (q++ < 3) {
+            if (q < 3) {
                 fenxiang();
             }
             if (ThreadSleepTime.sleep2()) {
@@ -62,14 +65,17 @@ public class AutoRead {
             isvideo();
 //             毫秒
 //            阅读时间
+            LogUtil.I("阅读：" + getRead_time_second() + " 秒");
             if (ThreadSleepTime.sleep(getRead_time_Mill())) {
                 return false;
             }
+            LogUtil.I("第 " + q + " 次结束");
             AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
             if (ThreadSleepTime.sleep2()) {
                 return false;
             }
         }
+        q = 0;
         LogUtil.D("观看完毕");
         return true;
     }
