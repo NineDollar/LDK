@@ -9,14 +9,41 @@ package com.sys.ldk.dg;
 public class LdkConfig {
     //    毫秒
     private static int read_time = 60 * 1000;
-    private static int video_time = 60 * 1000;
-    private static int duan_video_time = 60 * 1000 * 3;//短视频时间
-    private static int reading_times = 5;//文章阅读次数
-    private static int videoing_times = 5;//视频阅读次数
-    private static boolean xin_wen_lian_bo = false;
-    private static boolean save = true;
-    private static boolean duan_video = false;
+    private static int video_time = 60 * 1000 * 5;
+    private static int duan_video_time = 60 * 1000 * 5;//短视频时间
+    private static int reading_times = 10;//文章阅读次数
+    private static int videoing_times = 10;//视频阅读次数
+    private static boolean xin_wen_lian_bo = true;
+    private static boolean save = false;
+    private static boolean duan_video = true;
     private static boolean dati = true;
+    private static boolean read = true;
+    private static boolean sichuan = true;
+    private static boolean video = true;
+
+    public static boolean isSichuan() {
+        return sichuan;
+    }
+
+    public static void setSichuan(boolean sichuan) {
+        LdkConfig.sichuan = sichuan;
+    }
+
+    public static boolean isVideo() {
+        return video;
+    }
+
+    public static void setVideo(boolean video) {
+        LdkConfig.video = video;
+    }
+
+    public static boolean isRead() {
+        return read;
+    }
+
+    public static void setRead(boolean read) {
+        LdkConfig.read = read;
+    }
 
     public static boolean isDati() {
         return dati;

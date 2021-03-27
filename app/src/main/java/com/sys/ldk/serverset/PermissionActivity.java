@@ -44,23 +44,13 @@ import com.sys.ldk.easyfloat.permission.PermissionUtils;
 
 import java.util.List;
 
-public class Permission extends AppCompatActivity implements View.OnClickListener {
+public class PermissionActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Context mcontext ;
+    private Context mcontext;
     private static PowerManager packageManager;
-    private TextView textview1;
-    private Button fuzhu;
-    private Button xuanfu;
     private TextView xuanfutext;
-    private TextView textview2;
-    private Button ziqidong;
-    private TextView houtaitext;
-    private Button dianliang;
     private TextView dianliangtext;
-    private Button soding;
-    private TextView soudingtxst;
-    private TextView textview3;
-    private TextView yinchang;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switchyinchang;
     private TextView fuzhutext;
     private Keyguard keyguard;
@@ -116,19 +106,19 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
     }
 
     private void initView() {
-        textview1 = (TextView) findViewById(R.id.textview1);
-        fuzhu = (Button) findViewById(R.id.fuzhu);
-        xuanfu = (Button) findViewById(R.id.xuanfu);
+        TextView textview1 = (TextView) findViewById(R.id.textview1);
+        Button fuzhu = (Button) findViewById(R.id.fuzhu);
+        Button xuanfu = (Button) findViewById(R.id.xuanfu);
         xuanfutext = (TextView) findViewById(R.id.xuanfutext);
-        textview2 = (TextView) findViewById(R.id.textview2);
-        ziqidong = (Button) findViewById(R.id.ziqidong);
-        houtaitext = (TextView) findViewById(R.id.houtaitext);
-        dianliang = (Button) findViewById(R.id.dianliang);
+        TextView textview2 = (TextView) findViewById(R.id.textview2);
+        Button ziqidong = (Button) findViewById(R.id.ziqidong);
+        TextView houtaitext = (TextView) findViewById(R.id.houtaitext);
+        Button dianliang = (Button) findViewById(R.id.dianliang);
         dianliangtext = (TextView) findViewById(R.id.dianliangtext);
-        soding = (Button) findViewById(R.id.soding);
-        soudingtxst = (TextView) findViewById(R.id.soudingtxst);
-        textview3 = (TextView) findViewById(R.id.textview3);
-        yinchang = (TextView) findViewById(R.id.yinchang);
+        Button soding = (Button) findViewById(R.id.soding);
+        TextView soudingtxst = (TextView) findViewById(R.id.soudingtxst);
+        TextView textview3 = (TextView) findViewById(R.id.textview3);
+        TextView yinchang = (TextView) findViewById(R.id.yinchang);
         switchyinchang = (Switch) findViewById(R.id.switchyinchang);
         fuzhutext = (TextView) findViewById(R.id.fuzhutext);
 
@@ -143,6 +133,10 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
         switchyinchang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+/*
+                Intent intent = new Intent(mcontext, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                mcontext.startActivity(intent);*/
 
                 /*val intent = Intent(context, SettingActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
@@ -183,7 +177,8 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
                 easyFloat.requestPermission1();
                 break;
             case R.id.ziqidong:
-                jumpStartInterface(mcontext);
+//                jumpStartInterface(mcontext);
+                KeepLiveUtils.goKeepLiveSetting(mcontext);
                 break;
             case R.id.dianliang:
                 addWhite(this);
@@ -201,10 +196,6 @@ public class Permission extends AppCompatActivity implements View.OnClickListene
     public static void addWhite(Activity activity) {
         //应用是否在 白名单中
         if (!packageManager.isIgnoringBatteryOptimizations(activity.getPackageName())) {
-            //方法1、启动一个  ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS Intent
-//                Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-//                activity.startActivity(intent);
-            //方法2、触发系统对话框
             @SuppressLint("BatteryLife") Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
             intent.setData(Uri.parse("package:" + activity.getPackageName()));
             activity.startActivity(intent);

@@ -2,30 +2,38 @@
   <dictionary name="Nine_Dollar">
     <words>
       <w>addclock</w>
+      <w>aeba</w>
       <w>alllist</w>
       <w>alltext</w>
+      <w>alreadyflag</w>
       <w>answr</w>
       <w>apptype</w>
+      <w>atext</w>
       <w>autoanswer</w>
+      <w>dakaixuanfuchaung</w>
       <w>dati</w>
       <w>duan</w>
       <w>fileprovider</w>
       <w>funtion</w>
       <w>getall</w>
       <w>getfallinfo</w>
+      <w>huadong</w>
       <w>isdebug</w>
       <w>isinfo</w>
       <w>isrun</w>
       <w>jsoner</w>
       <w>jsontext</w>
+      <w>judou</w>
       <w>listinfo</w>
       <w>listview</w>
       <w>mcontext</w>
       <w>modethread</w>
+      <w>mriri</w>
       <w>myjson</w>
       <w>mystart</w>
       <w>mystop</w>
       <w>mythreadsleep</w>
+      <w>qqlogin</w>
       <w>questiontype</w>
       <w>questiontypeflag</w>
       <w>readandvideo</w>
@@ -37,10 +45,12 @@
       <w>startapp</w>
       <w>startvideo</w>
       <w>tencent</w>
+      <w>textlist</w>
       <w>textstr</w>
       <w>theat</w>
       <w>threadsleep</w>
       <w>timeinfo</w>
+      <w>tuijian</w>
       <w>xiang</w>
       <w>xiapp</w>
       <w>xuan</w>

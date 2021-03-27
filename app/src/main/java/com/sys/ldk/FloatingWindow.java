@@ -34,6 +34,7 @@ import com.sys.ldk.accessibility.util.ApiUtil;
 import com.sys.ldk.accessibility.util.LogUtil;
 import com.sys.ldk.dg.Autoanswer;
 import com.sys.ldk.dg.SandTimer;
+import com.sys.ldk.dg.XXQG;
 import com.sys.ldk.dg.XxqgFuntion;
 import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.easyfloat.anim.AppFloatDefaultAnimator;
@@ -44,19 +45,28 @@ import com.sys.ldk.easyfloat.permission.PermissionUtils;
 import com.sys.ldk.http.Http;
 import com.sys.ldk.http.JsonHelper;
 import com.sys.ldk.http.JsonString;
+import com.sys.ldk.serverset.Binding;
+import com.sys.ldk.serverset.KeepLiveUtils;
 import com.sys.ldk.serverset.MainService;
 import com.sys.ldk.serverset.MyNotificationType;
+import com.sys.ldk.shellService.Main;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.KeyStore;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 public class FloatingWindow {
     private static int clickNum = 0;
@@ -70,15 +80,13 @@ public class FloatingWindow {
     private static Button btn_start;
     @SuppressLint("StaticFieldLeak")
     private static Button btn_stop;
-    private static Timer timer;
 
     public static void start_float_windows() {
         mcontext = MainActivity.getMycontext();
-        timer = new Timer();
         if (!PermissionUtils.checkPermission(mcontext)) {
             AlertDialog alertDialog = new AlertDialog.Builder(mcontext)
                     .setTitle("提示")
-                    .setMessage("使用浮窗功能，需要您授权悬浮窗权限。")
+                    .setMessage("使用浮窗功能，需要您授权悬浮窗权限")
                     .setPositiveButton("去开启", (dialog, which) -> {
                         Floating_windows_1();
                     })
@@ -91,19 +99,20 @@ public class FloatingWindow {
         }
     }
 
+    @SuppressLint("RtlHardcoded")
     private static void Floating_windows_1() {
         EasyFloat.with(mcontext)
                 .setShowPattern(ShowPattern.ALL_TIME)
                 .setSidePattern(SidePattern.RESULT_HORIZONTAL)
                 .setTag("1")
-                .setGravity(Gravity.END, 0, 500)
+                .setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT)
                 .setLayout(R.layout.float1, View -> {
                     runimage = (ImageView) View.findViewById(R.id.icon);
 
                     runimage.setOnClickListener(v -> {
                         clickNum++;
                         // 初始化定时器
-                        timer.schedule(new TimerTask() {
+                        MainActivity.getTimer().schedule(new TimerTask() {
                             @Override
                             public void run() {
                                 //这里写处理功能
@@ -197,7 +206,7 @@ public class FloatingWindow {
         EasyFloat.with(mcontext)
                 .setSidePattern(SidePattern.RESULT_HORIZONTAL)
                 .setShowPattern(ShowPattern.ALL_TIME)
-                .setGravity(Gravity.END, 0, 800)
+                .setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT)
                 .setAppFloatAnimator(new AppFloatDefaultAnimator())
                 .setTag("2")
                 .setLayout(R.layout.activity_floatingwindow, View -> {
@@ -320,7 +329,6 @@ public class FloatingWindow {
     public static void stop() {
 //        加载悬浮窗
         AcessibilityApi.AutoKeyBoard();
-        Toast.makeText(mcontext, "正在停止", Toast.LENGTH_SHORT).show();
         Floating_windows_3();
         DG_Thread.stop();
         new Thread(new Runnable() {
@@ -431,35 +439,52 @@ public class FloatingWindow {
     private static void test1() {
         LogUtil.D("点击悬浮窗第1个按钮");
 
-        User.getallInfottext(true);
+        List<AccessibilityNodeInfo> accessibilityNodeInfoList = AcessibilityApi.findViewByid_list("cn.xuexi.android:id/general_carousel_card_image_id");
+
+        LogUtil.D("size:" + accessibilityNodeInfoList.size());
+        AcessibilityApi.performViewClick(accessibilityNodeInfoList.get(0));
+//        AcessibilityApi.ScrollNode(Objects.requireNonNull(AcessibilityApi.findViewByCls("cn.xuexi.android:id/general_carousel_card_image_id")).get(3), 1);
+
     }
 
     private static void test2() {
-
+//        AcessibilityApi.ScrollNode(Objects.requireNonNull(AcessibilityApi.findViewByCls("android.webkit.WebView")).get(0), 1);
     }
 
     private static void test3() {
         LogUtil.D("点击悬浮窗第3个按钮");
-        UiApi.clickNodeByTextWithTimeOut(2000, "百灵");
 
+        for (int i = 0; i < 5; i++) {
+            List<AccessibilityNodeInfo> accessibilityNodeInfoList = AcessibilityApi.findViewByid_list("cn.xuexi.android:id/general_card_title_id");
+            assert accessibilityNodeInfoList != null;
+            int m = accessibilityNodeInfoList.size();
+            LogUtil.I("总共：" + m);
+
+            for (AccessibilityNodeInfo a : accessibilityNodeInfoList
+            ) {
+                LogUtil.D("text：" + a.getText());
+            }
+           AcessibilityApi.ScrollNode(Objects.requireNonNull(AcessibilityApi.findViewByCls("android.widget.ListView")).get(3), 1);
+
+            ThreadSleepTime.sleep2();
+        }
     }
-
 
     private static void test4() {
-
-        MainService.notification();
+        User.getallInfottext(true);
     }
+
 
     private static void Floating_windows_3() {
         EasyFloat.with(mcontext)
                 .setSidePattern(SidePattern.DEFAULT)
                 .setShowPattern(ShowPattern.ALL_TIME)
-                .setGravity(Gravity.END, -290, 650)
+                .setGravity(Gravity.CENTER)
                 .setAppFloatAnimator(new AppFloatDefaultAnimator())
                 .setTag("3")
                 .setDragEnable(false)
                 .setLayout(R.layout.float_progressbar, View -> {
-                    ProgressBar progressBar = (ProgressBar) View.findViewById(R.id.progressbar);
+                    ProgressBar progressBar = View.findViewById(R.id.progressbar);
                     progressBar.setVisibility(android.view.View.VISIBLE);
                 })
                 .show();

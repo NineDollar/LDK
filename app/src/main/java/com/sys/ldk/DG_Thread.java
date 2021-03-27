@@ -27,7 +27,6 @@ public class DG_Thread {
         return MyThread.get_mode();
     }
 
-
     /**
      * 启动任务线程
      */
@@ -158,6 +157,8 @@ public class DG_Thread {
                         AcessibilityApi.performAction(AcessibilityApi.ActionType.HOME);
                         ThreadSleepTime.sleep1();
                         AcessibilityApi.performAction(AcessibilityApi.ActionType.POWER);
+                    }else {
+                        LogUtil.D("意外结束");
                     }
                     break;
                 }

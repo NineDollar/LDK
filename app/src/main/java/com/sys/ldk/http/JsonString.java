@@ -1,5 +1,6 @@
 package com.sys.ldk.http;
 
+import com.sys.ldk.MainConfig;
 import com.sys.ldk.accessibility.util.LogUtil;
 
 import org.json.JSONArray;
@@ -18,12 +19,13 @@ public class JsonString implements Serializable {
      */
 
     private int code;
-    private String msg;
     private String content;
+    private String source;
 
     public JsonString(JSONObject jsonObject) {
         try {
             content = jsonObject.getString("content");
+            source = jsonObject.getString("source");
             LogUtil.D("jsonObject:" + content);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -38,9 +40,11 @@ public class JsonString implements Serializable {
         return code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getSource() {
+        return source;
     }
 
-
+    public void setSource(String source) {
+        this.source = source;
+    }
 }

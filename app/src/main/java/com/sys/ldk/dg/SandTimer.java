@@ -29,8 +29,8 @@ public class SandTimer {
         long daySpan = 24 * 60 * 60 * 1000;
 //        long daySpan = 10 * 1000;
         // 规定的每天时间15:33:30运行
-//        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 7:00:00");
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 7:00:00");
+//        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 07:00:00");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 07:00:00");
         // 首次运行时间
         try {
             @SuppressLint("SimpleDateFormat") Date startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sdf.format(new Date()));
@@ -53,11 +53,8 @@ public class SandTimer {
         }
     }
 
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            MyNotificationType.setMessagetitle1("还未学习");
-            MainService.notification();
-        }
+    Runnable runnable = () -> {
+        MyNotificationType.setMessagetitle1("还未学习");
+        MainService.notification();
     };
 }

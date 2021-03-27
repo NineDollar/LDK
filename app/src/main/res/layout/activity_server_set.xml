@@ -49,6 +49,7 @@
             android:id="@+id/fuzhutext"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textColor="@color/black"
             android:text="@string/wsq"
             android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -58,6 +59,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:id="@+id/mage1"
             android:layout_marginRight="15dp"
             android:background="@drawable/ic_arrow_drop_down_black_24dp"
@@ -99,6 +101,7 @@
             android:layout_height="wrap_content"
             android:text="@string/wsq"
             android:textSize="15dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/mage2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -156,6 +159,7 @@
             android:id="@+id/houtaitext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/kuaisu"
             android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -201,6 +205,7 @@
         <TextView
             android:id="@+id/dianliangtext"
             android:layout_width="wrap_content"
+            android:textColor="@color/black"
             android:layout_height="wrap_content"
             android:text="@string/wsq"
             android:textSize="15dp"
@@ -252,6 +257,7 @@
             android:layout_height="wrap_content"
             android:text="@string/kuaisu"
             android:textSize="15dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@id/mage5"
             app:layout_constraintTop_toTopOf="parent" />
@@ -320,6 +326,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:textColor="@color/black"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="20dp"
         android:text="@string/copyRight"/>

@@ -8,21 +8,29 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.sys.ldk.MainActivity;
 import com.sys.ldk.MyApplication;
+import com.sys.ldk.MyBroadcastReceiver;
 import com.sys.ldk.R;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.shellService.Main;
 
 import java.util.ArrayList;
+
+import static android.app.Notification.EXTRA_NOTIFICATION_ID;
+import static com.sys.ldk.FloatingWindow.mcontext;
 
 /**
  * @description 服务端
@@ -31,9 +39,7 @@ import java.util.ArrayList;
  */
 public class MessengerService extends Service {
     private String string;
-    private static final String CHANNEL_ID = "10";
-    public int notificationId = 123;
-
+    private NotificationCompat.Builder builder;
     /**
      * For showing and hiding our notification.
      */
@@ -104,7 +110,8 @@ public class MessengerService extends Service {
                     text = msg.getData().getString(MyNotificationType.keytext1);
                     LogUtil.V("title: " + title);
                     LogUtil.V("text: " + text);
-                    showNotification(title, text);
+//                    showNotification(title, text);
+                    createNotificationChannel(title, text);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -127,7 +134,6 @@ public class MessengerService extends Service {
     public void onDestroy() {
         // Cancel the persistent notification.
         mNM.cancel(R.string.remote_service_started);
-
         // Tell the user we stopped.
         Toast.makeText(this, R.string.remote_service_stopped, Toast.LENGTH_SHORT).show();
     }
@@ -149,12 +155,12 @@ public class MessengerService extends Service {
     /**
      * Show a notification while this service is running.
      */
-    private void showNotification(String title, String text) {
-
+    /*private void showNotification(String title, String text) {
         CharSequence name = getString(R.string.channel_name);
         String description = getString(R.string.channel_description);
         int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.enableLights(false);
         channel.setDescription(description);
 
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -179,11 +185,59 @@ public class MessengerService extends Service {
 //                .setOnlyAlertOnce(true)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.tubiao))
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+                .setChannelId(CHANNEL_ID)
                 .build();
         // Send the notification.
         // We use a string id because it is a unique number.  We use it later to cancel.
 //        mNM.notify(R.string.remote_service_started, notification);
 
         startForeground(notificationId, notification);
+    }*/
+    private void createNotificationChannel(String title, String text) {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(MyNotificationType.getChannel(), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+        showNotification(title, text);
+    }
+
+    private void showNotification(String title, String text) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        Intent snoozeIntent = new Intent(this, MyBroadcastReceiver.class);
+        snoozeIntent.setAction("MessengerService");
+        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MyNotificationType.getChannel())
+                .setSmallIcon(R.mipmap.user_ic_launcher_round)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.tubiao))
+                .setContentTitle(title)
+                .setContentText(text)
+                .setShowWhen(true)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(text))
+                .setContentIntent(pendingIntent)
+                .setOngoing(true)
+                .setAutoCancel(false)
+                .addAction(R.mipmap.user_ic_launcher_round, getString(R.string.dakaixuanfuchaung),
+                        snoozePendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mcontext);
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(MyNotificationType.getNotificationId(), builder.build());
     }
 }

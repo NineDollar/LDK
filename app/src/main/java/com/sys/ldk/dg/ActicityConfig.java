@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -18,12 +17,12 @@ import androidx.core.content.FileProvider;
 
 import com.sys.ldk.MainActivity;
 import com.sys.ldk.R;
-import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.sdcard.SaveLog;
 
 import java.io.File;
 
-public class ActicityConfig extends AppCompatActivity implements View.OnClickListener {
+public class ActicityConfig extends AppCompatActivity {
     private EditText edit_read;
     private EditText edit_video;
 
@@ -87,18 +86,16 @@ public class ActicityConfig extends AppCompatActivity implements View.OnClickLis
         edit_duan_video = (EditText) findViewById(R.id.edit_duan_video_time);
 
         edit_read = (EditText) findViewById(R.id.edit_read);
-        Button btn_save_read = (Button) findViewById(R.id.btn_save_read);
+
         edit_video = (EditText) findViewById(R.id.edit_video);
-        Button btn_save_video = (Button) findViewById(R.id.btn_save_video);
+
         edit_log = (EditText) findViewById(R.id.edit_log);
 
-        btn_save_read.setOnClickListener(this);
-        btn_save_video.setOnClickListener(this);
 
         edit_log.setFocusable(false);
         edit_log.setFocusableInTouchMode(false);
 
-        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw_xin_wen = (Switch) findViewById(R.id.sw_is_xin_wen);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw_xin_wen = (Switch) findViewById(R.id.sw_xin_wen);
 
         sw_xin_wen.setChecked(LdkConfig.isXin_wen_lian_bo());
         sw_xin_wen.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -146,30 +143,75 @@ public class ActicityConfig extends AppCompatActivity implements View.OnClickLis
         Button btn_log = findViewById(R.id.btn_log);
         btn_log.setOnClickListener(v -> openlog());
 
-        Button btn_read_times = findViewById(R.id.btn_read_times);
+        Button btn_read_times = findViewById(R.id.btn_save);
         btn_read_times.setOnClickListener(v -> {
-            String s = edit_read_times.getText().toString();
-            int i = Integer.parseInt(s);
-            LdkConfig.setReading_times(i);
-            Toast.makeText(this, "保存成功：" + i + " 次", Toast.LENGTH_SHORT).show();
+            save_all();
         });
 
-        Button btn_video_times = findViewById(R.id.btn_video_times);
-        btn_video_times.setOnClickListener(v -> {
-            String s = edit_video_times.getText().toString();
-            int i = Integer.parseInt(s);
-            LdkConfig.setVideoing_times(i);
-            Toast.makeText(this, "保存成功：" + i + " 次", Toast.LENGTH_SHORT).show();
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch xufuchuang = findViewById(R.id.sw_float);
+        xufuchuang.setChecked(EasyFloat.appFloatIsShow("1"));
+        xufuchuang.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                EasyFloat.showAppFloat("1");
+                Toast.makeText(this, "打开悬浮窗", Toast.LENGTH_SHORT).show();
+            } else {
+                EasyFloat.hideAppFloat("1");
+                Toast.makeText(this, "关闭悬浮窗", Toast.LENGTH_SHORT).show();
+            }
         });
 
-        Button btn_duan_video = findViewById(R.id.btn_duan_video);
-        btn_duan_video.setOnClickListener(v -> {
-            String s = edit_duan_video.getText().toString();
-            int i = Integer.parseInt(s);
-            LdkConfig.setDuan_video_time(i);
-            Toast.makeText(this, "保存成功：" + i + " 分钟", Toast.LENGTH_SHORT).show();
-        });
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch read = (Switch) findViewById(R.id.sw_read);
+        read.setChecked(LdkConfig.isRead());
+        read.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            if (isChecked) {
+                LdkConfig.setRead(true);
+                Toast.makeText(this, "阅读文章", Toast.LENGTH_SHORT).show();
+            } else {
+                LdkConfig.setRead(false);
+                Toast.makeText(this, "取消阅读文章", Toast.LENGTH_SHORT).show();
+            }
+        }));
 
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch video = findViewById(R.id.sw_video);
+        video.setChecked(LdkConfig.isVideo());
+        video.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            if(isChecked){
+                LdkConfig.setVideo(true);
+                Toast.makeText(this, "打开第一视频", Toast.LENGTH_SHORT).show();
+            }else {
+                LdkConfig.setVideo(false);
+                Toast.makeText(this, "关闭第一视频", Toast.LENGTH_SHORT).show();
+            }
+        }));
+
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sichuan = findViewById(R.id.sw_sichuan);
+        sichuan.setChecked(LdkConfig.isSichuan());
+        sichuan.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                LdkConfig.setSichuan(true);
+                Toast.makeText(this, "打开四川频道", Toast.LENGTH_SHORT).show();
+            }else {
+                LdkConfig.setSichuan(false);
+                Toast.makeText(this, "关闭四川频道", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void save_all() {
+        save_read_time();
+        save_video_time();
+        String s = edit_read_times.getText().toString();
+        int i = Integer.parseInt(s);
+        LdkConfig.setReading_times(i);
+
+        String m = edit_video_times.getText().toString();
+        int i1 = Integer.parseInt(m);
+        LdkConfig.setVideoing_times(i1);
+
+        String s2 = edit_duan_video.getText().toString();
+        int i2 = Integer.parseInt(s2);
+        LdkConfig.setDuan_video_time(i2);
+        Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
     }
 
     private void openlog() {
@@ -187,20 +229,6 @@ public class ActicityConfig extends AppCompatActivity implements View.OnClickLis
         startActivity(intent);
     }
 
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_save_read:
-                save_read_time();
-                break;
-            case R.id.btn_save_video:
-                save_video_time();
-                break;
-        }
-    }
-
     private void save_read_time() {
         int read_time = 0;
         String str = edit_read.getText().toString();
@@ -214,9 +242,6 @@ public class ActicityConfig extends AppCompatActivity implements View.OnClickLis
         LdkConfig.setRead_time(read_time * 60 * 1000);
         if (read_time >= 1000) {
             LdkConfig.setRead_time(read_time);
-            Toast.makeText(this, "保存成功：" + (int) read_time / 1000 + " 秒", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "保存成功：" + read_time + " 分钟", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -231,9 +256,6 @@ public class ActicityConfig extends AppCompatActivity implements View.OnClickLis
         LdkConfig.setVideo_time(video_time * 60 * 1000);
         if (video_time >= 1000) {
             LdkConfig.setVideo_time(video_time);
-            Toast.makeText(this, "保存成功：" + (int) video_time / 1000 + " 秒", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "保存成功：" + video_time + " 分钟", Toast.LENGTH_SHORT).show();
         }
     }
 

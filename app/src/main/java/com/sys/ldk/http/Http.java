@@ -20,7 +20,7 @@ import java.util.concurrent.FutureTask;
 
 public class Http {
 
-    public static String get_http(final String url) {
+    public static String get_http(String url) {
         final StringBuilder sb = new StringBuilder();
         FutureTask<String> task = new FutureTask<>(() -> {
             HttpURLConnection connection = null;

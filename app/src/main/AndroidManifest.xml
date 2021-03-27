@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sys.ldk">
 
-    <uses-permission android:name="android.permission.VIBRATE" />   <!-- 振动权限 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 振动权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,14 +12,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".MyApplication"
@@ -31,14 +27,16 @@
         android:roundIcon="@mipmap/user_ic_launcher_round"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".serverset.Permission"
-            android:label="权限设置"/>
+        <activity android:name=".ActivityJuDou"
+            android:label="句读"/>
+        <activity android:name=".dg.ActivityApi" />
+        <activity
+            android:name=".serverset.PermissionActivity"
+            android:label="权限设置" />
         <activity
             android:name=".MainActivity"
-            android:excludeFromRecents="false"
             android:launchMode="singleTask"
-            android:taskAffinity=".MainActivity"
-            android:autoRemoveFromRecents="true">
+            android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,47 +44,44 @@
             </intent-filter>
         </activity>
         <activity android:name=".clock.AddclockActivity" />
-        <activity android:name=".qqlogin.LoginActivity"
-            android:label="登录"/>
-
-        <!-- 注册服务 process:将service放在独立的进程中 -->
-        <!--<service
+        <activity
+            android:name=".qqlogin.LoginActivity"
+            android:label="登录" /> <!-- 注册服务 process:将service放在独立的进程中 -->
+        <!--
+<service
             android:name=".clock.ClockService"
             android:enabled="true"
             android:exported="true"
-            android:process=":clockservice" />-->
-
+            android:process=":clockservice" />
+        -->
         <service
             android:name=".serverset.MessengerService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".serverset.MainService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".app.Startapp"
             android:enabled="true"
-            android:exported="true" />
-
-        <!-- 注册广播 -->
-        <!-- <receiver
+            android:exported="true" /> <!-- 注册广播 -->
+        <!--
+ <receiver
              android:name=".clock.ClockReceiver"
              android:enabled="true"
              android:exported="true"
-             android:process=":remote" />-->
-
+             android:process=":remote" />
+        -->
         <receiver
             android:name=".app.StartAppReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <activity android:name=".shellService.ShellActivity" />
-
-        <activity android:name=".dg.ActicityConfig"
-            android:label="参数设置"/>
+        <activity
+            android:name=".dg.ActicityConfig"
+            android:label="参数设置" />
 
         <service
             android:name=".MainAccessService"
@@ -94,12 +89,11 @@
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
-        </service>
-
-        <!--QQSDK-->
+        </service> <!-- QQSDK -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -113,7 +107,6 @@
                 <data android:scheme="tencent101911283" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -133,5 +126,15 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <receiver
+            android:name=".MyBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
+
 </manifest>

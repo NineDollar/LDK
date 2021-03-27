@@ -18,7 +18,7 @@ import java.util.List;
  * 上层api
  */
 public class UiApi {
-    private static final int WAIT_UI_APPEAR_MSEC = 500;  //控件默认的超时时间,毫秒
+    private static final int WAIT_UI_APPEAR_MSEC = 3000;  //控件默认的超时时间,毫秒
 
     private static final int CHECK_UI_SLEEP_GAP_MSEC = 200;  //控件默认的超时时间,毫秒
 

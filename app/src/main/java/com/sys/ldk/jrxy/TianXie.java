@@ -41,7 +41,7 @@ public class TianXie {
         return true;
     }
         List<AccessibilityNodeInfo> ScrollNodeInfoList = User.getScrollNodeInfo();
-        AcessibilityApi.ScrollNode(ScrollNodeInfoList.get(0));
+        AcessibilityApi.ScrollNode(ScrollNodeInfoList.get(0),1);
 
         hashMap.clear();
         afterInfomap.clear();
@@ -68,7 +68,7 @@ public class TianXie {
             if(AcessibilityApi.performViewClick(afterInfomap.get(e.getKey()))){
                 times -= 1;
                 if(times == 3){
-                    AcessibilityApi.ScrollNode(ScrollNodeInfoList.get(0));
+                    AcessibilityApi.ScrollNode(ScrollNodeInfoList.get(0),1);
                 }
                 if(ThreadSleepTime.sleep0D5()){
         return true;

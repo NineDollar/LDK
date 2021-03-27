@@ -1,5 +1,6 @@
 package com.sys.ldk.serverset;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.sys.ldk.FloatingWindow;
 import com.sys.ldk.MainAccessService;
@@ -25,7 +27,8 @@ import org.json.JSONObject;
 
 
 public class MainService extends Service {
-    private Context mcontext;
+    @SuppressLint("StaticFieldLeak")
+    private static Context mcontext;
 
     @Nullable
     @Override
@@ -85,11 +88,19 @@ public class MainService extends Service {
      * @time 2020/11/4 15:12
      */
     public static void notification() {
-        String s = Http.get_http(MainConfig.url);
-        JSONObject jsonObject = JsonHelper.getJsonObject(s);
-        assert jsonObject != null;
-        JsonString myjson = new JsonString(jsonObject);
-        MyNotificationType.setMessagetext1(myjson.getContent());
+        String str;
+        if(MainConfig.getAddresses()==null){
+            str = MyNotificationType.getMessagetext1();
+        }else {
+            String s = Http.get_http(MainConfig.getUrl());
+            JSONObject jsonObject = JsonHelper.getJsonObject(s);
+            if(jsonObject==null){
+                return;
+            }
+            JsonString myjson = new JsonString(jsonObject);
+            str = myjson.getContent() + "\n--" + myjson.getSource();
+        }
+        MyNotificationType.setMessagetext1(str);
 
         Binding binding = new Binding(MyNotificationType.case1, MyNotificationType.keytitle1,MyNotificationType.messagetitle1,MyNotificationType.keytext1, MyNotificationType.messagetext1);
         binding.doBindService();

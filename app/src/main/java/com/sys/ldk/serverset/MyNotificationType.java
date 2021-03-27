@@ -6,11 +6,22 @@ package com.sys.ldk.serverset;
  * @description 通知类型
  */
 public class MyNotificationType {
+    public static final int notificationId = 1;
+    public static final String channel = "channelId";
+
     public static final int case1 = 10;
     public static final String keytitle1 = "1";
     public static final String keytext1 = "2";
     public static String messagetitle1 = "还未学习";
-    public static String messagetext1 = "还未学习";
+    public static String messagetext1 = "";
+
+    public static int getNotificationId() {
+        return notificationId;
+    }
+
+    public static String getChannel() {
+        return channel;
+    }
 
     public static String getMessagetext1() {
         return messagetext1;

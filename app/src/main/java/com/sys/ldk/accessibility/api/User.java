@@ -304,12 +304,12 @@ public class User {
                 int index = (int) e.getValue();
                 LogUtil.V(key[0]+" " + index+"");
                 if (text1.equals(key[0])) {
-                    LogUtil.D("查找：" + text1 + " 成功");
+                    LogUtil.V("查找：" + text1 + " 成功");
                     AccessibilityNodeInfo accessibilityNodeInfo1 = accessibilityNodeInfoList.get(m + index);
                     String text2 = accessibilityNodeInfo1.getText() + "";
-                    LogUtil.D("text2:"+text2);
+                    LogUtil.V("text2:"+text2);
                     if (text2.equals(key[1])) {
-                        LogUtil.D("查找" + key[0] + "后第" + index + "个Info的Text确认成功");
+                        LogUtil.V("查找" + key[0] + "后第" + index + "个Info的Text确认成功");
                         hashMap1.put(key, accessibilityNodeInfo);
                     }
                 }

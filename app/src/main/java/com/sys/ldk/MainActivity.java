@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -34,15 +35,15 @@ import com.sys.ldk.clock.ClockService;
 import com.sys.ldk.clock.MyDatabaseHelper;
 import com.sys.ldk.clock.MySimpleAdaptey;
 import com.sys.ldk.dg.SandTimer;
-import com.sys.ldk.easyfloat.EasyFloat;
 import com.sys.ldk.qqlogin.LoginActivity;
 import com.sys.ldk.serverset.MainService;
-import com.sys.ldk.serverset.Permission;
+import com.sys.ldk.serverset.PermissionActivity;
 import com.sys.ldk.dg.ActicityConfig;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
@@ -55,12 +56,24 @@ public class MainActivity extends AppCompatActivity {
     private final LinkedList activityList = new LinkedList();
     private int passwordsCount = 3;
     private String password;
+    private static Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        timer = new Timer();
         mcontext = this;
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);//home
+        registerReceiver(new MyBroadcastReceiver(), filter);
+
+        PackageManager packageManager4 = getApplicationContext().getPackageManager();
+        Intent intent_screenshot = packageManager4.getLaunchIntentForPackage("com.sys.ldk");
+        intent_screenshot.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//新开启一个Task
+        startActivity(intent_screenshot);
+
 
         SandTimer sandTimer = new SandTimer();
         sandTimer.timerRun();
@@ -115,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
+
             }
         });
 
@@ -148,15 +162,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
 
-        xufuchuang = findViewById(R.id.sw_float);
-        xufuchuang.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                EasyFloat.showAppFloat("1");
-            } else {
-                EasyFloat.hideAppFloat("1");
-            }
-        });
+    public static Timer getTimer() {
+        return timer;
     }
 
     private void setpassword() {
@@ -227,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         initDatabase();
         mySimpleAdaptey.notifyDataSetChanged();
-        xufuchuang.setChecked(EasyFloat.appFloatIsShow("1"));
+//        xufuchuang.setChecked(EasyFloat.appFloatIsShow("1"));
 //        xufuchuang.setChecked(EasyFloat.appFloatIsShow());
     }
 
@@ -285,7 +294,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ActicityConfig.class));
                 return true;
             case R.id.setverset:
-                startActivity(new Intent(this, Permission.class));
+                startActivity(new Intent(this, PermissionActivity.class));
+                return true;
+            case R.id.activity_judou:
+                startActivity(new Intent(this, ActivityJuDou.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

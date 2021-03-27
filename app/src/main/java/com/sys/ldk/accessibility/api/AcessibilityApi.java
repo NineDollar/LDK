@@ -1,17 +1,25 @@
 package com.sys.ldk.accessibility.api;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.GestureDescription;
 import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Path;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Toast;
 
 
+import androidx.annotation.RequiresApi;
+
+import com.sys.ldk.MainActivity;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.serverset.MainService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +53,7 @@ public class AcessibilityApi {
         AcessibilityApi.context = context;
     }
 
+
     /**
      * 设置数据
      *
@@ -58,7 +67,6 @@ public class AcessibilityApi {
             }
 
         }
-
     }
 
     public static void setAccessibilityEvent(AccessibilityEvent event) {
@@ -66,9 +74,16 @@ public class AcessibilityApi {
             if (event != null && mAccessibilityEvent == null) {
                 mAccessibilityEvent = event;
             }
-
         }
+    }
 
+
+    public static int getMaxScrollY() {
+        return mAccessibilityEvent.getMaxScrollY();
+    }
+
+    public static int getMaxScrollX() {
+        return mAccessibilityEvent.getMaxScrollX();
     }
 
 
@@ -205,8 +220,7 @@ public class AcessibilityApi {
 
 
     //    滑动
-    public static boolean ScrollNode(AccessibilityNodeInfo nodeInfo) {
-
+    public static boolean ScrollNode(AccessibilityNodeInfo nodeInfo,int direction) {
         boolean flg = false;
         if (nodeInfo == null) {
             LogUtil.E("NodeInfo为空");
@@ -215,12 +229,14 @@ public class AcessibilityApi {
         while (nodeInfo != null) {
             if (nodeInfo.isScrollable()) {
                 LogUtil.D("可滚动");
-                flg = nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                if(direction >= 1){
+                    flg = nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                }else {
+                    flg = nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD);
+                }
                 break;
             }
             nodeInfo = nodeInfo.getParent();
-
-
         }
 
         return flg;
@@ -405,7 +421,6 @@ public class AcessibilityApi {
             AccessibilityNodeInfo node = getRootNodeInfo();
             if (node != null) {
                 return node.getPackageName() == null ? "" : node.getPackageName().toString();
-
             }
         }
         return "";
@@ -463,7 +478,7 @@ public class AcessibilityApi {
     /**
      * 关闭软件盘,需要7.0版本
      */
-    public static void closeKeyBoard()  {
+    public static void closeKeyBoard() {
         if (mAccessibilityService != null) {
             AccessibilityService.SoftKeyboardController softKeyboardController = mAccessibilityService.getSoftKeyboardController();
             softKeyboardController.setShowMode(AccessibilityService.SHOW_MODE_HIDDEN);
@@ -472,15 +487,16 @@ public class AcessibilityApi {
 
     /**
      * 自动返回true
+     *
      * @return
      */
-    public static boolean AutoKeyBoard( ) {
+    public static boolean AutoKeyBoard() {
         if (mAccessibilityService != null) {
             AccessibilityService.SoftKeyboardController softKeyboardController = mAccessibilityService.getSoftKeyboardController();
-           if( softKeyboardController.getShowMode()==AccessibilityService.SHOW_MODE_HIDDEN){
-               softKeyboardController.setShowMode(AccessibilityService.SHOW_MODE_AUTO);
-               return true;
-           }
+            if (softKeyboardController.getShowMode() == AccessibilityService.SHOW_MODE_HIDDEN) {
+                softKeyboardController.setShowMode(AccessibilityService.SHOW_MODE_AUTO);
+                return true;
+            }
         }
         return false;
     }

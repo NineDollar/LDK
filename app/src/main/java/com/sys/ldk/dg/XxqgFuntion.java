@@ -2,16 +2,20 @@ package com.sys.ldk.dg;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.sys.ldk.FloatingWindow;
 import com.sys.ldk.ThreadSleepTime;
 import com.sys.ldk.accessibility.api.AcessibilityApi;
 import com.sys.ldk.accessibility.api.UiApi;
 import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
+import com.sys.ldk.serverset.MyNotificationType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.sys.ldk.serverset.MainService.notification;
 
 /**
  * <p>大国共用方法</p>
@@ -57,19 +61,13 @@ public class XxqgFuntion {
 
     public static boolean back() {
 //        判断三次
-        for(int i = 0; i < 3; i++){
-            if (ThreadSleepTime.sleep0D5()) {
-                return false;
-            }
-            if(UiApi.findNodeByTextWithTimeOut(1000, "学习积分") != null){
+        for (int i = 0; i < 6; i++) {
+            if (UiApi.findNodeByTextWithTimeOut(500, "学习积分") != null) {
                 LogUtil.D("退回到积分页了");
-                if (ThreadSleepTime.sleep0D5()) {
-                    return false;
-                }
                 return true;
             }
-            if (User.findtext("电视台")) {
-                if (ThreadSleepTime.sleep0D5()) {
+            if (XXQG.isPage()) {
+                if (ThreadSleepTime.sleep1()) {
                     return false;
                 }
                 Autoanswer.into_ji_fen_page();
@@ -88,6 +86,24 @@ public class XxqgFuntion {
         if (!dateFlag) {
             return false;
         }
+        return true;
+    }
+
+    public static boolean fen_shu() {
+
+        AccessibilityNodeInfo accessibilityNodeInfo = User.get_text_after_info("积分规则", 1);
+
+        if (accessibilityNodeInfo != null) {
+            LogUtil.D("积分：" + accessibilityNodeInfo.getText());
+        }else {
+            return false;
+        }
+
+//        回UI线程
+        FloatingWindow.runimage.post(() -> {
+            MyNotificationType.setMessagetitle1(accessibilityNodeInfo.getText() + "");
+            notification();
+        });
         return true;
     }
 }

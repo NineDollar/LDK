@@ -9,6 +9,7 @@ import com.sys.ldk.accessibility.api.User;
 import com.sys.ldk.accessibility.util.LogUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,70 +29,40 @@ public class AutoVideo {
         if (ThreadSleepTime.sleep2()) {
             return false;
         }
-        if (!AcessibilityApi.clickTextViewByText("第一频道")) {
-            return false;
-        }
-        if (ThreadSleepTime.sleep2()) {
-
-            return false;
-        }
-        if (!startvideo(Objects.requireNonNull(di_yi_ping_dao()))) {
-            return false;
-        }
-
-//        联播频道
-        if (LdkConfig.isXin_wen_lian_bo()) {
-            LogUtil.D("开始观看新闻联播");
-            if (ThreadSleepTime.sleep2()) {
-                return false;
-            }
-            if (!AcessibilityApi.clickTextViewByText("联播频道")) {
-                return false;
-            }
-            if (ThreadSleepTime.sleep2()) {
-                return false;
-            }
-            if (!startvideo(Objects.requireNonNull(XxqgFuntion.listinfo("cn.xuexi.android:id/general_card_title_id", "中央广播电视总台")))) {
-                return false;
-            }
-        }
-
-//       短视频
-        if (LdkConfig.isDuan_video()) {
-            LogUtil.D("开始短视频");
-            if (ThreadSleepTime.sleep2()) {
-                return false;
-            }
-            UiApi.clickNodeByTextWithTimeOut(2000, "百灵");
-            if (ThreadSleepTime.sleep2()) {
-                return false;
-            }
-            if (!start_duan_video()) {
-                return false;
-            }
-        }
-
-        return true;
+        return startvideo(Objects.requireNonNull(di_yi_ping_dao()));
     }
 
-    private static boolean start_duan_video() {
+    public static boolean start_duan_video() {
         List<String> stringList = User.getallInfottext(false);
+        List<AccessibilityNodeInfo> accessibilityNodeInfoList = AcessibilityApi.getAllNode(null, null);
+        HashMap<String[],AccessibilityNodeInfo> hashMap = new HashMap<>();
+        HashMap<String[],Integer> hashMap1 = new HashMap<>();
+
         for (String s : stringList
         ) {
             if (XxqgFuntion.is_video_time(s)) {
-                if (!UiApi.clickNodeByTextWithTimeOut(2000, s)) {
-                    return false;
-                }
-                break;
+                String[] strings = {s, "null"};
+                hashMap1.put(strings, 1);
+                hashMap = User.get_alter_info(accessibilityNodeInfoList, hashMap1);
             }
         }
+        if(hashMap.isEmpty()){
+            LogUtil.W("未找到短视频");
+            return false;
+        }
+
+        Object myKey = hashMap.keySet().toArray()[0];
+        AcessibilityApi.performViewClick(hashMap.get(myKey));
+
         long time = LdkConfig.getDuan_video_time_second();
         LogUtil.D("观看短视频：" + time+ " 分钟");
         if (ThreadSleepTime.sleep(LdkConfig.getDuan_video_time_Mill())) {
             return false;
         }
+
         LogUtil.D("短视频观看结束");
         AcessibilityApi.performAction(AcessibilityApi.ActionType.BACK);
+
         return true;
     }
 
@@ -112,7 +83,7 @@ public class AutoVideo {
             //最大观看时间
             if (q > LdkConfig.getVideoing_times()) {
                 LogUtil.I("到达视频最大观看次数");
-                if (ThreadSleepTime.sleep1()) {
+                if (ThreadSleepTime.sleep0D5()) {
                     return false;
                 }
                 break;
@@ -120,21 +91,18 @@ public class AutoVideo {
             int video_max = getVideo_time_second();
             LogUtil.D("开始观看第 " + q + " 个视频");
             LogUtil.D("text: " + a.getText());
-            if (ThreadSleepTime.sleep2()) {
+            if (ThreadSleepTime.sleep0D5()) {
                 return false;
             }
-            AcessibilityApi.performViewClick(a);
-            if (UiApi.findNodeByTextWithTimeOut(2000, "欢迎发表你的观点") == null) {
+            UiApi.clickNodeWithTimeOut(0, a);
+            if (UiApi.findNodeByTextWithTimeOut(0, "欢迎发表你的观点") == null) {
                 LogUtil.W("观看失败");
                 return false;
             } else {
                 LogUtil.I("正在观看");
             }
 //            流量播放
-            AcessibilityApi.performViewClick(UiApi.findNodeByTextWithTimeOut(2000, "继续播放"));
-            if (ThreadSleepTime.sleep2()) {
-                return false;
-            }
+            AcessibilityApi.performViewClick(UiApi.findNodeByTextWithTimeOut(0, "继续播放"));
 
             LogUtil.I("观看视频：" + video_max + "秒");
             while (true) {

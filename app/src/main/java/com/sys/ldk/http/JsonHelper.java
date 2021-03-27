@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonHelper {
-    public static Class kindClass;
 
     /**
      * @param JsonString 一个json格式的字符串

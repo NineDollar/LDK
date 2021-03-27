@@ -10,7 +10,7 @@
     <string name="wsq">未授权</string>
     <string name="kuaisu">快速设置</string>
     <string name="channel_name">懒点看</string>
-    <string name="channel_description">显示服务检查</string>
+    <string name="channel_description">前天服务</string>
     <string name="local_service_started">前台服务开始</string>
     <string name="local_service_stopped">前台服务停止</string>
     <string name="local_service_label">前台服务</string>
@@ -23,6 +23,7 @@
     <string name="create">创建通知</string>
     <string name="btn_answr_dd">手动答题</string>
     <string name="dati">答题</string>
+    <string name="dakaixuanfuchaung">打开悬浮窗</string>
     <string name="readvideo">阅读和视频</string>
     <string name="show">显示信息</string>
     <string name="xufuchuang">悬浮窗</string>

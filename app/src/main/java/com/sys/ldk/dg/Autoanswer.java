@@ -36,36 +36,29 @@ public class Autoanswer {
     public static boolean doactivity() {
         LogUtil.D("开始答题");
         if (!into_ji_fen_page()) {
+            LogUtil.D("进入答题页面失败");
             return false;
         }
 
 //        自动答题
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep3()) {
             return false;
         }
         return auto_answer();
     }
 
     public static boolean into_ji_fen_page() {
-        String temp1 = "{"
-                + "'maxWClickMSec':1000,"
-                + "'click':{'id':'cn.xuexi.android:id/comm_head_xuexi_score'},"
-                + "'page':"
-                + "{"
-                + "'maxMustMills':5000,"
-                + "'maxOptionMills':5000,"
-                + "'must':{'text':[],'id':[],'desc':[]},"
-                + "'option':{'text':[],'id':[],'desc':[]}"
-                + "}"
-                + "}";
-        return UiApi.jumpToNeedPage(new String[]{temp1});
+        if (!UiApi.clickNodeByIdWithTimeOut(2000, "cn.xuexi.android:id/comm_head_xuexi_score")) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean auto_answer() {
 //      向上滚动
-        AcessibilityApi.ScrollNode(Objects.requireNonNull(AcessibilityApi.findViewByCls("android.webkit.WebView")).get(0));
+        AcessibilityApi.ScrollNode(Objects.requireNonNull(AcessibilityApi.findViewByCls("android.webkit.WebView")).get(0),1);
 
-        if (ThreadSleepTime.sleep2()) {
+        if (ThreadSleepTime.sleep1()) {
             return false;
         }
 
@@ -93,6 +86,9 @@ public class Autoanswer {
             switch (key[0]) {
                 case mei_ri:
                     LogUtil.D(mei_ri + "开始");
+                    if (ThreadSleepTime.sleep2()) {
+                        return false;
+                    }
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
                     if (ThreadSleepTime.sleep2()) {
                         return false;
@@ -104,7 +100,7 @@ public class Autoanswer {
                     break;
                 case mei_zhou:
                     LogUtil.D(mei_zhou + "开始");
-                    if(ThreadSleepTime.sleep2()){
+                    if (ThreadSleepTime.sleep2()) {
                         return false;
                     }
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
@@ -127,7 +123,7 @@ public class Autoanswer {
                     break;
                 case zhuan_xiang:
                     LogUtil.D(zhuan_xiang + "开始");
-                    if(ThreadSleepTime.sleep2()){
+                    if (ThreadSleepTime.sleep2()) {
                         return false;
                     }
                     AcessibilityApi.performViewClick(hashMap1.get(e.getKey()));
@@ -155,22 +151,13 @@ public class Autoanswer {
             return false;
         }
 
-        fen_shu();
+        if(!XxqgFuntion.fen_shu()){
+            return false;
+        }
         return true;
     }
 
-    public static void fen_shu() {
-        AccessibilityNodeInfo accessibilityNodeInfo = User.get_text_after_info("积分规则", 1);
-        if (accessibilityNodeInfo != null) {
-            LogUtil.D("" + accessibilityNodeInfo.getText());
-        }
-        assert accessibilityNodeInfo != null;
-//        回UI线程
-        FloatingWindow.runimage.post(() -> {
-            MyNotificationType.setMessagetitle1(accessibilityNodeInfo.getText() + "");
-            notification();
-        });
-    }
+
 
     /**
      * 点击未作答
